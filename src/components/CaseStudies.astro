@@ -1,0 +1,212 @@
+---
+const caseStudies = [
+	{
+		name: "Coastal Bloom Florist",
+		category: "E-Commerce",
+		summary:
+			"Rebuilt a slow, template-based storefront into a fast React experience with a streamlined checkout and live inventory sync.",
+		metrics: [
+			{ label: "Conversion Rate", before: "1.8%", after: "5.6%" },
+			{ label: "Page Load Time", before: "4.2s", after: "1.3s" },
+			{ label: "Monthly Orders", before: "30", after: "140" },
+		],
+	},
+	{
+		name: "Harbor & Co. Consulting",
+		category: "Lead Generation",
+		summary:
+			"Redesigned the landing pages and wired the contact forms directly into their CRM via REST API, cutting manual follow-up to zero.",
+		metrics: [
+			{ label: "Monthly Leads", before: "12", after: "68" },
+			{ label: "Form Conversion", before: "2.9%", after: "9.4%" },
+			{ label: "Response Time", before: "48 hrs", after: "Instant" },
+		],
+	},
+	{
+		name: "Nimbus Fitness Studio",
+		category: "Bookings",
+		summary:
+			"Replaced a clunky third-party booking widget with a custom PHP/SQL backend and a mobile-first flow built for one-thumb scheduling.",
+		metrics: [
+			{ label: "Booking Abandonment", before: "45%", after: "12%" },
+			{ label: "Mobile Bookings", before: "18%", after: "71%" },
+			{ label: "Avg. Booking Time", before: "3m 40s", after: "52s" },
+		],
+	},
+];
+---
+
+<section id="case-studies">
+	<div id="case-studies-inner">
+		<p id="case-studies-kicker">Case Studies</p>
+		<h2 id="case-studies-heading">Real businesses, real growth</h2>
+		<p id="case-studies-intro">
+			A look at where I stepped in and what changed — before my implementation
+			and after.
+		</p>
+
+		<div id="case-studies-list">
+			{
+				caseStudies.map((study) => (
+					<article class="case-card">
+						<header class="case-card-header">
+							<h3>{study.name}</h3>
+							<span class="case-card-tag">{study.category}</span>
+						</header>
+						<p class="case-card-summary">{study.summary}</p>
+						<div class="case-card-metrics">
+							{study.metrics.map((metric) => (
+								<div class="metric-row">
+									<span class="metric-label">{metric.label}</span>
+									<div class="metric-values">
+										<span class="metric-before">{metric.before}</span>
+										<span class="metric-arrow">&rarr;</span>
+										<span class="metric-after">{metric.after}</span>
+									</div>
+								</div>
+							))}
+						</div>
+					</article>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	#case-studies {
+		padding: 100px 40px;
+		background: var(--surface);
+	}
+
+	#case-studies-inner {
+		max-width: 1040px;
+		margin: 0 auto;
+	}
+
+	#case-studies-kicker {
+		margin: 0 0 16px;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	#case-studies-heading {
+		font-family: var(--font-serif);
+		font-weight: 500;
+		font-size: clamp(28px, 4vw, 42px);
+		color: var(--ink);
+		margin: 0 0 16px;
+		max-width: 560px;
+	}
+
+	#case-studies-intro {
+		font-size: 16px;
+		line-height: 1.6;
+		color: var(--ink-soft);
+		max-width: 520px;
+		margin: 0 0 48px;
+	}
+
+	#case-studies-list {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 24px;
+	}
+
+	.case-card {
+		border: 1px solid var(--border);
+		border-radius: 16px;
+		padding: 28px 24px;
+		background: var(--surface);
+	}
+
+	.case-card-header {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 12px;
+		margin-bottom: 14px;
+	}
+
+	.case-card-header h3 {
+		font-size: 18px;
+		font-weight: 600;
+		color: var(--ink);
+		margin: 0;
+	}
+
+	.case-card-tag {
+		font-size: 11px;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+		white-space: nowrap;
+	}
+
+	.case-card-summary {
+		font-size: 14px;
+		line-height: 1.6;
+		color: var(--ink-soft);
+		margin: 0 0 24px;
+	}
+
+	.case-card-metrics {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		border-top: 1px solid var(--border);
+		padding-top: 18px;
+	}
+
+	.metric-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+	}
+
+	.metric-label {
+		font-size: 12px;
+		color: var(--ink-soft);
+		flex: 1;
+	}
+
+	.metric-values {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 13px;
+		font-weight: 600;
+	}
+
+	.metric-before {
+		color: var(--ink-soft);
+		font-weight: 400;
+		text-decoration: line-through;
+		text-decoration-color: var(--border);
+	}
+
+	.metric-arrow {
+		color: var(--ink-soft);
+	}
+
+	.metric-after {
+		color: var(--ink);
+	}
+
+	@media (max-width: 900px) {
+		#case-studies-list {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 640px) {
+		#case-studies {
+			padding: 64px 20px;
+		}
+	}
+</style>

@@ -1,0 +1,83 @@
+---
+const skills = [
+	"HTML5",
+	"JavaScript",
+	"CSS",
+	"React",
+	"PHP",
+	"SQL",
+	"REST APIs",
+	"Claude / AI Tools",
+];
+---
+
+<section id="about">
+	<div id="about-inner">
+		<h2>About</h2>
+		<p>
+			I'm Trevor Armstrong, known online as <strong>TrevTheDev</strong> — a
+			Digital Growth Developer focused on building web experiences that help
+			businesses grow. I studied Software Engineering at BTVI and work
+			across the full stack, from REST APIs and SQL-backed systems to
+			modern React frontends.
+		</p>
+		<p>
+			AI tools like Claude are woven into my workflow, letting me build
+			smarter and ship faster without cutting corners on quality.
+		</p>
+		<ul id="about-skills">
+			{skills.map((skill) => <li>{skill}</li>)}
+		</ul>
+	</div>
+</section>
+
+<style>
+	#about {
+		padding: 100px 40px;
+		background: var(--surface);
+	}
+
+	#about-inner {
+		max-width: 680px;
+		margin: 0 auto;
+	}
+
+	#about h2 {
+		font-size: 14px;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+		margin: 0 0 24px;
+	}
+
+	#about p {
+		font-size: 17px;
+		line-height: 1.7;
+		color: var(--ink);
+		margin: 0 0 16px;
+	}
+
+	#about-skills {
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		padding: 0;
+		margin: 28px 0 0;
+	}
+
+	#about-skills li {
+		font-size: 13px;
+		padding: 7px 14px;
+		border-radius: 16px;
+		background: var(--bg-2);
+		color: var(--ink-soft);
+	}
+
+	@media (max-width: 640px) {
+		#about {
+			padding: 64px 20px;
+		}
+	}
+</style>

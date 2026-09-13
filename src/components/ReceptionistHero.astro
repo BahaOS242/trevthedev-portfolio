@@ -1,0 +1,117 @@
+---
+---
+
+<section id="rhero">
+	<div id="rhero-inner">
+		<p id="rhero-kicker">Project — AI Product Design &amp; Engineering</p>
+		<h1 id="rhero-heading">WhatsApp AI Receptionist</h1>
+		<p id="rhero-body">
+			An AI-powered receptionist that handles customer conversations,
+			captures leads, and helps businesses turn messages into
+			appointments.
+		</p>
+		<div id="rhero-ctas">
+			<a href="#demo" id="rhero-cta-primary">Try the Demo</a>
+			<a href="/#work" id="rhero-cta-secondary">&larr; All Projects</a>
+		</div>
+		<p id="rhero-note">
+			Portfolio demo — a fictional dental clinic, a rule-based
+			conversation engine, and simulated business actions. Nothing here
+			books a real appointment or reaches a real person.
+		</p>
+	</div>
+</section>
+
+<style>
+	#rhero {
+		width: 100%;
+		padding: 64px 40px 72px;
+		background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%);
+	}
+
+	#rhero-inner {
+		max-width: 720px;
+		margin: 0 auto;
+		text-align: center;
+	}
+
+	#rhero-kicker {
+		margin: 0 0 20px;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	#rhero-heading {
+		font-family: var(--font-serif);
+		font-weight: 500;
+		font-size: clamp(40px, 6vw, 64px);
+		line-height: 1;
+		letter-spacing: -0.01em;
+		color: var(--ink);
+		margin: 0 0 20px;
+	}
+
+	#rhero-body {
+		font-size: 17px;
+		line-height: 1.6;
+		color: var(--ink-soft);
+		max-width: 560px;
+		margin: 0 auto;
+	}
+
+	#rhero-ctas {
+		display: flex;
+		justify-content: center;
+		gap: 12px;
+		margin-top: 32px;
+	}
+
+	#rhero-cta-primary,
+	#rhero-cta-secondary {
+		display: inline-block;
+		border-radius: 24px;
+		padding: 13px 28px;
+		font-size: 14px;
+		font-weight: 500;
+		text-decoration: none;
+	}
+
+	#rhero-cta-primary {
+		background: var(--ink);
+		color: #fff;
+	}
+
+	#rhero-cta-secondary {
+		background: transparent;
+		color: var(--ink);
+		border: 1px solid var(--border);
+	}
+
+	#rhero-note {
+		margin: 28px auto 0;
+		max-width: 480px;
+		font-size: 13px;
+		line-height: 1.6;
+		color: var(--ink-soft);
+	}
+
+	@media (max-width: 640px) {
+		#rhero {
+			padding: 44px 20px 48px;
+		}
+
+		#rhero-ctas {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		#rhero-cta-primary,
+		#rhero-cta-secondary {
+			width: 100%;
+			text-align: center;
+		}
+	}
+</style>

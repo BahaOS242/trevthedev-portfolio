@@ -1,77 +1,194 @@
 <section id="hero">
-	<div id="hero-inner">
-		<h1 id="hero-heading">Keep building with your AI coding agent</h1>
-		<p id="hero-body">
-			Go back to your coding agent and keep prompting. Add pages, content,
-			and design as you go.
-		</p>
-		<a
-			href="https://dev.wix.com/docs/go-headless"
-			target="_blank"
-			rel="noopener noreferrer"
-			id="hero-cta">Learn More About Headless</a
-		>
+	<div id="hero-masthead">
+		<span>No. 01</span>
+		<span>Digital Growth Developer</span>
+		<span>Est. 2026</span>
+	</div>
+
+	<div id="hero-grid">
+		<div id="hero-copy">
+			<p id="hero-kicker">Profile — TrevTheDev</p>
+			<h1 id="hero-heading">
+				Trevor<br />
+				Armstrong
+			</h1>
+			<p id="hero-role">Building fast, functional web experiences</p>
+			<p id="hero-body">
+				I build full-stack web products end to end — from REST APIs and
+				SQL-backed systems to modern React frontends — with AI tools like
+				Claude woven into how I work.
+			</p>
+			<div id="hero-ctas">
+				<a href="#work" id="hero-cta-primary">View My Work</a>
+				<a href="#contact" id="hero-cta-secondary">Get In Touch</a>
+			</div>
+		</div>
+
+		<figure id="hero-figure">
+			<img src="/trevor.jpeg" alt="Trevor Armstrong" id="hero-portrait" />
+			<figcaption>Fig. 01 — TrevTheDev, 2026</figcaption>
+		</figure>
 	</div>
 </section>
 
 <style>
 	#hero {
 		width: 100%;
-		height: 100vh;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 80px 40px;
-		position: relative;
-		overflow: hidden;
-		background: linear-gradient(135deg, #dde9de 0%, #eaedf4 55%, #e0dced 100%);
-		font-family:
-			Inter, Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans", Arial,
-			sans-serif;
-		box-sizing: border-box;
-	}
-
-	#hero-inner {
-		max-width: 800px;
-		text-align: center;
+		min-height: calc(100vh - 73px);
+		padding: 32px 40px 64px;
+		background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%);
 		display: flex;
 		flex-direction: column;
+	}
+
+	#hero-masthead {
+		display: flex;
+		justify-content: space-between;
+		padding-bottom: 16px;
+		margin-bottom: 48px;
+		border-bottom: 1px solid var(--border);
+		font-size: 12px;
+		font-weight: 500;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	#hero-masthead span:nth-child(2) {
+		display: none;
+	}
+
+	#hero-grid {
+		flex: 1;
+		display: grid;
+		grid-template-columns: 1.1fr 0.9fr;
+		gap: 64px;
 		align-items: center;
+	}
+
+	#hero-copy {
+		max-width: 520px;
+	}
+
+	#hero-kicker {
+		margin: 0 0 20px;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
 	}
 
 	#hero-heading {
-		font-size: clamp(36px, 5vw, 64px);
-		font-weight: 400;
-		line-height: 1.05;
-		letter-spacing: -0.02em;
-		color: #1a1d2e;
+		font-family: var(--font-serif);
+		font-weight: 500;
+		font-size: clamp(56px, 8vw, 104px);
+		line-height: 0.95;
+		letter-spacing: -0.01em;
+		color: var(--ink);
 		margin: 0;
+	}
+
+	#hero-role {
+		font-family: var(--font-serif);
+		font-style: italic;
+		font-weight: 500;
+		font-size: clamp(18px, 2vw, 24px);
+		color: var(--ink);
+		margin: 24px 0 0;
 	}
 
 	#hero-body {
 		margin: 20px 0 0;
 		font-size: 16px;
-		line-height: 1.6;
-		color: #4a4d5e;
-		max-width: 520px;
+		line-height: 1.7;
+		color: var(--ink-soft);
 	}
 
-	#hero-cta {
-		display: inline-block;
+	#hero-ctas {
+		display: flex;
+		gap: 12px;
 		margin-top: 36px;
+	}
+
+	#hero-cta-primary,
+	#hero-cta-secondary {
+		display: inline-block;
 		border-radius: 24px;
 		padding: 13px 28px;
 		font-size: 14px;
 		font-weight: 500;
 		width: fit-content;
-		background: #1a1d2e;
-		color: #fff;
 		text-decoration: none;
+	}
+
+	#hero-cta-primary {
+		background: var(--ink);
+		color: #fff;
+	}
+
+	#hero-cta-secondary {
+		background: transparent;
+		color: var(--ink);
+		border: 1px solid var(--border);
+	}
+
+	#hero-figure {
+		margin: 0;
+		justify-self: end;
+	}
+
+	#hero-portrait {
+		width: 100%;
+		max-width: 360px;
+		aspect-ratio: 3 / 4;
+		object-fit: cover;
+		display: block;
+		border: 1px solid var(--border);
+		box-shadow: 0 24px 48px rgba(26, 29, 46, 0.16);
+	}
+
+	#hero-figure figcaption {
+		margin-top: 12px;
+		font-size: 12px;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+		text-align: right;
+	}
+
+	@media (max-width: 900px) {
+		#hero-grid {
+			grid-template-columns: 1fr;
+			gap: 40px;
+		}
+
+		#hero-figure {
+			justify-self: start;
+			order: -1;
+		}
+
+		#hero-portrait {
+			max-width: 220px;
+		}
+
+		#hero-figure figcaption {
+			text-align: left;
+		}
 	}
 
 	@media (max-width: 640px) {
 		#hero {
-			padding: 80px 20px;
+			padding: 20px 20px 48px;
+		}
+
+		#hero-masthead {
+			margin-bottom: 32px;
+		}
+
+		#hero-ctas {
+			flex-direction: column;
+			width: 100%;
 		}
 	}
 </style>

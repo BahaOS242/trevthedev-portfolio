@@ -1,0 +1,754 @@
+---
+---
+
+<section id="demo">
+	<div id="demo-inner">
+		<div id="demo-intro">
+			<p class="demo-kicker">Live Demo</p>
+			<h2 id="demo-heading">Chat with the BrightSmile Dental receptionist</h2>
+			<p id="demo-copy">
+				This is a real, working conversation engine — not a scripted
+				animation. Ask about hours, services, or pricing, try booking an
+				appointment, or ask to reschedule or cancel one.
+			</p>
+			<ul id="demo-try-list">
+				<li>"Do you guys do teeth whitening?"</li>
+				<li>"I'd like to book a cleaning"</li>
+				<li>"I need to move my appointment"</li>
+				<li>"Can I speak to a real person?"</li>
+			</ul>
+		</div>
+
+		<div id="phone">
+			<header id="phone-header">
+				<div id="phone-avatar" aria-hidden="true">🦷</div>
+				<div id="phone-title">
+					<strong>BrightSmile Dental</strong>
+					<span id="phone-status">AI Receptionist &bull; Online</span>
+				</div>
+				<span id="phone-demo-badge">DEMO</span>
+			</header>
+
+			<p id="demo-strip">
+				Simulated conversation — no real messages, bookings, or staff are
+				involved.
+			</p>
+
+			<div id="chat" role="log" aria-live="polite" aria-label="Conversation with the AI receptionist"></div>
+
+			<div id="quick-replies" hidden></div>
+
+			<form id="composer">
+				<input
+					id="composer-input"
+					type="text"
+					name="message"
+					placeholder="Type a message…"
+					autocomplete="off"
+					aria-label="Message the receptionist"
+				/>
+				<button id="composer-send" type="submit" aria-label="Send message">Send</button>
+			</form>
+		</div>
+	</div>
+</section>
+
+<style is:global>
+	/*
+	 * Global, not scoped: chat content is built client-side via
+	 * document.createElement (see script below), and Astro only attaches
+	 * its scoping attribute to elements present in the static template —
+	 * scoped rules would silently fail to match anything created at
+	 * runtime. Same approach as SiteAuditor.astro.
+	 */
+	#demo {
+		padding: 80px 40px 100px;
+		background: var(--surface);
+	}
+
+	#demo-inner {
+		max-width: 1040px;
+		margin: 0 auto;
+		display: grid;
+		grid-template-columns: 320px 1fr;
+		gap: 40px;
+		align-items: start;
+	}
+
+	.demo-kicker {
+		margin: 0 0 16px;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	#demo-heading {
+		font-family: var(--font-serif);
+		font-weight: 500;
+		font-size: clamp(24px, 3vw, 32px);
+		line-height: 1.15;
+		color: var(--ink);
+		margin: 0 0 16px;
+	}
+
+	#demo-copy {
+		font-size: 15px;
+		line-height: 1.6;
+		color: var(--ink-soft);
+		margin: 0 0 24px;
+	}
+
+	#demo-try-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	#demo-try-list li {
+		font-size: 13px;
+		color: var(--ink-soft);
+		padding: 10px 14px;
+		border-radius: 10px;
+		background: var(--bg-2);
+		border: 1px solid var(--border);
+	}
+
+	/* ---- Phone frame ---- */
+
+	#phone {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 24px;
+		overflow: hidden;
+		box-shadow: 0 24px 48px rgba(26, 29, 46, 0.12);
+		display: flex;
+		flex-direction: column;
+		height: 640px;
+	}
+
+	#phone-header {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 16px 18px;
+		background: var(--ink);
+		color: #fff;
+	}
+
+	#phone-avatar {
+		width: 40px;
+		height: 40px;
+		flex-shrink: 0;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.14);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.1rem;
+	}
+
+	#phone-title {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		flex: 1;
+		min-width: 0;
+	}
+
+	#phone-title strong {
+		font-family: var(--font-serif);
+		font-size: 16px;
+		font-weight: 500;
+	}
+
+	#phone-status {
+		font-size: 12px;
+		color: rgba(255, 255, 255, 0.68);
+	}
+
+	#phone-demo-badge {
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		padding: 4px 8px;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.16);
+		color: #fff;
+		flex-shrink: 0;
+	}
+
+	#demo-strip {
+		margin: 0;
+		padding: 8px 18px;
+		font-size: 11px;
+		line-height: 1.4;
+		text-align: center;
+		color: var(--ink-soft);
+		background: var(--bg-2);
+		border-bottom: 1px solid var(--border);
+	}
+
+	#chat {
+		flex: 1;
+		min-height: 0;
+		overflow-y: auto;
+		padding: 18px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		background: var(--bg-1);
+	}
+
+	.bubble-row {
+		display: flex;
+		flex-direction: column;
+		max-width: 82%;
+		animation: bubble-rise 0.22s ease-out;
+	}
+
+	.bubble-row.from-customer {
+		align-self: flex-end;
+		align-items: flex-end;
+	}
+
+	.bubble-row.from-assistant {
+		align-self: flex-start;
+		align-items: flex-start;
+	}
+
+	.bubble {
+		padding: 10px 13px;
+		border-radius: 16px;
+		font-size: 14px;
+		line-height: 1.45;
+		white-space: pre-line;
+		word-break: break-word;
+	}
+
+	.from-customer .bubble {
+		background: #d7ead2;
+		color: var(--ink);
+		border-bottom-right-radius: 4px;
+	}
+
+	.from-assistant .bubble {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		color: var(--ink);
+		border-bottom-left-radius: 4px;
+	}
+
+	.bubble-time {
+		margin-top: 4px;
+		font-size: 10px;
+		color: var(--ink-soft);
+		padding: 0 4px;
+	}
+
+	.typing-row {
+		align-self: flex-start;
+	}
+
+	.typing-bubble {
+		display: inline-flex;
+		gap: 4px;
+		padding: 12px 14px;
+		border-radius: 16px;
+		border-bottom-left-radius: 4px;
+		background: var(--surface);
+		border: 1px solid var(--border);
+	}
+
+	.typing-dot {
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: var(--ink-soft);
+		opacity: 0.5;
+		animation: typing-blink 1s infinite;
+	}
+
+	.typing-dot:nth-child(2) {
+		animation-delay: 0.15s;
+	}
+
+	.typing-dot:nth-child(3) {
+		animation-delay: 0.3s;
+	}
+
+	@keyframes typing-blink {
+		0%,
+		80%,
+		100% {
+			transform: scale(0.7);
+			opacity: 0.35;
+		}
+		40% {
+			transform: scale(1);
+			opacity: 0.9;
+		}
+	}
+
+	@keyframes bubble-rise {
+		from {
+			opacity: 0;
+			transform: translateY(6px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	/* ---- Simulated action card ---- */
+
+	.action-card {
+		align-self: flex-start;
+		max-width: 88%;
+		width: 280px;
+		border-radius: 16px;
+		padding: 14px 16px;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		animation: bubble-rise 0.28s ease-out;
+	}
+
+	.action-card-eyebrow {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		margin: 0 0 8px;
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	.action-card-eyebrow .dot {
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: #2f9e63;
+	}
+
+	.action-card.is-escalation .action-card-eyebrow .dot {
+		background: #c17a1f;
+	}
+
+	.action-card-details {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		margin: 10px 0 0;
+		padding-top: 10px;
+		border-top: 1px solid var(--border);
+	}
+
+	.action-card-detail-row {
+		display: flex;
+		justify-content: space-between;
+		gap: 10px;
+		font-size: 12px;
+	}
+
+	.action-card-detail-label {
+		color: var(--ink-soft);
+		text-transform: capitalize;
+	}
+
+	.action-card-detail-value {
+		color: var(--ink);
+		font-weight: 500;
+		text-align: right;
+	}
+
+	.action-card-footnote {
+		margin: 10px 0 0;
+		font-size: 10.5px;
+		line-height: 1.4;
+		color: var(--ink-soft);
+	}
+
+	/* ---- Lead-captured chip (subtle, internal) ---- */
+
+	.lead-chip-row {
+		align-self: center;
+		max-width: 92%;
+	}
+
+	.lead-chip {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 10.5px;
+		color: var(--ink-soft);
+		background: var(--bg-2);
+		border: 1px dashed var(--border);
+		border-radius: 999px;
+		padding: 5px 12px;
+	}
+
+	/* ---- System / error bubble ---- */
+
+	.system-row {
+		align-self: center;
+		max-width: 92%;
+		text-align: center;
+	}
+
+	.system-bubble {
+		font-size: 12px;
+		color: #a13b2c;
+		background: #fbeae6;
+		border: 1px solid #f0c7bd;
+		border-radius: 12px;
+		padding: 8px 12px;
+	}
+
+	/* ---- Quick replies ---- */
+
+	#quick-replies {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		padding: 12px 18px;
+		border-top: 1px solid var(--border);
+		background: var(--surface);
+	}
+
+	#quick-replies[hidden] {
+		display: none;
+	}
+
+	.quick-reply {
+		font: inherit;
+		font-size: 12px;
+		color: var(--ink);
+		background: var(--bg-2);
+		border: 1px solid var(--border);
+		border-radius: 999px;
+		padding: 8px 13px;
+		cursor: pointer;
+	}
+
+	.quick-reply:hover {
+		background: var(--bg-1);
+	}
+
+	/* ---- Composer ---- */
+
+	#composer {
+		display: flex;
+		gap: 8px;
+		padding: 12px;
+		border-top: 1px solid var(--border);
+		background: var(--surface);
+	}
+
+	#composer-input {
+		flex: 1;
+		min-width: 0;
+		font: inherit;
+		font-size: 14px;
+		padding: 11px 14px;
+		border-radius: 22px;
+		border: 1px solid var(--border);
+		background: var(--bg-1);
+		color: var(--ink);
+	}
+
+	#composer-input:focus {
+		outline: 2px solid var(--ink);
+		outline-offset: 1px;
+	}
+
+	#composer-input:disabled {
+		opacity: 0.6;
+	}
+
+	#composer-send {
+		font: inherit;
+		font-size: 13px;
+		font-weight: 600;
+		border: none;
+		border-radius: 22px;
+		padding: 0 20px;
+		background: var(--ink);
+		color: #fff;
+		cursor: pointer;
+	}
+
+	#composer-send:disabled {
+		opacity: 0.5;
+		cursor: default;
+	}
+
+	@media (max-width: 900px) {
+		#demo-inner {
+			grid-template-columns: 1fr;
+		}
+
+		#demo-intro {
+			order: 2;
+		}
+
+		#phone {
+			order: 1;
+			height: 600px;
+		}
+	}
+
+	@media (max-width: 640px) {
+		#demo {
+			padding: 56px 16px 72px;
+		}
+
+		#phone {
+			height: 78vh;
+			min-height: 480px;
+			border-radius: 18px;
+		}
+	}
+</style>
+
+<script>
+	import type { ChatMessage, SimulatedAction } from "../lib/receptionist/types";
+
+	const chatEl = document.getElementById("chat") as HTMLDivElement;
+	const quickRepliesEl = document.getElementById("quick-replies") as HTMLDivElement;
+	const form = document.getElementById("composer") as HTMLFormElement;
+	const input = document.getElementById("composer-input") as HTMLInputElement;
+	const sendBtn = document.getElementById("composer-send") as HTMLButtonElement;
+
+	let history: ChatMessage[] = [];
+	let busy = false;
+
+	function el<K extends keyof HTMLElementTagNameMap>(
+		tag: K,
+		opts: { className?: string; text?: string; attrs?: Record<string, string> } = {},
+		children: Node[] = [],
+	): HTMLElementTagNameMap[K] {
+		const node = document.createElement(tag);
+		if (opts.className) node.className = opts.className;
+		if (opts.text !== undefined) node.textContent = opts.text;
+		if (opts.attrs) {
+			for (const [key, value] of Object.entries(opts.attrs)) node.setAttribute(key, value);
+		}
+		for (const child of children) node.appendChild(child);
+		return node;
+	}
+
+	function formatTime(iso: string): string {
+		try {
+			return new Date(iso).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+		} catch {
+			return "";
+		}
+	}
+
+	function scrollToBottom() {
+		chatEl.scrollTop = chatEl.scrollHeight;
+	}
+
+	function appendBubble(role: "customer" | "assistant", text: string, timestamp: string) {
+		const row = el("div", { className: `bubble-row from-${role}` }, [
+			el("div", { className: "bubble", text }),
+			el("div", { className: "bubble-time", text: formatTime(timestamp) }),
+		]);
+		chatEl.appendChild(row);
+		scrollToBottom();
+	}
+
+	const ACTION_LABELS: Record<SimulatedAction["type"], string> = {
+		booking_captured: "Simulated booking request",
+		reschedule_captured: "Simulated reschedule request",
+		cancellation_captured: "Simulated cancellation request",
+		escalation_created: "Simulated staff escalation",
+		lead_captured: "Lead captured",
+	};
+
+	// "newDate" -> "New Date", "serviceInterest" -> "Service Interest" — the
+	// detail keys are camelCase identifiers, not display text.
+	function labelize(key: string): string {
+		return key
+			.replace(/([a-z])([A-Z])/g, "$1 $2")
+			.replace(/^./, (c) => c.toUpperCase());
+	}
+
+	function appendActionCard(action: SimulatedAction, timestamp: string) {
+		const isEscalation = action.type === "escalation_created";
+		const detailRows = Object.entries(action.details ?? {}).map(([label, value]) =>
+			el("div", { className: "action-card-detail-row" }, [
+				el("span", { className: "action-card-detail-label", text: labelize(label) }),
+				el("span", { className: "action-card-detail-value", text: value }),
+			]),
+		);
+
+		const card = el("div", { className: `action-card${isEscalation ? " is-escalation" : ""}` }, [
+			el("p", { className: "action-card-eyebrow" }, [
+				el("span", { className: "dot" }),
+				document.createTextNode(ACTION_LABELS[action.type]),
+			]),
+			...(detailRows.length ? [el("div", { className: "action-card-details" }, detailRows)] : []),
+			el("p", {
+				className: "action-card-footnote",
+				text: "Demo only — nothing was actually booked, cancelled, or sent to a real team.",
+			}),
+		]);
+
+		chatEl.appendChild(el("div", { className: "bubble-row from-assistant" }, [card, el("div", { className: "bubble-time", text: formatTime(timestamp) })]));
+		scrollToBottom();
+	}
+
+	function appendLeadChip(action: SimulatedAction) {
+		const summary = [action.details?.name, action.details?.serviceInterest]
+			.filter(Boolean)
+			.join(" — ");
+		const chip = el("div", { className: "lead-chip" }, [
+			document.createTextNode(`🔒 Lead captured (demo)${summary ? ": " + summary : ""}`),
+		]);
+		chatEl.appendChild(el("div", { className: "lead-chip-row" }, [chip]));
+		scrollToBottom();
+	}
+
+	function appendSystemError(text: string) {
+		const bubble = el("div", { className: "system-bubble", text });
+		chatEl.appendChild(el("div", { className: "system-row" }, [bubble]));
+		scrollToBottom();
+	}
+
+	let typingRow: HTMLDivElement | null = null;
+
+	function showTyping() {
+		if (typingRow) return;
+		typingRow = el("div", { className: "bubble-row from-assistant typing-row" }, [
+			el("div", { className: "typing-bubble" }, [
+				el("span", { className: "typing-dot" }),
+				el("span", { className: "typing-dot" }),
+				el("span", { className: "typing-dot" }),
+			]),
+		]);
+		chatEl.appendChild(typingRow);
+		scrollToBottom();
+	}
+
+	function hideTyping() {
+		typingRow?.remove();
+		typingRow = null;
+	}
+
+	function renderQuickReplies(options: string[] | undefined) {
+		quickRepliesEl.replaceChildren();
+		if (!options || options.length === 0) {
+			quickRepliesEl.hidden = true;
+			return;
+		}
+		for (const option of options) {
+			const chip = el("button", {
+				className: "quick-reply",
+				text: option,
+				attrs: { type: "button" },
+			});
+			chip.addEventListener("click", () => submitMessage(option));
+			quickRepliesEl.appendChild(chip);
+		}
+		quickRepliesEl.hidden = false;
+	}
+
+	function sleep(ms: number) {
+		return new Promise((resolve) => setTimeout(resolve, ms));
+	}
+
+	async function renderAssistantMessages(messages: ChatMessage[]) {
+		for (const message of messages) {
+			hideTyping();
+			if (message.action && message.action.type !== "lead_captured") {
+				appendActionCard(message.action, message.timestamp);
+			} else if (message.text) {
+				appendBubble("assistant", message.text, message.timestamp);
+			}
+			if (message.action?.type === "lead_captured") {
+				appendLeadChip(message.action);
+			}
+			history.push(message);
+			if (messages.indexOf(message) < messages.length - 1) {
+				showTyping();
+				await sleep(500 + Math.random() * 400);
+			}
+		}
+		renderQuickReplies(messages[messages.length - 1]?.quickReplies);
+	}
+
+	async function callReceptionist(payloadMessages: ChatMessage[]): Promise<ChatMessage[]> {
+		const response = await fetch("/api/receptionist", {
+			method: "POST",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify({ messages: payloadMessages }),
+		});
+		const data = await response.json();
+		if (!response.ok) {
+			throw new Error(data?.error ?? "Something went wrong.");
+		}
+		return data.messages as ChatMessage[];
+	}
+
+	function setBusy(next: boolean) {
+		busy = next;
+		input.disabled = next;
+		sendBtn.disabled = next;
+	}
+
+	async function submitMessage(rawText: string) {
+		const text = rawText.trim();
+		if (!text || busy) return;
+
+		setBusy(true);
+		renderQuickReplies(undefined);
+
+		const customerMessage: ChatMessage = {
+			id: crypto.randomUUID(),
+			role: "customer",
+			text,
+			timestamp: new Date().toISOString(),
+		};
+		appendBubble("customer", customerMessage.text, customerMessage.timestamp);
+		history.push(customerMessage);
+		input.value = "";
+
+		showTyping();
+		try {
+			const replies = await callReceptionist(history);
+			await renderAssistantMessages(replies);
+		} catch {
+			hideTyping();
+			appendSystemError("Something went wrong. Please try again.");
+		} finally {
+			setBusy(false);
+			input.focus();
+		}
+	}
+
+	form.addEventListener("submit", (event) => {
+		event.preventDefault();
+		void submitMessage(input.value);
+	});
+
+	async function startConversation() {
+		showTyping();
+		try {
+			const replies = await callReceptionist([]);
+			await renderAssistantMessages(replies);
+		} catch {
+			hideTyping();
+			appendSystemError("Couldn't start the demo conversation. Please refresh and try again.");
+		}
+	}
+
+	void startConversation();
+</script>

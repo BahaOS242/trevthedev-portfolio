@@ -1,0 +1,848 @@
+<section id="auditor">
+	<div id="auditor-inner">
+		<p id="auditor-kicker">Free Diagnostic</p>
+		<h2 id="auditor-heading">Get your free BahaOS Growth Audit</h2>
+		<p id="auditor-intro">
+			I don't just check boxes for search engines — I look at where your
+			digital customer journey has room to grow. Enter your site below for a
+			free diagnostic across visibility, conversion, experience, trust, and
+			technical health.
+		</p>
+
+		<form id="auditor-form">
+			<div class="auditor-field">
+				<label for="auditor-name">Name</label>
+				<input id="auditor-name" name="name" type="text" placeholder="Jane Doe" required />
+			</div>
+			<div class="auditor-field">
+				<label for="auditor-email">Email</label>
+				<input id="auditor-email" name="email" type="email" placeholder="jane@business.com" required />
+			</div>
+			<div class="auditor-field">
+				<label for="auditor-url">Website URL</label>
+				<input id="auditor-url" name="url" type="text" placeholder="yourbusiness.com" required />
+			</div>
+			<button type="submit" id="auditor-submit">Run Free Growth Audit</button>
+			<p id="auditor-error" role="alert"></p>
+		</form>
+
+		<div id="auditor-loading" hidden>
+			<span class="spinner"></span>
+			<span>Running your BahaOS Growth Audit&hellip; this can take up to 15 seconds.</span>
+		</div>
+
+		<div id="auditor-results" hidden>
+			<!-- Score header -->
+			<header id="growth-header">
+				<p class="kicker">BahaOS Growth Score</p>
+				<div id="growth-score-row">
+					<div id="growth-score-ring">
+						<div id="growth-score-number-wrap">
+							<span id="growth-score-number">0</span><span id="growth-score-max">/100</span>
+						</div>
+					</div>
+					<div>
+						<p id="growth-opportunities-count"></p>
+						<p id="growth-explanation">
+							Your score is based on technical, content, conversion, experience,
+							and visibility signals. It reflects what's publicly detectable on
+							your site today — not a guarantee of business performance.
+						</p>
+					</div>
+				</div>
+			</header>
+
+			<!-- Category scores -->
+			<div id="category-grid"></div>
+
+			<details id="methodology">
+				<summary>How we calculate your score</summary>
+				<p>
+					Each category is scored 0–100 from its own set of checks, then
+					combined using the weights below. Same site, same conditions, same
+					score — nothing here is randomized.
+				</p>
+				<ul id="methodology-weights"></ul>
+			</details>
+
+			<!-- Top 2 visible problems -->
+			<div id="problems-section">
+				<p class="section-label">Your Top Opportunities</p>
+				<div id="problem-card-1" class="problem-card" hidden></div>
+				<div id="problem-card-2" class="problem-card" hidden></div>
+			</div>
+
+			<!-- Blurred paywall -->
+			<div id="paywall-wrap">
+				<div id="paywall-blurred-list" aria-hidden="true"></div>
+				<div id="paywall-overlay">
+					<p class="paywall-lock" aria-hidden="true">&#128274;</p>
+					<h3 class="paywall-heading">Unlock Your Full Growth Diagnostic Report</h3>
+					<p id="paywall-copy"></p>
+					<a href="#" id="paywall-unlock-btn" class="btn-whatsapp" target="_blank" rel="noopener noreferrer">
+						Unlock Full Report — $99 &rarr;
+					</a>
+					<p class="paywall-discount">
+						If you hire Trev to fix your website's leaks within the next 45
+						days, the full $99 comes off your final bill — making this
+						diagnostic 100% risk-free.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style is:global>
+	/*
+	 * This block is global, not scoped, because most of #auditor-results is built
+	 * client-side via document.createElement in the script block below — Astro only
+	 * attaches its scoping attribute to elements present in the static template,
+	 * so scoped rules would silently fail to match anything created at runtime.
+	 */
+	#auditor {
+		padding: 100px 40px;
+		background: var(--bg-2);
+	}
+
+	#auditor-inner {
+		max-width: 720px;
+		margin: 0 auto;
+	}
+
+	#auditor-kicker {
+		margin: 0 0 16px;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+		text-align: center;
+	}
+
+	#auditor-heading {
+		font-family: var(--font-serif);
+		font-weight: 500;
+		font-size: clamp(28px, 4vw, 42px);
+		color: var(--ink);
+		margin: 0 0 16px;
+		text-align: center;
+	}
+
+	#auditor-intro {
+		font-size: 16px;
+		line-height: 1.6;
+		color: var(--ink-soft);
+		text-align: center;
+		margin: 0 auto 40px;
+		max-width: 540px;
+	}
+
+	#auditor-form {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 16px;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 16px;
+		padding: 28px;
+	}
+
+	.auditor-field {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	.auditor-field:last-of-type {
+		grid-column: 1 / -1;
+	}
+
+	.auditor-field label {
+		font-size: 12px;
+		font-weight: 600;
+		color: var(--ink-soft);
+	}
+
+	.auditor-field input {
+		font: inherit;
+		font-size: 14px;
+		padding: 11px 14px;
+		border-radius: 10px;
+		border: 1px solid var(--border);
+		background: var(--surface);
+		color: var(--ink);
+	}
+
+	.auditor-field input:focus {
+		outline: 2px solid var(--ink);
+		outline-offset: 1px;
+	}
+
+	#auditor-submit {
+		grid-column: 1 / -1;
+		margin-top: 4px;
+		border: none;
+		border-radius: 24px;
+		padding: 13px 28px;
+		font-size: 14px;
+		font-weight: 500;
+		background: var(--ink);
+		color: #fff;
+		cursor: pointer;
+	}
+
+	#auditor-submit:disabled {
+		opacity: 0.6;
+		cursor: default;
+	}
+
+	#auditor-error {
+		grid-column: 1 / -1;
+		margin: 0;
+		font-size: 13px;
+		color: #b3261e;
+		min-height: 0;
+	}
+
+	#auditor-error:empty {
+		display: none;
+	}
+
+	#auditor-loading {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		padding: 32px;
+		font-size: 14px;
+		color: var(--ink-soft);
+		text-align: center;
+	}
+
+	#auditor-loading[hidden],
+	#auditor-results[hidden] {
+		display: none;
+	}
+
+	.spinner {
+		width: 16px;
+		height: 16px;
+		flex-shrink: 0;
+		border-radius: 50%;
+		border: 2px solid var(--border);
+		border-top-color: var(--ink);
+		animation: spin 0.8s linear infinite;
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	#auditor-results {
+		margin-top: 24px;
+		display: flex;
+		flex-direction: column;
+		gap: 28px;
+	}
+
+	.section-label {
+		margin: 0 0 16px;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	/* ---- Score header ---- */
+
+	#growth-header {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 16px;
+		padding: 28px;
+	}
+
+	#growth-header .kicker {
+		margin: 0 0 16px;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	#growth-score-row {
+		display: flex;
+		align-items: center;
+		gap: 24px;
+	}
+
+	#growth-score-ring {
+		width: 96px;
+		height: 96px;
+		border-radius: 50%;
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: conic-gradient(var(--ink) calc(var(--score, 0) * 1%), var(--bg-2) 0);
+	}
+
+	#growth-score-number-wrap {
+		width: 78px;
+		height: 78px;
+		border-radius: 50%;
+		background: var(--surface);
+		display: flex;
+		align-items: baseline;
+		justify-content: center;
+		gap: 2px;
+	}
+
+	#growth-score-number {
+		font-family: var(--font-serif);
+		font-size: 26px;
+		font-weight: 600;
+		color: var(--ink);
+	}
+
+	#growth-score-max {
+		font-size: 13px;
+		color: var(--ink-soft);
+	}
+
+	#growth-opportunities-count {
+		margin: 0 0 8px;
+		font-size: 16px;
+		font-weight: 600;
+		color: var(--ink);
+	}
+
+	#growth-explanation {
+		margin: 0;
+		font-size: 13px;
+		line-height: 1.6;
+		color: var(--ink-soft);
+	}
+
+	/* ---- Category grid ---- */
+
+	#category-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+		gap: 12px;
+	}
+
+	.category-card {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		padding: 16px;
+	}
+
+	.category-label {
+		margin: 0 0 8px;
+		font-size: 12px;
+		font-weight: 600;
+		color: var(--ink-soft);
+	}
+
+	.category-score {
+		margin: 0 0 10px;
+		font-family: var(--font-serif);
+		font-size: 22px;
+		font-weight: 600;
+		color: var(--ink);
+	}
+
+	.category-score span {
+		font-family: var(--font);
+		font-size: 12px;
+		font-weight: 400;
+		color: var(--ink-soft);
+	}
+
+	.category-bar {
+		height: 4px;
+		border-radius: 2px;
+		background: var(--bg-2);
+		overflow: hidden;
+	}
+
+	.category-bar-fill {
+		height: 100%;
+		background: var(--ink);
+	}
+
+	/* ---- Methodology ---- */
+
+	#methodology {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		padding: 16px 20px;
+	}
+
+	#methodology summary {
+		cursor: pointer;
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--ink);
+	}
+
+	#methodology p {
+		margin: 12px 0;
+		font-size: 13px;
+		line-height: 1.6;
+		color: var(--ink-soft);
+	}
+
+	#methodology-weights {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	#methodology-weights li {
+		display: flex;
+		justify-content: space-between;
+		font-size: 13px;
+		color: var(--ink-soft);
+	}
+
+	#methodology-weights strong {
+		color: var(--ink);
+	}
+
+	/* ---- Problem cards ---- */
+
+	#problems-section {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.problem-card[hidden] {
+		display: none;
+	}
+
+	.problem-card {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 16px;
+		padding: 26px 28px;
+	}
+
+	.problem-eyebrow {
+		margin: 0 0 8px;
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	.problem-title {
+		margin: 0 0 18px;
+		font-family: var(--font-serif);
+		font-size: 22px;
+		font-weight: 500;
+		color: var(--ink);
+		line-height: 1.3;
+	}
+
+	.problem-block {
+		margin: 0 0 16px;
+	}
+
+	.problem-block strong {
+		display: block;
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+		margin-bottom: 4px;
+	}
+
+	.problem-block p {
+		margin: 0;
+		font-size: 15px;
+		line-height: 1.6;
+		color: var(--ink);
+	}
+
+	/* ---- WhatsApp buttons ---- */
+
+	a.btn-whatsapp:link,
+	a.btn-whatsapp:visited {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		margin-top: 8px;
+		padding: 14px 26px;
+		border-radius: 28px;
+		background: #25d366;
+		color: #fff;
+		font-size: 15px;
+		font-weight: 600;
+		text-decoration: none;
+		box-shadow: 0 8px 20px rgba(37, 211, 102, 0.32);
+		transition:
+			transform 0.15s ease,
+			box-shadow 0.15s ease,
+			background 0.15s ease;
+	}
+
+	a.btn-whatsapp:hover {
+		background: #1fbd5a;
+		transform: translateY(-1px);
+		box-shadow: 0 10px 24px rgba(37, 211, 102, 0.4);
+	}
+
+	.problem-card .btn-whatsapp {
+		width: 100%;
+	}
+
+	/* ---- Blurred $99 paywall ---- */
+
+	#paywall-wrap {
+		position: relative;
+		border-radius: 16px;
+		overflow: hidden;
+		border: 1px solid var(--border);
+		min-height: 280px;
+	}
+
+	#paywall-blurred-list {
+		padding: 28px;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		background: var(--surface);
+		filter: blur(6px);
+		user-select: none;
+		pointer-events: none;
+	}
+
+	#paywall-blurred-list[hidden] {
+		display: none;
+	}
+
+	.blurred-row {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		font-size: 14px;
+		color: var(--ink);
+	}
+
+	#paywall-overlay {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		padding: 32px 24px;
+		background: rgba(255, 255, 255, 0.92);
+	}
+
+	.paywall-lock {
+		margin: 0 0 8px;
+		font-size: 28px;
+	}
+
+	.paywall-heading {
+		margin: 0 0 12px;
+		font-family: var(--font-serif);
+		font-size: 22px;
+		font-weight: 500;
+		color: var(--ink);
+		max-width: 380px;
+	}
+
+	#paywall-copy {
+		margin: 0 0 20px;
+		font-size: 14px;
+		line-height: 1.6;
+		color: var(--ink-soft);
+		max-width: 420px;
+	}
+
+	.paywall-discount {
+		margin: 16px 0 0;
+		max-width: 420px;
+		font-size: 13px;
+		line-height: 1.6;
+		color: var(--ink-soft);
+		font-weight: 500;
+	}
+
+	@media (max-width: 640px) {
+		#auditor {
+			padding: 64px 20px;
+		}
+
+		#auditor-form {
+			grid-template-columns: 1fr;
+			padding: 20px;
+		}
+
+		.auditor-field:last-of-type {
+			grid-column: auto;
+		}
+
+		#growth-score-row {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		.problem-card {
+			padding: 20px;
+		}
+
+		#paywall-overlay {
+			padding: 24px 16px;
+		}
+	}
+</style>
+
+<script>
+	import type { Check, AuditResult, CategoryResult, Severity } from "../lib/audit-engine";
+	import { getPlainEnglish } from "../lib/plain-english";
+
+	const WHATSAPP_NUMBER = "12428012847";
+
+	const form = document.getElementById("auditor-form") as HTMLFormElement;
+	const submitBtn = document.getElementById("auditor-submit") as HTMLButtonElement;
+	const errorEl = document.getElementById("auditor-error") as HTMLParagraphElement;
+	const loadingEl = document.getElementById("auditor-loading") as HTMLDivElement;
+	const resultsEl = document.getElementById("auditor-results") as HTMLDivElement;
+
+	const scoreRing = document.getElementById("growth-score-ring") as HTMLDivElement;
+	const scoreNumber = document.getElementById("growth-score-number") as HTMLSpanElement;
+	const opportunitiesCountEl = document.getElementById("growth-opportunities-count") as HTMLParagraphElement;
+
+	const categoryGrid = document.getElementById("category-grid") as HTMLDivElement;
+	const methodologyWeights = document.getElementById("methodology-weights") as HTMLUListElement;
+
+	const problemCard1 = document.getElementById("problem-card-1") as HTMLDivElement;
+	const problemCard2 = document.getElementById("problem-card-2") as HTMLDivElement;
+
+	const paywallBlurredList = document.getElementById("paywall-blurred-list") as HTMLDivElement;
+	const paywallCopy = document.getElementById("paywall-copy") as HTMLParagraphElement;
+	const paywallUnlockBtn = document.getElementById("paywall-unlock-btn") as HTMLAnchorElement;
+
+	// Small safe-DOM helper — every dynamic string (site titles, meta descriptions,
+	// etc. scraped from a third-party site) goes through `text`, never innerHTML,
+	// so audited-site content can never execute as markup in the visitor's browser.
+	function el<K extends keyof HTMLElementTagNameMap>(
+		tag: K,
+		opts: { className?: string; text?: string; attrs?: Record<string, string> } = {},
+		children: Node[] = [],
+	): HTMLElementTagNameMap[K] {
+		const node = document.createElement(tag);
+		if (opts.className) node.className = opts.className;
+		if (opts.text !== undefined) node.textContent = opts.text;
+		if (opts.attrs) {
+			for (const [key, value] of Object.entries(opts.attrs)) node.setAttribute(key, value);
+		}
+		for (const child of children) node.appendChild(child);
+		return node;
+	}
+
+	interface FlatCheck {
+		check: Check;
+		categoryLabel: string;
+	}
+
+	const SEVERITY_RANK: Record<Severity, number> = { high: 0, medium: 1, low: 2 };
+
+	function sortBySeverity(items: FlatCheck[]): FlatCheck[] {
+		return [...items].sort(
+			(a, b) => SEVERITY_RANK[a.check.severity] - SEVERITY_RANK[b.check.severity] || b.check.maxPoints - a.check.maxPoints,
+		);
+	}
+
+	// Same-origin 45-day window, computed fresh at click time so it's always
+	// accurate regardless of when the page was loaded or deployed.
+	function formatExpirationDate(): string {
+		const expires = new Date();
+		expires.setDate(expires.getDate() + 45);
+		return expires.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+	}
+
+	function buildWhatsAppUrl(message: string): string {
+		return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+	}
+
+	function renderProblemCard(
+		container: HTMLDivElement,
+		index: number,
+		check: Check,
+		siteUrl: string,
+		leadEmail: string,
+	) {
+		const copy = getPlainEnglish(check);
+		const priceLabel = copy.price != null ? `$${copy.price}` : "a custom quote";
+		const buttonLabel = copy.price != null ? `Fix This on WhatsApp — $${copy.price} →` : "Fix This on WhatsApp →";
+
+		const message = `Hi Trevor! I just ran the free BahaOS Growth Audit on ${siteUrl} (${leadEmail}) and found this: "${copy.title}". I'd like to fix it — I understand the cost is ${priceLabel}. Let's get started!`;
+
+		const button = el("a", {
+			className: "btn-whatsapp",
+			text: buttonLabel,
+			attrs: { href: buildWhatsAppUrl(message), target: "_blank", rel: "noopener noreferrer" },
+		});
+
+		container.replaceChildren(
+			el("p", { className: "problem-eyebrow", text: `Opportunity #${index}` }),
+			el("h3", { className: "problem-title", text: copy.title }),
+			el("div", { className: "problem-block" }, [
+				el("strong", { text: "What's happening" }),
+				el("p", { text: copy.whatsHappening }),
+			]),
+			el("div", { className: "problem-block" }, [
+				el("strong", { text: "Why it hurts you" }),
+				el("p", { text: copy.whyItHurts }),
+			]),
+			el("div", { className: "problem-block" }, [
+				el("strong", { text: "How Trev fixes it" }),
+				el("p", { text: copy.howTrevFixes }),
+			]),
+			button,
+		);
+		container.hidden = false;
+	}
+
+	function renderResults(data: AuditResult, leadEmail: string) {
+		// --- Score header ---
+		scoreRing.style.setProperty("--score", String(data.score));
+		scoreNumber.textContent = String(data.score);
+		opportunitiesCountEl.textContent =
+			data.opportunitiesCount === 0
+				? "No major opportunities identified"
+				: `${data.opportunitiesCount} opportunit${data.opportunitiesCount === 1 ? "y" : "ies"} identified`;
+
+		// --- Category grid + methodology ---
+		categoryGrid.replaceChildren();
+		methodologyWeights.replaceChildren();
+		for (const category of data.categories) {
+			categoryGrid.appendChild(
+				el("div", { className: "category-card" }, [
+					el("p", { className: "category-label", text: category.label }),
+					el("p", { className: "category-score" }, [
+						document.createTextNode(String(category.score)),
+						el("span", { text: "/100" }),
+					]),
+					el("div", { className: "category-bar" }, [
+						(() => {
+							const fill = el("div", { className: "category-bar-fill" });
+							fill.style.width = `${category.score}%`;
+							return fill;
+						})(),
+					]),
+				]),
+			);
+
+			methodologyWeights.appendChild(
+				el("li", {}, [
+					document.createTextNode(category.label + " "),
+					el("strong", { text: `${category.weight}%` }),
+				]),
+			);
+		}
+
+		// --- Flatten real, detected fails only (never the structural "unavailable" placeholders) ---
+		const flatFails: FlatCheck[] = data.categories.flatMap((category: CategoryResult) =>
+			category.checks
+				.filter((check) => check.status === "fail")
+				.map((check) => ({ check, categoryLabel: category.label })),
+		);
+		const sorted = sortBySeverity(flatFails);
+		const [first, second, ...rest] = sorted;
+		const siteUrl = data.url;
+
+		// --- Two visible problem cards ---
+		if (first) {
+			renderProblemCard(problemCard1, 1, first.check, siteUrl, leadEmail);
+		} else {
+			problemCard1.hidden = true;
+		}
+		if (second) {
+			renderProblemCard(problemCard2, 2, second.check, siteUrl, leadEmail);
+		} else {
+			problemCard2.hidden = true;
+		}
+
+		// --- Blurred paywall teaser + copy ---
+		paywallBlurredList.replaceChildren();
+		if (rest.length > 0) {
+			paywallBlurredList.hidden = false;
+			for (const { check, categoryLabel } of rest) {
+				paywallBlurredList.appendChild(
+					el("div", { className: "blurred-row" }, [
+						el("span", { text: "\u{1F512}" }),
+						el("span", { text: `${categoryLabel} — ${getPlainEnglish(check).title}` }),
+					]),
+				);
+			}
+			paywallCopy.textContent = `Your quick scan surfaced ${sorted.length} opportunities. You're seeing the top ${Math.min(2, sorted.length)} above — ${rest.length} more ${rest.length === 1 ? "is" : "are"} waiting in your full manual diagnostic, plus a local competitor authority scan against sites like BahamasLocal and The Tribune.`;
+		} else {
+			paywallBlurredList.hidden = true;
+			paywallCopy.textContent =
+				"Your automated quick scan is clean beyond what's shown above — nice work. The full manual diagnostic still catches things bots can't, including a local competitor authority scan against sites like BahamasLocal and The Tribune.";
+		}
+
+		const unlockMessage = `Hi Trevor! I just ran the free BahaOS Growth Audit on ${siteUrl} (${leadEmail}) — my Growth Score was ${data.score}/100 with ${data.opportunitiesCount} opportunities found. I'd like to unlock the full $99 Growth Diagnostic Report (including the local competitor authority scan). I understand that if I hire you to fix my site within 45 days (by ${formatExpirationDate()}), the $99 is credited toward my final bill.`;
+		paywallUnlockBtn.setAttribute("href", buildWhatsAppUrl(unlockMessage));
+	}
+
+	form?.addEventListener("submit", async (e) => {
+		e.preventDefault();
+		errorEl.textContent = "";
+		resultsEl.hidden = true;
+
+		const formData = new FormData(form);
+		const name = String(formData.get("name") ?? "");
+		const email = String(formData.get("email") ?? "");
+		const url = String(formData.get("url") ?? "");
+
+		submitBtn.disabled = true;
+		loadingEl.hidden = false;
+
+		try {
+			const response = await fetch("/api/audit", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ name, email, url }),
+			});
+
+			const data = await response.json();
+
+			if (!response.ok) {
+				errorEl.textContent = data?.error ?? "Something went wrong. Please try again.";
+				return;
+			}
+
+			renderResults(data as AuditResult, email);
+			resultsEl.hidden = false;
+			resultsEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+		} catch {
+			errorEl.textContent = "Something went wrong. Please try again.";
+		} finally {
+			submitBtn.disabled = false;
+			loadingEl.hidden = true;
+		}
+	});
+</script>

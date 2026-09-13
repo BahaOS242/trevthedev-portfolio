@@ -1,0 +1,90 @@
+---
+const capabilities = [
+	{ title: "Answer", description: "Answers common customer questions." },
+	{ title: "Qualify", description: "Captures customer intent and lead information." },
+	{ title: "Book", description: "Guides customers toward appointment requests." },
+	{ title: "Follow Up", description: "Keeps conversations moving." },
+	{ title: "Escalate", description: "Knows when a human should take over." },
+];
+---
+
+<section id="rcaps">
+	<div id="rcaps-inner">
+		<p id="rcaps-kicker">Capabilities</p>
+		<div id="rcaps-grid">
+			{
+				capabilities.map((c) => (
+					<div class="rcap-card">
+						<h3>{c.title}</h3>
+						<p>{c.description}</p>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	#rcaps {
+		padding: 80px 40px;
+		background: var(--surface);
+	}
+
+	#rcaps-inner {
+		max-width: 1040px;
+		margin: 0 auto;
+	}
+
+	#rcaps-kicker {
+		margin: 0 0 24px;
+		font-size: 14px;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	#rcaps-grid {
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		gap: 16px;
+	}
+
+	.rcap-card {
+		border: 1px solid var(--border);
+		border-radius: 16px;
+		padding: 22px 18px;
+		background: var(--bg-2);
+	}
+
+	.rcap-card h3 {
+		font-family: var(--font-serif);
+		font-size: 19px;
+		font-weight: 500;
+		color: var(--ink);
+		margin: 0 0 8px;
+	}
+
+	.rcap-card p {
+		font-size: 13px;
+		line-height: 1.5;
+		color: var(--ink-soft);
+		margin: 0;
+	}
+
+	@media (max-width: 900px) {
+		#rcaps-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 640px) {
+		#rcaps {
+			padding: 56px 20px;
+		}
+
+		#rcaps-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

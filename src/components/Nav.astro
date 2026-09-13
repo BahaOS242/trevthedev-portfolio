@@ -1,0 +1,58 @@
+---
+---
+
+<nav id="nav">
+	<a href="#hero" id="nav-brand">TrevTheDev</a>
+	<div id="nav-links">
+		<a href="#about">About</a>
+		<a href="#case-studies">Case Studies</a>
+		<a href="#work">Work</a>
+		<a href="#auditor">Growth Audit</a>
+		<a href="#contact">Contact</a>
+	</div>
+</nav>
+
+<style>
+	#nav {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 20px 40px;
+		background: var(--surface);
+		border-bottom: 1px solid var(--border);
+	}
+
+	#nav-brand {
+		font-weight: 600;
+		text-decoration: none;
+		letter-spacing: -0.01em;
+	}
+
+	#nav-links {
+		display: flex;
+		gap: 28px;
+	}
+
+	#nav-links a {
+		text-decoration: none;
+		font-size: 14px;
+		color: var(--ink-soft);
+	}
+
+	#nav-links a:hover {
+		color: var(--ink);
+	}
+
+	@media (max-width: 640px) {
+		#nav {
+			padding: 16px 20px;
+		}
+
+		#nav-links {
+			gap: 16px;
+		}
+	}
+</style>

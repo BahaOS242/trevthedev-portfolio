@@ -1,0 +1,45 @@
+---
+---
+
+<nav id="rnav">
+	<a href="/" id="rnav-back">&larr; TrevTheDev</a>
+	<span id="rnav-label">Project — WhatsApp AI Receptionist</span>
+</nav>
+
+<style>
+	#rnav {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		padding: 20px 40px;
+		background: var(--surface);
+		border-bottom: 1px solid var(--border);
+	}
+
+	#rnav-back {
+		font-weight: 600;
+		text-decoration: none;
+		letter-spacing: -0.01em;
+		white-space: nowrap;
+	}
+
+	#rnav-label {
+		font-size: 13px;
+		color: var(--ink-soft);
+		text-align: right;
+	}
+
+	@media (max-width: 640px) {
+		#rnav {
+			padding: 16px 20px;
+		}
+
+		#rnav-label {
+			display: none;
+		}
+	}
+</style>
