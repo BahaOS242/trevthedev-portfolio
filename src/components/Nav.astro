@@ -5,6 +5,7 @@
 	<a href="#hero" id="nav-brand">TrevTheDev</a>
 	<div id="nav-links">
 		<a href="#about">About</a>
+		<a href="#experience">Experience</a>
 		<a href="#case-studies">Case Studies</a>
 		<a href="#work">Work</a>
 		<a href="#auditor">Growth Audit</a>
@@ -52,11 +53,14 @@
 
 	@media (max-width: 640px) {
 		#nav {
+			flex-wrap: wrap;
+			row-gap: 10px;
 			padding: 16px 20px;
 		}
 
 		#nav-links {
-			gap: 16px;
+			flex-wrap: wrap;
+			gap: 10px 14px;
 		}
 	}
 </style>

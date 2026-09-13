@@ -1,0 +1,150 @@
+---
+const bullets = [
+	"Developed and structured a professional digital presence for a Bahamian Pilates and wellness business using Wix Studio and CMS architecture.",
+	"Designed scalable CMS structures for services, retreats, events, memberships, merchandise, and philanthropic initiatives.",
+	"Developed a Nassau/Bahamas-focused SEO strategy, including page architecture, metadata, structured content, and local search targeting.",
+	"Created digital customer experiences for Pilates brunches, retreats, memberships, events, and promotions.",
+	"Applied UX/UI, branding, graphic design, and conversion principles to create a cohesive customer experience.",
+	"Developed concepts for email marketing and customer communications around events, memberships, promotions, and retention.",
+];
+---
+
+<section id="experience">
+	<div id="experience-inner">
+		<p id="experience-kicker">Experience</p>
+		<h2 id="experience-heading">Where I've done the work</h2>
+
+		<article class="role-card">
+			<header class="role-card-header">
+				<div>
+					<h3>Web Developer &amp; Digital Marketing</h3>
+					<p class="role-org">Fuel &amp; Flow Pilates</p>
+				</div>
+				<span class="role-meta">Nassau, Bahamas · Client Project</span>
+			</header>
+			<ul class="role-bullets">
+				{bullets.map((bullet) => <li>{bullet}</li>)}
+			</ul>
+			<a href="#case-studies" class="role-link">See the live site in Case Studies &rarr;</a>
+		</article>
+	</div>
+</section>
+
+<style>
+	#experience {
+		padding: 100px 40px;
+		background: var(--bg-2);
+	}
+
+	#experience-inner {
+		max-width: 720px;
+		margin: 0 auto;
+	}
+
+	#experience-kicker {
+		margin: 0 0 16px;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	#experience-heading {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: clamp(28px, 4vw, 42px);
+		letter-spacing: -0.02em;
+		color: var(--ink);
+		margin: 0 0 40px;
+		max-width: 560px;
+	}
+
+	.role-card {
+		border: 1px solid var(--border);
+		border-radius: 16px;
+		padding: 32px;
+		background: var(--surface);
+	}
+
+	.role-card-header {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 8px 16px;
+		margin-bottom: 20px;
+	}
+
+	.role-card-header h3 {
+		font-size: 19px;
+		font-weight: 600;
+		color: var(--ink);
+		margin: 0 0 4px;
+	}
+
+	.role-org {
+		margin: 0;
+		font-size: 14px;
+		font-weight: 500;
+		color: var(--ink-soft);
+	}
+
+	.role-meta {
+		font-size: 11px;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+		white-space: nowrap;
+	}
+
+	.role-bullets {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		margin: 0 0 24px;
+		padding: 18px 0 0;
+		border-top: 1px solid var(--border);
+		list-style: none;
+	}
+
+	.role-bullets li {
+		position: relative;
+		padding-left: 20px;
+		font-size: 13.5px;
+		line-height: 1.55;
+		color: var(--ink);
+	}
+
+	.role-bullets li::before {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 8px;
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: var(--ink-soft);
+	}
+
+	.role-link {
+		display: inline-block;
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--ink);
+		text-decoration: none;
+		border-bottom: 1px solid var(--ink);
+		padding-bottom: 2px;
+	}
+
+	@media (max-width: 640px) {
+		#experience {
+			padding: 64px 20px;
+		}
+
+		.role-card {
+			padding: 24px;
+		}
+	}
+</style>

@@ -1,20 +1,88 @@
 ---
-const skills = [
-	"HTML5",
-	"JavaScript",
-	"CSS",
-	"React",
-	"PHP",
-	"SQL",
-	"REST APIs",
-	"Claude / AI Tools",
+const skillGroups = [
+	{
+		label: "Programming",
+		items: [
+			"Python",
+			"TypeScript",
+			"JavaScript",
+			"Next.js",
+			"HTML/CSS",
+			"PostgreSQL",
+			"Prisma",
+			"Better Auth",
+			"Git & GitHub",
+			"APIs",
+			"Software Testing",
+		],
+	},
+	{
+		label: "Web",
+		items: [
+			"Wix Studio",
+			"Wix CMS",
+			"Wix Headless",
+			"Responsive Web Design",
+			"Website Administration",
+			"CMS Architecture",
+			"Landing Pages",
+			"Website Optimization",
+		],
+	},
+	{
+		label: "AI & Automation",
+		items: [
+			"ChatGPT",
+			"Claude",
+			"Claude Code",
+			"Generative AI",
+			"Prompt Engineering",
+			"AI APIs",
+			"AI Receptionists",
+			"Workflow Automation",
+			"AI Marketing Systems",
+			"SaaS Development",
+		],
+	},
+	{
+		label: "Marketing & Design",
+		items: [
+			"SEO",
+			"Local SEO",
+			"Email Development",
+			"Email Marketing",
+			"Campaign Strategy",
+			"Lead Generation",
+			"Conversion Optimization",
+			"Graphic Design",
+			"Branding",
+			"Digital Advertising Creative",
+			"Social Media Graphics",
+			"Flyer Design",
+			"Canva",
+			"Figma",
+			"AI Image Generation",
+		],
+	},
+	{
+		label: "Business & Product",
+		items: [
+			"Product Development",
+			"Market Research",
+			"Pricing Strategy",
+			"ROI Analysis",
+			"Sales Strategy",
+			"Competitive Analysis",
+			"Business Automation",
+		],
+	},
 ];
 
 const info = [
 	{ label: "Location", value: "Nassau, Bahamas" },
-	{ label: "Focus", value: "Full-Stack & Growth" },
+	{ label: "Focus", value: "Software Eng. & Digital Growth" },
 	{ label: "Availability", value: "Open for Projects" },
-	{ label: "Studied", value: "Software Eng., BTVI" },
+	{ label: "Studied", value: "Software Eng., BTVI · 2021–Present" },
 ];
 ---
 
@@ -23,14 +91,17 @@ const info = [
 		<h2>About</h2>
 		<p>
 			I'm Trevor Armstrong, known online as <strong>TrevTheDev</strong> — a
-			Digital Growth Developer focused on building web experiences that help
-			businesses grow. I studied Software Engineering at BTVI and work
-			across the full stack, from REST APIs and SQL-backed systems to
-			modern React frontends.
+			software engineering student and technology-focused digital
+			professional based in Nassau, Bahamas. I've studied Software
+			Engineering at BTVI since 2021, and work hands-on across Python, web
+			development, website administration, AI, graphic design, email
+			development, SEO, and digital marketing.
 		</p>
 		<p>
-			AI tools like Claude are woven into my workflow, letting me build
-			smarter and ship faster without cutting corners on quality.
+			I build real-world digital solutions for businesses and develop
+			independent technology projects — combining technical, creative, and
+			business skills to turn ideas into practical digital products and
+			customer experiences.
 		</p>
 
 		<div id="about-info-grid">
@@ -44,9 +115,18 @@ const info = [
 			}
 		</div>
 
-		<ul id="about-skills">
-			{skills.map((skill) => <li>{skill}</li>)}
-		</ul>
+		<div id="about-skill-groups">
+			{
+				skillGroups.map((group) => (
+					<div class="about-skill-group">
+						<p class="about-skill-group-label">{group.label}</p>
+						<ul class="about-skills">
+							{group.items.map((skill) => <li>{skill}</li>)}
+						</ul>
+					</div>
+				))
+			}
+		</div>
 	</div>
 </section>
 
@@ -57,7 +137,7 @@ const info = [
 	}
 
 	#about-inner {
-		max-width: 680px;
+		max-width: 720px;
 		margin: 0 auto;
 	}
 
@@ -111,21 +191,38 @@ const info = [
 		color: var(--ink);
 	}
 
-	#about-skills {
+	#about-skill-groups {
+		display: flex;
+		flex-direction: column;
+		gap: 22px;
+		margin: 40px 0 0;
+		padding-top: 32px;
+		border-top: 1px solid var(--border);
+	}
+
+	.about-skill-group-label {
+		margin: 0 0 12px;
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	.about-skills {
 		list-style: none;
 		display: flex;
 		flex-wrap: wrap;
-		gap: 10px;
+		gap: 8px;
 		padding: 0;
-		margin: 20px 0 0;
+		margin: 0;
 	}
 
-	#about-skills li {
+	.about-skills li {
 		font-size: 11px;
 		font-weight: 600;
-		letter-spacing: 0.04em;
-		text-transform: uppercase;
-		padding: 7px 14px;
+		letter-spacing: 0.02em;
+		padding: 6px 12px;
 		border-radius: 16px;
 		background: var(--bg-2);
 		color: var(--ink-soft);
