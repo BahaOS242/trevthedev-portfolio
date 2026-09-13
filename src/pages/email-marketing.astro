@@ -1,0 +1,297 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const points = [
+	{
+		title: "Email development",
+		body: "The template underneath has to survive dozens of rendering engines — Gmail, Outlook, Apple Mail — each with different CSS support. That means table-based layout, inline styles, and no assumptions about flexbox or web fonts. It's a narrower, stricter kind of front-end work than a web page.",
+	},
+	{
+		title: "Automation",
+		body: "A booking, a missed class, an abandoned signup form — each is a trigger a business can respond to automatically instead of manually. Automated sequences turn one-time actions into ongoing relationships without someone remembering to follow up.",
+	},
+	{
+		title: "The mailing list",
+		body: "Social reach is rented and can change overnight; an email list is owned. It's the one channel a business controls end to end — no algorithm deciding who sees the message.",
+	},
+];
+---
+
+<Layout
+	title="Email Marketing — TrevTheDev"
+	description="A real, table-based HTML email built for Fuel & Flow Pilates, plus why email development, automation, and mailing lists matter for a business."
+>
+	<nav id="enav">
+		<a href="/" id="enav-back">&larr; TrevTheDev</a>
+		<span id="enav-label">Project — Email Marketing</span>
+	</nav>
+
+	<section id="ehero">
+		<p id="ehero-kicker">Email Development &amp; Automation</p>
+		<h1 id="ehero-heading">An inbox-ready campaign, built by hand</h1>
+		<p id="ehero-body">
+			A real HTML email for Fuel &amp; Flow Pilates — table-based layout, inline
+			styles, and the same flyers from the Graphic Design section, built to
+			actually render correctly in an inbox.
+		</p>
+	</section>
+
+	<section id="epreview-section">
+		<div id="epreview-frame">
+			<div id="epreview-chrome">
+				<div id="epreview-dots"><span></span><span></span><span></span></div>
+				<div id="epreview-meta">
+					<span class="epreview-label">From</span>
+					<span class="epreview-value">Fuel &amp; Flow Pilates &lt;hello@fuelandflowbahamas.com&gt;</span>
+					<span class="epreview-label">Subject</span>
+					<span class="epreview-value">This month, move with us 🌊</span>
+				</div>
+			</div>
+			<div id="epreview-scroll">
+				<iframe
+					id="epreview-iframe"
+					src="/fuel-flow-email.html"
+					title="Fuel & Flow Pilates email campaign preview"
+					loading="eager"
+				></iframe>
+			</div>
+		</div>
+	</section>
+
+	<section id="epoints">
+		<div id="epoints-inner">
+			<p id="epoints-kicker">Why It Matters</p>
+			<div id="epoints-grid">
+				{
+					points.map((point) => (
+						<div class="epoint-card">
+							<h3>{point.title}</h3>
+							<p>{point.body}</p>
+						</div>
+					))
+				}
+			</div>
+			<a href="/#design" id="epoints-link">See the Graphic Design work these flyers came from &rarr;</a>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	#enav {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		padding: 20px 40px;
+		background: var(--surface);
+		border-bottom: 1px solid var(--border);
+	}
+
+	#enav-back {
+		font-weight: 600;
+		text-decoration: none;
+		letter-spacing: -0.01em;
+		white-space: nowrap;
+	}
+
+	#enav-label {
+		font-size: 13px;
+		color: var(--ink-soft);
+		text-align: right;
+	}
+
+	#ehero {
+		width: 100%;
+		padding: 56px 40px 36px;
+		text-align: center;
+		background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%);
+	}
+
+	#ehero-kicker {
+		margin: 0 0 16px;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	#ehero-heading {
+		font-family: var(--font-serif);
+		font-weight: 500;
+		font-size: clamp(32px, 5vw, 52px);
+		line-height: 1.08;
+		letter-spacing: -0.01em;
+		color: var(--ink);
+		margin: 0 0 18px;
+	}
+
+	#ehero-body {
+		font-size: 16px;
+		line-height: 1.6;
+		color: var(--ink-soft);
+		max-width: 580px;
+		margin: 0 auto;
+	}
+
+	#epreview-section {
+		padding: 0 40px 64px;
+		background: var(--bg-2);
+	}
+
+	#epreview-frame {
+		max-width: 720px;
+		margin: 0 auto;
+		border-radius: 14px;
+		overflow: hidden;
+		background: #fff;
+		box-shadow: 0 30px 80px rgba(26, 29, 46, 0.16);
+		border: 1px solid var(--border);
+	}
+
+	#epreview-chrome {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		padding: 12px 16px;
+		background: #f3f0ea;
+		border-bottom: 1px solid var(--border);
+	}
+
+	#epreview-dots {
+		display: flex;
+		gap: 7px;
+		flex: none;
+	}
+
+	#epreview-dots span {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: rgba(26, 29, 46, 0.14);
+	}
+
+	#epreview-meta {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: 2px 8px;
+		font-size: 11.5px;
+		line-height: 1.5;
+	}
+
+	.epreview-label {
+		color: var(--ink-soft);
+		font-weight: 600;
+	}
+
+	.epreview-value {
+		color: var(--ink);
+		font-weight: 500;
+	}
+
+	#epreview-scroll {
+		overflow-x: auto;
+		overflow-y: hidden;
+		max-height: 80vh;
+	}
+
+	#epreview-iframe {
+		display: block;
+		width: 640px;
+		max-width: none;
+		height: 1400px;
+		max-height: 80vh;
+		border: 0;
+		background: #efeae0;
+	}
+
+	@media (min-width: 721px) {
+		#epreview-iframe {
+			width: 100%;
+		}
+	}
+
+	#epoints {
+		padding: 80px 40px;
+	}
+
+	#epoints-inner {
+		max-width: 900px;
+		margin: 0 auto;
+	}
+
+	#epoints-kicker {
+		margin: 0 0 24px;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	#epoints-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 24px;
+		margin-bottom: 40px;
+	}
+
+	.epoint-card h3 {
+		font-size: 16px;
+		font-weight: 600;
+		color: var(--ink);
+		margin: 0 0 10px;
+	}
+
+	.epoint-card p {
+		font-size: 13.5px;
+		line-height: 1.65;
+		color: var(--ink-soft);
+		margin: 0;
+	}
+
+	#epoints-link {
+		display: inline-block;
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--ink);
+		text-decoration: none;
+		border-bottom: 1px solid var(--ink);
+		padding-bottom: 2px;
+	}
+
+	@media (max-width: 780px) {
+		#epoints-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 640px) {
+		#enav {
+			padding: 16px 20px;
+		}
+
+		#enav-label {
+			display: none;
+		}
+
+		#ehero {
+			padding: 40px 20px 28px;
+		}
+
+		#epreview-section {
+			padding: 0 12px 40px;
+		}
+
+		#epreview-meta {
+			font-size: 10.5px;
+		}
+
+		#epoints {
+			padding: 56px 20px;
+		}
+	}
+</style>

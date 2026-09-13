@@ -1,0 +1,273 @@
+---
+import { items } from "@wix/data";
+
+const COLLECTION_ID = "PortfolioDesignWork";
+
+interface DesignItem {
+	_id: string;
+	title: string;
+	category: string;
+	client: string;
+	tool: string;
+	imageUrl: string;
+	order?: number;
+}
+
+let designItems: DesignItem[] = [];
+
+try {
+	const response = await items.query(COLLECTION_ID, {
+		paging: { limit: 50, offset: 0 },
+		sort: [{ fieldName: "order", order: "ASC" }],
+	});
+	designItems = (response.items ?? []) as DesignItem[];
+} catch (error) {
+	console.error("Failed to load design work from CMS:", error);
+}
+
+const logos = designItems.filter((d) => d.category === "Logo");
+const flyers = designItems.filter((d) => d.category === "Flyer");
+---
+
+<section id="design">
+	<div id="design-inner">
+		<p id="design-kicker">Graphic Design</p>
+		<h2 id="design-heading">Brand marks and campaign creative</h2>
+		<p id="design-intro">
+			My design workflow combines AI image generation with Canva. For some
+			pieces, I let an AI model generate the complete flyer — layout,
+			typography, and call-to-action included. For others, I generate the
+			base photography-style imagery with AI, then build the branding, text,
+			and CTA on top in Canva, so the final piece is on-brand and
+			conversion-ready.
+		</p>
+
+		{
+			logos.length > 0 && (
+				<div class="design-group">
+					<p class="design-group-label">Logo Design</p>
+					<div id="logo-grid">
+						{logos.map((logo) => (
+							<figure class="logo-card">
+								<img src={logo.imageUrl} alt={logo.title} loading="lazy" />
+								<figcaption>
+									<span class="logo-title">{logo.title}</span>
+									<span class="logo-client">{logo.client}</span>
+								</figcaption>
+							</figure>
+						))}
+					</div>
+				</div>
+			)
+		}
+
+		{
+			flyers.length > 0 && (
+				<div class="design-group">
+					<p class="design-group-label">Flyers &amp; Campaign Creative</p>
+					<div id="flyer-grid">
+						{flyers.map((flyer) => (
+							<figure class="flyer-card">
+								<img src={flyer.imageUrl} alt={flyer.title} loading="lazy" />
+								<figcaption>
+									<span class="flyer-title">{flyer.title}</span>
+									<span class="flyer-client">{flyer.client}</span>
+									<span class="flyer-tool">{flyer.tool}</span>
+								</figcaption>
+							</figure>
+						))}
+					</div>
+					<a href="/email-marketing" id="design-email-link">See how these flyers become a live email campaign &rarr;</a>
+				</div>
+			)
+		}
+	</div>
+</section>
+
+<style>
+	#design {
+		padding: 100px 40px;
+		background: var(--surface);
+	}
+
+	#design-inner {
+		max-width: 1040px;
+		margin: 0 auto;
+	}
+
+	#design-kicker {
+		margin: 0 0 16px;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	#design-heading {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: clamp(28px, 4vw, 42px);
+		letter-spacing: -0.02em;
+		color: var(--ink);
+		margin: 0 0 16px;
+		max-width: 560px;
+	}
+
+	#design-intro {
+		font-size: 16px;
+		line-height: 1.6;
+		color: var(--ink-soft);
+		max-width: 640px;
+		margin: 0 0 48px;
+	}
+
+	.design-group {
+		margin-bottom: 48px;
+	}
+
+	.design-group-label {
+		margin: 0 0 20px;
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+		padding-top: 24px;
+		border-top: 1px solid var(--border);
+	}
+
+	#logo-grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 16px;
+	}
+
+	.logo-card {
+		margin: 0;
+		border: 1px solid var(--border);
+		border-radius: 14px;
+		padding: 20px;
+		background: var(--bg-2);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+	.logo-card img {
+		width: 100%;
+		max-width: 130px;
+		aspect-ratio: 1 / 1;
+		object-fit: contain;
+		margin-bottom: 14px;
+	}
+
+	.logo-card figcaption {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	.logo-title {
+		font-size: 12.5px;
+		font-weight: 600;
+		color: var(--ink);
+	}
+
+	.logo-client {
+		font-size: 11px;
+		color: var(--ink-soft);
+	}
+
+	#flyer-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 20px;
+	}
+
+	.flyer-card {
+		margin: 0;
+		border: 1px solid var(--border);
+		border-radius: 14px;
+		overflow: hidden;
+		background: var(--surface);
+		transition: border-color 0.15s ease, transform 0.15s ease;
+	}
+
+	.flyer-card:hover {
+		border-color: var(--ink);
+		transform: translateY(-2px);
+	}
+
+	.flyer-card img {
+		width: 100%;
+		aspect-ratio: 1 / 1;
+		object-fit: cover;
+		display: block;
+	}
+
+	.flyer-card figcaption {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		padding: 14px 16px 16px;
+	}
+
+	.flyer-title {
+		font-size: 13.5px;
+		font-weight: 600;
+		color: var(--ink);
+	}
+
+	.flyer-client {
+		font-size: 12px;
+		color: var(--ink-soft);
+	}
+
+	.flyer-tool {
+		margin-top: 6px;
+		display: inline-block;
+		width: fit-content;
+		font-size: 10.5px;
+		font-weight: 600;
+		letter-spacing: 0.03em;
+		text-transform: uppercase;
+		padding: 4px 10px;
+		border-radius: 12px;
+		background: var(--bg-2);
+		color: var(--ink-soft);
+	}
+
+	#design-email-link {
+		display: inline-block;
+		margin-top: 24px;
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--ink);
+		text-decoration: none;
+		border-bottom: 1px solid var(--ink);
+		padding-bottom: 2px;
+	}
+
+	@media (max-width: 900px) {
+		#logo-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		#flyer-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 640px) {
+		#design {
+			padding: 64px 20px;
+		}
+
+		#logo-grid,
+		#flyer-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
