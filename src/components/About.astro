@@ -9,6 +9,13 @@ const skills = [
 	"REST APIs",
 	"Claude / AI Tools",
 ];
+
+const info = [
+	{ label: "Location", value: "Nassau, Bahamas" },
+	{ label: "Focus", value: "Full-Stack & Growth" },
+	{ label: "Availability", value: "Open for Projects" },
+	{ label: "Studied", value: "Software Eng., BTVI" },
+];
 ---
 
 <section id="about">
@@ -25,6 +32,18 @@ const skills = [
 			AI tools like Claude are woven into my workflow, letting me build
 			smarter and ship faster without cutting corners on quality.
 		</p>
+
+		<div id="about-info-grid">
+			{
+				info.map((item) => (
+					<div class="about-info-cell">
+						<p class="about-info-label">{item.label}</p>
+						<p class="about-info-value">{item.value}</p>
+					</div>
+				))
+			}
+		</div>
+
 		<ul id="about-skills">
 			{skills.map((skill) => <li>{skill}</li>)}
 		</ul>
@@ -58,17 +77,54 @@ const skills = [
 		margin: 0 0 16px;
 	}
 
+	#about-info-grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		margin: 32px 0 0;
+		overflow: hidden;
+	}
+
+	.about-info-cell {
+		padding: 16px;
+		border-left: 1px solid var(--border);
+	}
+
+	.about-info-cell:first-child {
+		border-left: none;
+	}
+
+	.about-info-label {
+		margin: 0 0 6px;
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	.about-info-value {
+		margin: 0;
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--ink);
+	}
+
 	#about-skills {
 		list-style: none;
 		display: flex;
 		flex-wrap: wrap;
 		gap: 10px;
 		padding: 0;
-		margin: 28px 0 0;
+		margin: 20px 0 0;
 	}
 
 	#about-skills li {
-		font-size: 13px;
+		font-size: 11px;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
 		padding: 7px 14px;
 		border-radius: 16px;
 		background: var(--bg-2);
@@ -78,6 +134,23 @@ const skills = [
 	@media (max-width: 640px) {
 		#about {
 			padding: 64px 20px;
+		}
+
+		#about-info-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.about-info-cell:nth-child(3) {
+			border-left: none;
+		}
+
+		.about-info-cell {
+			border-bottom: 1px solid var(--border);
+		}
+
+		.about-info-cell:nth-child(3),
+		.about-info-cell:nth-child(4) {
+			border-bottom: none;
 		}
 	}
 </style>

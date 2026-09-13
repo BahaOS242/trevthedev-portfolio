@@ -1,0 +1,272 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const stack = ["Next.js", "TypeScript", "PostgreSQL", "Prisma", "Claude", "Ideogram", "Meta"];
+const workflow = ["Plan", "Create", "Adapt", "Publish", "Measure", "Improve"];
+---
+
+<Layout
+	title="BrandForge AI — TrevTheDev"
+	description="BrandForge AI is an AI marketing operating system that turns a business goal into strategy, creative, publishing, and optimization. Interactive product demo."
+>
+	<nav id="bnav">
+		<a href="/" id="bnav-back">&larr; TrevTheDev</a>
+		<span id="bnav-label">Project — BrandForge AI</span>
+	</nav>
+
+	<section id="bhero">
+		<p id="bhero-kicker">AI Marketing Operating System</p>
+		<h1 id="bhero-heading">BrandForge AI</h1>
+		<p id="bhero-body">Turn a business goal into strategy, creative, publishing, and optimization.</p>
+	</section>
+
+	<section id="bdemo">
+		<div id="bdemo-frame">
+			<div id="bdemo-chrome">
+				<div id="bdemo-dots"><span></span><span></span><span></span></div>
+				<div id="bdemo-url">brandforge.app</div>
+			</div>
+			<iframe
+				id="bdemo-iframe"
+				src="/brandforge-demo.html"
+				title="BrandForge interactive product demo"
+				loading="eager"
+			></iframe>
+		</div>
+	</section>
+
+	<section id="bworkflow">
+		<div id="bworkflow-steps">
+			{
+				workflow.map((step, i) => (
+					<>
+						<span class="bworkflow-step">{step}</span>
+						{i < workflow.length - 1 && <span class="bworkflow-arrow">&rarr;</span>}
+					</>
+				))
+			}
+		</div>
+		<p id="bworkflow-copy">BrandForge connects the entire marketing workflow in one creative system.</p>
+
+		<div id="bstack">
+			{stack.map((tech) => <span class="bstack-badge">{tech}</span>)}
+		</div>
+
+		<a href="https://github.com/BahaOS242/brandforge-ai" target="_blank" rel="noopener noreferrer" id="bgithub">
+			View on GitHub &rarr;
+		</a>
+	</section>
+</Layout>
+
+<style>
+	#bnav {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		padding: 20px 40px;
+		background: var(--surface);
+		border-bottom: 1px solid var(--border);
+	}
+
+	#bnav-back {
+		font-weight: 600;
+		text-decoration: none;
+		letter-spacing: -0.01em;
+		white-space: nowrap;
+	}
+
+	#bnav-label {
+		font-size: 13px;
+		color: var(--ink-soft);
+		text-align: right;
+	}
+
+	#bhero {
+		width: 100%;
+		padding: 56px 40px 36px;
+		text-align: center;
+		background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%);
+	}
+
+	#bhero-kicker {
+		margin: 0 0 16px;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+
+	#bhero-heading {
+		font-family: var(--font-serif);
+		font-weight: 500;
+		font-size: clamp(40px, 6vw, 64px);
+		line-height: 1;
+		letter-spacing: -0.01em;
+		color: var(--ink);
+		margin: 0 0 18px;
+	}
+
+	#bhero-body {
+		font-size: 17px;
+		line-height: 1.6;
+		color: var(--ink-soft);
+		max-width: 560px;
+		margin: 0 auto;
+	}
+
+	#bdemo {
+		padding: 0 40px 64px;
+		background: var(--bg-2);
+	}
+
+	#bdemo-frame {
+		max-width: 1400px;
+		margin: 0 auto;
+		border-radius: 18px;
+		overflow: hidden;
+		background: #0f0d0c;
+		box-shadow: 0 30px 80px rgba(26, 29, 46, 0.22);
+		border: 1px solid var(--border);
+	}
+
+	#bdemo-chrome {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		padding: 12px 16px;
+		background: #17140f;
+	}
+
+	#bdemo-dots {
+		display: flex;
+		gap: 7px;
+		flex: none;
+	}
+
+	#bdemo-dots span {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.16);
+	}
+
+	#bdemo-url {
+		font-size: 12px;
+		color: rgba(255, 255, 255, 0.4);
+		font-family: var(--font);
+		background: rgba(255, 255, 255, 0.06);
+		border-radius: 6px;
+		padding: 5px 12px;
+		letter-spacing: 0.01em;
+	}
+
+	#bdemo-iframe {
+		display: block;
+		width: 100%;
+		height: 88vh;
+		min-height: 640px;
+		max-height: 980px;
+		border: 0;
+		background: #0f0d0c;
+	}
+
+	#bworkflow {
+		padding: 72px 40px;
+		text-align: center;
+	}
+
+	#bworkflow-steps {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		margin-bottom: 20px;
+	}
+
+	.bworkflow-step {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 13px;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--ink);
+	}
+
+	.bworkflow-arrow {
+		color: var(--ink-soft);
+	}
+
+	#bworkflow-copy {
+		font-size: 15px;
+		color: var(--ink-soft);
+		max-width: 480px;
+		margin: 0 auto 40px;
+		line-height: 1.6;
+	}
+
+	#bstack {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 10px;
+		margin-bottom: 36px;
+	}
+
+	.bstack-badge {
+		font-size: 12px;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+		padding: 7px 14px;
+		border-radius: 20px;
+		background: var(--bg-2);
+		border: 1px solid var(--border);
+		color: var(--ink-soft);
+	}
+
+	#bgithub {
+		display: inline-block;
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--ink);
+		text-decoration: none;
+		border-bottom: 1px solid var(--ink);
+		padding-bottom: 2px;
+	}
+
+	@media (max-width: 640px) {
+		#bnav {
+			padding: 16px 20px;
+		}
+
+		#bnav-label {
+			display: none;
+		}
+
+		#bhero {
+			padding: 40px 20px 28px;
+		}
+
+		#bdemo {
+			padding: 0 12px 40px;
+		}
+
+		#bdemo-frame {
+			border-radius: 12px;
+		}
+
+		#bdemo-iframe {
+			height: 78vh;
+			min-height: 520px;
+		}
+
+		#bworkflow {
+			padding: 48px 20px;
+		}
+	}
+</style>

@@ -1,0 +1,2067 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BrandForge</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230F0D0C'/%3E%3Cpath d='M50 14 L74 52 L58 52 L64 86 L26 46 L44 46 Z' fill='%23FF6A4D'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================= TOKENS ============================= */
+:root{
+  --bg:#0F0D0C;
+  --bg-elevated:#141210;
+  --surface:#1B1714;
+  --surface-hover:#242019;
+  --surface-raised:#211D19;
+  --border:#2E2823;
+  --border-strong:#403A32;
+  --text-primary:#F5F1EA;
+  --text-secondary:#AB9F91;
+  --muted:#726A5F;
+  --accent:#FF6A4D;
+  --accent-strong:#FF8266;
+  --accent-dim:#B8482F;
+  --accent-soft:rgba(255,106,77,0.13);
+  --accent-soft-strong:rgba(255,106,77,0.24);
+  --success:#6FBF8A;
+  --success-soft:rgba(111,191,138,0.14);
+  --warning:#E0A94D;
+  --warning-soft:rgba(224,169,77,0.14);
+  --danger:#E0664D;
+  --radius-sm:6px;
+  --radius-md:10px;
+  --radius-lg:16px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,0.4);
+  --shadow-md:0 8px 24px rgba(0,0,0,0.35);
+  --shadow-lg:0 24px 64px rgba(0,0,0,0.5);
+  --font-display:'Fraunces', ui-serif, Georgia, 'Times New Roman', serif;
+  --font-ui:'Hanken Grotesk', ui-sans-serif, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text-primary);
+  font-family:var(--font-ui);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+h1,h2,h3,h4{margin:0;font-family:var(--font-display);font-weight:600;text-wrap:balance;}
+p{margin:0;}
+button{font-family:inherit;}
+::selection{background:var(--accent-soft-strong);color:var(--text-primary);}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+a{color:inherit;}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:8px;border:2px solid var(--bg);}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important;transition-duration:0.01ms !important;}
+}
+
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums;}
+.eyebrow{
+  font-size:11.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* ============================= APP SHELL ============================= */
+#app{display:flex;height:100vh;width:100vw;}
+
+/* ---- Sidebar ---- */
+.sidebar{
+  width:236px;flex:none;background:var(--bg-elevated);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  padding:18px 14px 16px;
+  gap:4px;
+}
+.brand-row{display:flex;align-items:center;gap:9px;padding:6px 8px 18px;}
+.brand-mark{flex:none;display:block;}
+.brand-word{font-family:var(--font-display);font-size:19px;font-weight:600;letter-spacing:-0.01em;}
+.nav-group{display:flex;flex-direction:column;gap:1px;margin-bottom:6px;}
+.nav-item{
+  display:flex;align-items:center;gap:11px;padding:8.5px 10px;border-radius:var(--radius-sm);
+  font-size:13.5px;font-weight:500;color:var(--text-secondary);cursor:pointer;
+  border:1px solid transparent;transition:background .12s ease, color .12s ease;
+  user-select:none;
+}
+.nav-item svg{flex:none;opacity:.85;}
+.nav-item:hover{background:var(--surface-hover);color:var(--text-primary);}
+.nav-item.active{background:var(--surface);color:var(--text-primary);border-color:var(--border);}
+.nav-item.active svg{opacity:1;color:var(--accent);}
+.nav-divider{height:1px;background:var(--border);margin:10px 4px;}
+.sidebar-spacer{flex:1;}
+.biz-card{
+  display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--radius-md);
+  border:1px solid var(--border);background:var(--surface);margin-bottom:8px;cursor:default;
+}
+.biz-mark{
+  width:28px;height:28px;border-radius:8px;background:linear-gradient(155deg,#2A241E,#1B1714);
+  border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-weight:600;font-size:12.5px;color:var(--accent);flex:none;
+}
+.biz-name{font-size:12.5px;font-weight:600;line-height:1.25;}
+.biz-sub{font-size:10.5px;color:var(--muted);}
+.account-row{display:flex;align-items:center;gap:9px;padding:7px 10px;}
+.avatar{
+  width:26px;height:26px;border-radius:50%;flex:none;
+  background:linear-gradient(140deg,#FF8266,#B8482F);
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#1B1714;
+}
+.account-name{font-size:12.5px;font-weight:600;}
+.account-role{font-size:10.5px;color:var(--muted);}
+
+/* ---- Main stage ---- */
+.stage{flex:1;min-width:0;height:100vh;overflow-y:auto;position:relative;}
+.view{display:none;}
+.view.active{display:block;}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 40px 0;
+}
+.topbar .greeting{font-size:13px;color:var(--muted);}
+.topbar-actions{display:flex;align-items:center;gap:10px;}
+.icon-btn{
+  width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--surface);
+  display:flex;align-items:center;justify-content:center;color:var(--text-secondary);cursor:pointer;
+  transition:background .12s ease,color .12s ease,border-color .12s ease;
+}
+.icon-btn:hover{background:var(--surface-hover);color:var(--text-primary);border-color:var(--border-strong);}
+
+/* ============================= BUTTONS ============================= */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  font-size:13px;font-weight:600;padding:9px 16px;border-radius:8px;border:1px solid transparent;
+  cursor:pointer;transition:transform .08s ease, background .12s ease, border-color .12s ease, color .12s ease;
+  white-space:nowrap;
+}
+.btn:active{transform:scale(0.97);}
+.btn-primary{background:var(--accent);color:#1B1108;}
+.btn-primary:hover{background:var(--accent-strong);}
+.btn-secondary{background:var(--surface);color:var(--text-primary);border-color:var(--border-strong);}
+.btn-secondary:hover{background:var(--surface-hover);}
+.btn-ghost{background:transparent;color:var(--text-secondary);border-color:transparent;}
+.btn-ghost:hover{color:var(--text-primary);background:var(--surface-hover);}
+.btn-sm{padding:6.5px 12px;font-size:12px;border-radius:7px;}
+.chip{
+  font-size:12px;font-weight:600;padding:7px 13px;border-radius:99px;border:1px solid var(--border-strong);
+  background:var(--surface);color:var(--text-secondary);cursor:pointer;transition:all .12s ease;
+}
+.chip:hover{border-color:var(--muted);color:var(--text-primary);}
+.chip.active{background:var(--accent-soft);border-color:var(--accent-dim);color:var(--accent-strong);}
+
+/* ============================= HOME ============================= */
+.home-wrap{max-width:920px;margin:0 auto;padding:30px 40px 80px;}
+.create-hero{padding:46px 0 10px;text-align:center;}
+.create-hero h1{font-size:40px;line-height:1.12;letter-spacing:-0.01em;}
+.create-hero .lede{margin-top:12px;font-size:15.5px;color:var(--text-secondary);max-width:480px;margin-left:auto;margin-right:auto;line-height:1.55;}
+
+.prompt-box{
+  margin-top:30px;background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-md);padding:6px 6px 14px;transition:border-color .15s ease, box-shadow .15s ease;
+}
+.prompt-box:focus-within{border-color:var(--accent-dim);box-shadow:0 0 0 3px var(--accent-soft), var(--shadow-md);}
+.prompt-input{
+  width:100%;border:none;background:transparent;resize:none;color:var(--text-primary);
+  font-family:var(--font-display);font-size:19px;font-weight:500;line-height:1.5;
+  padding:18px 18px 6px;min-height:74px;
+}
+.prompt-input:focus{outline:none;}
+.prompt-input::placeholder{color:var(--muted);font-weight:400;}
+.prompt-toolbar{display:flex;align-items:center;justify-content:space-between;padding:0 12px;}
+.prompt-toolbar-left{display:flex;align-items:center;gap:8px;}
+.attach-btn{
+  display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-secondary);
+  background:var(--bg-elevated);border:1px solid var(--border);padding:6px 11px 6px 8px;border-radius:8px;cursor:pointer;
+  transition:all .12s ease;
+}
+.attach-btn:hover{color:var(--text-primary);border-color:var(--border-strong);}
+
+.goal-examples{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:22px;}
+
+.section-head{display:flex;align-items:baseline;justify-content:space-between;margin:56px 0 16px;}
+.section-head h2{font-size:16px;font-weight:600;letter-spacing:-.005em;}
+.section-head .see-all{font-size:12.5px;color:var(--muted);cursor:pointer;}
+.section-head .see-all:hover{color:var(--text-primary);}
+
+.campaign-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.campaign-card{
+  border:1px solid var(--border);background:var(--surface);border-radius:var(--radius-lg);overflow:hidden;
+  cursor:pointer;transition:border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+.campaign-card:hover{border-color:var(--border-strong);transform:translateY(-2px);box-shadow:var(--shadow-md);}
+.campaign-thumb{aspect-ratio:4/3;position:relative;overflow:hidden;background:#0B0A09;}
+.campaign-thumb svg{width:100%;height:100%;display:block;}
+.status-pill{
+  position:absolute;top:10px;left:10px;font-size:10.5px;font-weight:700;letter-spacing:.03em;
+  padding:4px 9px;border-radius:99px;backdrop-filter:blur(6px);
+  display:flex;align-items:center;gap:5px;
+}
+.status-pill.active{background:rgba(111,191,138,0.18);color:#9BE0B2;border:1px solid rgba(111,191,138,0.35);}
+.status-pill.draft{background:rgba(224,169,77,0.16);color:#F0C783;border:1px solid rgba(224,169,77,0.3);}
+.status-pill.done{background:rgba(171,159,145,0.16);color:#CFC5B7;border:1px solid rgba(171,159,145,0.3);}
+.status-pill .dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+.campaign-body{padding:13px 14px 15px;}
+.campaign-title{font-size:14px;font-weight:600;margin-bottom:8px;}
+.campaign-metrics{display:flex;gap:14px;}
+.metric-inline{display:flex;flex-direction:column;gap:2px;}
+.metric-inline .v{font-family:var(--font-mono);font-size:12.5px;font-weight:500;color:var(--text-primary);}
+.metric-inline .l{font-size:10px;color:var(--muted);}
+
+.creative-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.creative-tile{
+  aspect-ratio:4/5;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border);
+  cursor:pointer;position:relative;transition:border-color .15s ease,transform .15s ease;background:#0B0A09;
+}
+.creative-tile:hover{border-color:var(--border-strong);transform:translateY(-2px);}
+.creative-tile svg{width:100%;height:100%;display:block;}
+.creative-tile-label{
+  position:absolute;bottom:0;left:0;right:0;padding:9px 10px 8px;font-size:11px;font-weight:600;
+  background:linear-gradient(to top, rgba(10,9,8,0.85), transparent);color:#F1ECE4;
+}
+
+/* ============================= GENERATION OVERLAY ============================= */
+#genOverlay{
+  position:fixed;inset:0;background:rgba(10,9,8,0.86);backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;z-index:200;
+}
+#genOverlay.active{display:flex;}
+.gen-card{
+  width:380px;background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-lg);
+  padding:30px 28px;box-shadow:var(--shadow-lg);
+}
+.gen-title{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px;}
+.gen-step{display:flex;align-items:center;gap:12px;padding:8px 0;font-size:14px;color:var(--muted);transition:color .2s ease;}
+.gen-step.live{color:var(--text-primary);}
+.gen-step.done{color:var(--text-secondary);}
+.gen-check{
+  width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border-strong);flex:none;
+  display:flex;align-items:center;justify-content:center;transition:all .25s ease;
+}
+.gen-step.live .gen-check{border-color:var(--accent);}
+.gen-step.live .gen-check::after{content:'';width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1s infinite ease-in-out;}
+.gen-step.done .gen-check{background:var(--success);border-color:var(--success);}
+.gen-step.done .gen-check svg{display:block;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(0.8);}}
+
+/* ============================= TOAST ============================= */
+#toastHost{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:400;display:flex;flex-direction:column;gap:8px;align-items:center;}
+.toast{
+  background:var(--bg-elevated);border:1px solid var(--border-strong);color:var(--text-primary);
+  font-size:13px;font-weight:500;padding:11px 18px;border-radius:10px;box-shadow:var(--shadow-lg);
+  display:flex;align-items:center;gap:9px;opacity:0;transform:translateY(8px);
+  animation:toastIn .25s ease forwards;
+}
+.toast.out{animation:toastOut .2s ease forwards;}
+@keyframes toastIn{to{opacity:1;transform:translateY(0);}}
+@keyframes toastOut{to{opacity:0;transform:translateY(8px);}}
+.toast .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none;}
+
+/* ============================= WORKSPACE ============================= */
+.ws-header{padding:22px 40px 0;}
+.ws-crumb{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;margin-bottom:10px;cursor:pointer;}
+.ws-crumb:hover{color:var(--text-secondary);}
+.ws-title-row{display:flex;align-items:center;justify-content:space-between;}
+.ws-title-row h1{font-size:24px;}
+.ws-title-row .status-pill{position:static;margin-left:12px;}
+.ws-title-left{display:flex;align-items:center;}
+
+.ws-tabs{display:flex;gap:2px;margin-top:20px;border-bottom:1px solid var(--border);position:relative;}
+.ws-tab{
+  padding:11px 4px;margin-right:26px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;
+  letter-spacing:.02em;position:relative;transition:color .15s ease;
+}
+.ws-tab:hover{color:var(--text-secondary);}
+.ws-tab.active{color:var(--text-primary);}
+.ws-tab-indicator{position:absolute;bottom:-1px;height:2px;background:var(--accent);transition:left .22s cubic-bezier(.4,0,.2,1),width .22s cubic-bezier(.4,0,.2,1);}
+
+.ws-pane{display:none;padding:26px 40px 70px;}
+.ws-pane.active{display:block;}
+
+/* --- CREATE pane 3-col --- */
+.ws-columns{display:grid;grid-template-columns:250px 1fr 280px;gap:22px;align-items:start;}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;}
+.panel-title{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.brief-row{margin-bottom:16px;}
+.brief-row .k{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.brief-row .v{font-size:13.5px;line-height:1.45;color:var(--text-primary);}
+.brief-row .v.price{font-family:var(--font-mono);font-weight:500;color:var(--accent-strong);}
+
+.stage-preview-wrap{position:relative;}
+.stage-preview{
+  border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border-strong);
+  box-shadow:var(--shadow-lg);position:relative;aspect-ratio:4/5;max-width:420px;margin:0 auto;
+  background:#0B0A09;cursor:pointer;
+}
+.stage-preview .edit-hint{
+  position:absolute;inset:0;background:rgba(10,9,8,0.45);display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .15s ease;
+}
+.stage-preview:hover .edit-hint{opacity:1;}
+.edit-hint span{
+  background:rgba(20,18,16,0.9);border:1px solid var(--border-strong);padding:9px 16px;border-radius:8px;
+  font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:7px;
+}
+.stage-shimmer{position:absolute;inset:0;background:linear-gradient(100deg, transparent 30%, rgba(255,255,255,0.09) 50%, transparent 70%);background-size:200% 100%;animation:shimmer 1.1s infinite;display:none;}
+.stage-shimmer.active{display:block;}
+@keyframes shimmer{0%{background-position:160% 0;}100%{background-position:-60% 0;}}
+.stage-caption{text-align:center;margin-top:14px;font-size:12px;color:var(--muted);}
+
+.ai-panel .ai-head{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.ai-spark{flex:none;}
+.ai-name{font-size:12.5px;font-weight:700;}
+.ai-msg{
+  font-size:13.5px;line-height:1.55;color:var(--text-secondary);background:var(--bg-elevated);
+  border:1px solid var(--border);border-radius:var(--radius-md);padding:12px 13px;margin:12px 0 14px;
+}
+.ai-actions{display:flex;flex-direction:column;gap:7px;}
+.ai-action-btn{
+  display:flex;align-items:center;justify-content:space-between;text-align:left;
+  padding:9px 11px;border-radius:8px;border:1px solid var(--border);background:var(--bg-elevated);
+  color:var(--text-primary);font-size:12.5px;font-weight:500;cursor:pointer;transition:all .12s ease;
+}
+.ai-action-btn:hover{border-color:var(--accent-dim);background:var(--accent-soft);}
+.ai-action-btn svg{opacity:.6;flex:none;}
+
+/* --- PLAN pane --- */
+.plan-grid{display:grid;grid-template-columns:1fr 320px;gap:36px;max-width:920px;}
+.plan-kv{display:grid;grid-template-columns:140px 1fr;row-gap:20px;column-gap:16px;padding:26px 0;border-top:1px solid var(--border);}
+.plan-kv .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding-top:2px;}
+.plan-kv .v{font-size:15.5px;line-height:1.5;font-family:var(--font-display);font-weight:500;}
+.plan-kv .v.price{font-family:var(--font-mono);color:var(--accent-strong);}
+.strategy-note{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;font-size:13px;line-height:1.6;color:var(--text-secondary);}
+.strategy-note b{color:var(--text-primary);}
+
+/* --- ADAPT pane --- */
+.format-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;}
+.format-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.format-card{border:1px solid var(--border);background:var(--surface);border-radius:var(--radius-lg);padding:14px;}
+.format-card .fc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.format-card .fc-name{font-size:12.5px;font-weight:600;}
+.format-card .fc-size{font-size:10.5px;color:var(--muted);font-family:var(--font-mono);}
+.format-canvas{border-radius:8px;overflow:hidden;border:1px solid var(--border);position:relative;background:#0B0A09;}
+.fmt-original .format-canvas{aspect-ratio:4/5;}
+.fmt-ig .format-canvas{aspect-ratio:4/5;}
+.fmt-story .format-canvas{aspect-ratio:9/16;}
+.fmt-fb .format-canvas{aspect-ratio:1/1;}
+.fmt-banner .format-canvas{aspect-ratio:16/9;}
+.fmt-wa .format-canvas{aspect-ratio:1/1;}
+
+/* --- PUBLISH pane --- */
+.publish-grid{display:grid;grid-template-columns:340px 1fr;gap:36px;max-width:880px;}
+.publish-preview{aspect-ratio:4/5;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border-strong);box-shadow:var(--shadow-md);}
+.channel-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:26px;}
+.channel-row{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--surface);}
+.channel-icon{width:32px;height:32px;border-radius:9px;background:var(--bg-elevated);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex:none;}
+.channel-name{font-size:13.5px;font-weight:600;flex:1;}
+.channel-status{font-size:11.5px;font-weight:600;display:flex;align-items:center;gap:6px;}
+.channel-status.on{color:var(--success);}
+.channel-status.off{color:var(--muted);}
+.channel-status .dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+.schedule-row{display:flex;gap:8px;margin-bottom:22px;}
+.schedule-opt{
+  flex:1;padding:12px;border-radius:9px;border:1px solid var(--border-strong);background:var(--surface);
+  cursor:pointer;text-align:center;font-size:13px;font-weight:600;color:var(--text-secondary);transition:all .12s ease;
+}
+.schedule-opt.active{border-color:var(--accent-dim);background:var(--accent-soft);color:var(--accent-strong);}
+.custom-date{margin-top:10px;}
+.custom-date input{
+  width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border-strong);background:var(--bg-elevated);
+  color:var(--text-primary);font-family:inherit;font-size:13px;
+}
+.publish-success{display:none;text-align:center;padding:30px 10px 10px;}
+.publish-success.active{display:block;}
+.success-check{
+  width:52px;height:52px;border-radius:50%;background:var(--success-soft);border:1px solid var(--success);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--success);
+  animation:popIn .3s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes popIn{from{transform:scale(0.5);opacity:0;}to{transform:scale(1);opacity:1;}}
+
+/* --- MEASURE / ANALYTICS --- */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+.stat-tile{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;}
+.stat-tile .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;}
+.stat-tile .v{font-family:var(--font-mono);font-size:24px;font-weight:500;letter-spacing:-.01em;}
+.stat-tile .delta{font-size:11.5px;font-weight:600;margin-top:6px;display:flex;align-items:center;gap:4px;}
+.stat-tile .delta.up{color:var(--success);}
+.chart-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 22px;margin-bottom:24px;}
+.chart-panel-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+.chart-panel-head h3{font-size:13.5px;font-weight:600;}
+.measure-cols{display:grid;grid-template-columns:1.1fr 1fr;gap:22px;}
+.best-creative-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;display:flex;gap:16px;margin-bottom:18px;}
+.best-creative-card .thumb{width:110px;aspect-ratio:4/5;border-radius:8px;overflow:hidden;flex:none;border:1px solid var(--border);}
+.best-creative-info .tag{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--accent-strong);margin-bottom:6px;}
+.best-creative-info h4{font-size:15px;margin-bottom:6px;}
+.best-creative-info .stat{font-family:var(--font-mono);font-size:19px;color:var(--success);font-weight:500;}
+.insight-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:16px;}
+.insight-card .label{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px;}
+.insight-card p{font-size:13.5px;line-height:1.6;color:var(--text-secondary);}
+.insight-card.action{border-color:var(--accent-dim);background:var(--accent-soft);}
+.insight-card.action .label{color:var(--accent-strong);}
+.insight-card.action p{color:var(--text-primary);margin-bottom:14px;}
+
+/* --- IMPROVE pane --- */
+.improve-log{display:flex;flex-direction:column;gap:10px;margin-top:24px;}
+.improve-log-item{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--border);}
+.improve-log-item .idot{width:8px;height:8px;border-radius:50%;background:var(--success);margin-top:6px;flex:none;}
+.improve-log-item .itext{font-size:13px;color:var(--text-secondary);line-height:1.5;}
+.improve-log-item .itime{font-size:11px;color:var(--muted);margin-top:3px;}
+
+/* ============================= CREATE STUDIO (Screen 5) ============================= */
+.studio-wrap{max-width:960px;margin:0 auto;padding:34px 40px 80px;}
+.studio-head h1{font-size:28px;margin-bottom:8px;}
+.studio-head p{color:var(--text-secondary);font-size:14px;margin-bottom:26px;}
+.studio-prompt{
+  background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-lg);padding:16px;
+}
+.studio-textarea{
+  width:100%;border:none;background:transparent;resize:none;color:var(--text-primary);font-family:var(--font-ui);
+  font-size:15px;line-height:1.55;min-height:64px;
+}
+.studio-textarea:focus{outline:none;}
+.studio-controls{display:flex;gap:26px;margin:20px 0;flex-wrap:wrap;}
+.control-group .cg-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:9px;}
+.control-chips{display:flex;gap:7px;flex-wrap:wrap;}
+.studio-generate-row{display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
+.results-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:30px;}
+.result-card{border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;background:var(--surface);position:relative;}
+.result-canvas{aspect-ratio:4/5;position:relative;overflow:hidden;background:#0B0A09;}
+.result-canvas.ar-1-1{aspect-ratio:1/1;}
+.result-canvas.ar-9-16{aspect-ratio:9/16;}
+.result-canvas.ar-16-9{aspect-ratio:16/9;}
+.result-overlay{
+  position:absolute;inset:0;background:rgba(10,9,8,0.72);opacity:0;transition:opacity .15s ease;
+  display:flex;flex-direction:column;justify-content:flex-end;padding:9px;gap:6px;
+}
+.result-card:hover .result-overlay{opacity:1;}
+.result-overlay button{
+  font-size:11.5px;font-weight:600;padding:7px 8px;border-radius:6px;border:1px solid var(--border-strong);
+  background:rgba(27,23,20,0.9);color:var(--text-primary);cursor:pointer;transition:background .12s ease;
+}
+.result-overlay button:hover{background:var(--surface-hover);}
+.result-label{position:absolute;top:8px;left:8px;font-size:10px;font-weight:700;background:rgba(10,9,8,0.6);padding:3px 7px;border-radius:5px;letter-spacing:.03em;}
+.studio-skeleton{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:30px;display:none;}
+.studio-skeleton.active{display:grid;}
+.skeleton-tile{aspect-ratio:4/5;border-radius:var(--radius-md);background:var(--surface);position:relative;overflow:hidden;border:1px solid var(--border);}
+.skeleton-tile::after{content:'';position:absolute;inset:0;background:linear-gradient(100deg, transparent 30%, rgba(255,255,255,0.06) 50%, transparent 70%);background-size:200% 100%;animation:shimmer 1.1s infinite;}
+
+/* ============================= PRODUCTS ============================= */
+.page-wrap{max-width:1040px;margin:0 auto;padding:30px 40px 80px;}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:28px;}
+.page-head h1{font-size:26px;}
+.page-head .sub{color:var(--text-secondary);font-size:13.5px;margin-top:6px;}
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.product-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:border-color .15s ease,transform .15s ease;}
+.product-card:hover{border-color:var(--border-strong);transform:translateY(-2px);}
+.product-thumb{aspect-ratio:1/1;position:relative;overflow:hidden;background:#0B0A09;}
+.product-body{padding:14px 15px 15px;}
+.product-cat{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-strong);margin-bottom:6px;}
+.product-name{font-size:14.5px;font-weight:600;margin-bottom:6px;}
+.product-price{font-family:var(--font-mono);font-size:15px;color:var(--text-primary);margin-bottom:10px;}
+.product-meta{font-size:11.5px;color:var(--muted);border-top:1px solid var(--border);padding-top:10px;}
+.add-product-card{
+  border:1.5px dashed var(--border-strong);border-radius:var(--radius-lg);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:8px;color:var(--muted);cursor:pointer;transition:all .15s ease;min-height:100%;
+}
+.add-product-card:hover{border-color:var(--accent-dim);color:var(--accent-strong);background:var(--accent-soft);}
+
+/* ============================= BRAND DNA ============================= */
+.brand-wrap{max-width:980px;margin:0 auto;padding:34px 40px 90px;}
+.brand-hero{margin-bottom:44px;max-width:520px;}
+.brand-hero h1{font-size:30px;margin-bottom:10px;}
+.brand-hero p{color:var(--text-secondary);font-size:14.5px;line-height:1.55;}
+.brand-section{display:grid;grid-template-columns:200px 1fr;gap:32px;padding:34px 0;border-top:1px solid var(--border);}
+.brand-section:first-of-type{border-top:1px solid var(--border);}
+.brand-section .bs-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding-top:3px;}
+.tag-cluster{display:flex;flex-wrap:wrap;gap:9px;}
+.dna-tag{
+  padding:8px 15px;border-radius:99px;border:1px solid var(--border-strong);background:var(--surface);
+  font-size:13px;font-weight:600;
+}
+.identity-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+.identity-grid .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.identity-grid .v{font-size:14.5px;font-family:var(--font-display);font-weight:500;}
+.swatch-row{display:flex;gap:14px;}
+.swatch{display:flex;flex-direction:column;gap:8px;align-items:center;}
+.swatch .sw{width:56px;height:56px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);}
+.swatch .sw-label{font-size:10.5px;font-family:var(--font-mono);color:var(--muted);}
+.type-sample{display:flex;flex-direction:column;gap:16px;}
+.type-sample .ts-h{font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:var(--text-primary);}
+.type-sample .ts-b{font-size:14px;color:var(--text-secondary);max-width:52ch;line-height:1.6;}
+.type-sample .ts-meta{font-size:11px;color:var(--muted);font-family:var(--font-mono);}
+.rules-list{display:flex;flex-direction:column;gap:10px;}
+.rule-item{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--text-secondary);}
+.rule-item svg{flex:none;margin-top:2px;color:var(--success);}
+
+/* ============================= LIGHT UTILITY VIEWS (Calendar / Integrations) ============================= */
+.timeline{display:flex;flex-direction:column;}
+.timeline-item{display:grid;grid-template-columns:110px 1fr;gap:20px;padding:18px 0;border-top:1px solid var(--border);}
+.timeline-item .tl-when{font-size:12px;color:var(--muted);font-family:var(--font-mono);padding-top:2px;}
+.timeline-card{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px 14px;}
+.timeline-card .tc-thumb{width:44px;height:44px;border-radius:8px;overflow:hidden;flex:none;border:1px solid var(--border);}
+.timeline-card .tc-name{font-size:13.5px;font-weight:600;}
+.timeline-card .tc-channel{font-size:11.5px;color:var(--muted);margin-top:2px;}
+
+.integration-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.integration-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;display:flex;flex-direction:column;gap:14px;}
+.integration-top{display:flex;align-items:center;gap:12px;}
+.integration-top .in-name{font-size:14px;font-weight:600;}
+.integration-top .in-sub{font-size:11.5px;color:var(--muted);}
+
+/* ============================= CREATIVE EDITOR ============================= */
+#editorView{position:fixed;inset:0;background:var(--bg);z-index:150;display:none;flex-direction:column;}
+#editorView.active{display:flex;}
+.editor-top{
+  height:54px;flex:none;border-bottom:1px solid var(--border);display:flex;align-items:center;
+  justify-content:space-between;padding:0 16px;background:var(--bg-elevated);
+}
+.editor-top-left,.editor-top-right{display:flex;align-items:center;gap:10px;}
+.editor-title{font-size:13px;font-weight:600;color:var(--text-secondary);}
+.editor-body{flex:1;display:flex;min-height:0;}
+.editor-rail{width:66px;flex:none;background:var(--bg-elevated);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:4px;}
+.rail-btn{
+  width:46px;height:46px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;color:var(--muted);cursor:pointer;font-size:9.5px;font-weight:600;transition:all .12s ease;
+}
+.rail-btn:hover{color:var(--text-secondary);background:var(--surface-hover);}
+.rail-btn.active{color:var(--accent);background:var(--accent-soft);}
+.editor-canvas-wrap{flex:1;display:flex;align-items:center;justify-content:center;background:
+  repeating-linear-gradient(45deg, var(--bg-elevated) 0, var(--bg-elevated) 1px, var(--bg) 1px, var(--bg) 22px);
+  position:relative;overflow:auto;padding:30px;}
+#editorCanvas{
+  width:460px;height:575px;position:relative;border-radius:6px;overflow:visible;box-shadow:var(--shadow-lg);
+  flex:none;
+}
+#editorCanvas .flyer-bg{position:absolute;inset:0;border-radius:6px;overflow:hidden;}
+#editorCanvas .flyer-bg svg{width:100%;height:100%;display:block;}
+.el{position:absolute;cursor:move;padding:4px 6px;border:1.5px solid transparent;border-radius:4px;}
+.el:hover{border-color:rgba(255,106,77,0.4);}
+.el.selected{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+.el.headline-el{font-family:'Fraunces',serif;font-weight:700;color:#FBF6EF;line-height:1.05;text-shadow:0 3px 18px rgba(0,0,0,0.5);}
+.el.sub-el{font-family:var(--font-ui);font-weight:500;color:#E7DFD4;text-shadow:0 2px 10px rgba(0,0,0,0.5);}
+.el.price-el{
+  font-family:var(--font-mono);font-weight:500;background:rgba(15,13,12,0.72);color:var(--accent-strong);
+  border-radius:8px;backdrop-filter:blur(4px);
+}
+.el.cta-el{
+  font-family:var(--font-ui);font-weight:700;letter-spacing:.03em;background:var(--accent);color:#1B1108;
+  border-radius:8px;text-align:center;
+}
+.el.brandtag-el{font-family:var(--font-mono);font-weight:500;letter-spacing:.12em;color:#C9BFAF;text-transform:uppercase;}
+.editor-inspector{width:264px;flex:none;background:var(--bg-elevated);border-left:1px solid var(--border);padding:18px;overflow-y:auto;}
+.insp-empty{color:var(--muted);font-size:13px;text-align:center;padding:40px 10px;line-height:1.5;}
+.insp-group{margin-bottom:20px;}
+.insp-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:9px;}
+.insp-row{display:flex;gap:8px;margin-bottom:8px;}
+.insp-btn-set{display:flex;gap:6px;}
+.insp-btn{
+  flex:1;padding:7px 0;text-align:center;border-radius:7px;border:1px solid var(--border-strong);background:var(--surface);
+  font-size:12px;font-weight:600;color:var(--text-secondary);cursor:pointer;
+}
+.insp-btn.active{border-color:var(--accent-dim);background:var(--accent-soft);color:var(--accent-strong);}
+.insp-slider{width:100%;accent-color:var(--accent);}
+.insp-text-input{
+  width:100%;padding:9px 10px;border-radius:7px;border:1px solid var(--border-strong);background:var(--surface);
+  color:var(--text-primary);font-family:inherit;font-size:13px;resize:none;
+}
+.insp-num{width:100%;padding:7px 9px;border-radius:7px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text-primary);font-family:var(--font-mono);font-size:12.5px;}
+.swatch-mini-row{display:flex;gap:7px;}
+.swatch-mini{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;}
+.swatch-mini.active{border-color:var(--text-primary);}
+.layer-item{display:flex;align-items:center;justify-content:space-between;padding:8px 9px;border-radius:7px;font-size:12.5px;cursor:pointer;color:var(--text-secondary);}
+.layer-item:hover{background:var(--surface-hover);}
+.layer-item.selected{background:var(--accent-soft);color:var(--accent-strong);}
+
+/* ============================= MODAL ============================= */
+#modalHost{position:fixed;inset:0;background:rgba(10,9,8,0.72);display:none;align-items:center;justify-content:center;z-index:300;}
+#modalHost.active{display:flex;}
+.modal{width:420px;background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-lg);}
+.modal h3{font-size:17px;margin-bottom:4px;}
+.modal .modal-sub{font-size:12.5px;color:var(--muted);margin-bottom:20px;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:11.5px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;}
+.field input,.field select,.field textarea{
+  width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border-strong);background:var(--bg-elevated);
+  color:var(--text-primary);font-family:inherit;font-size:13.5px;
+}
+.field textarea{resize:none;min-height:60px;}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;}
+
+/* ============================= RESPONSIVE ============================= */
+.bottom-nav{display:none;}
+@media (max-width:1100px){
+  .sidebar{width:76px;}
+  .brand-word,.nav-item span,.biz-card .biz-name,.biz-card .biz-sub,.account-name,.account-role{display:none;}
+  .nav-item{justify-content:center;}
+  .biz-card{justify-content:center;}
+  .account-row{justify-content:center;}
+  .ws-columns{grid-template-columns:1fr 1fr;}
+  .ws-columns .ai-panel{grid-column:span 2;}
+  .campaign-grid,.results-grid,.format-grid,.product-grid,.creative-strip{grid-template-columns:repeat(2,1fr);}
+  .plan-grid,.publish-grid,.measure-cols{grid-template-columns:1fr;}
+}
+@media (max-width:720px){
+  .sidebar{display:none;}
+  .bottom-nav{
+    display:flex;position:fixed;bottom:0;left:0;right:0;height:60px;background:var(--bg-elevated);
+    border-top:1px solid var(--border);z-index:100;align-items:center;justify-content:space-around;
+  }
+  .bn-item{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);font-size:9.5px;font-weight:600;cursor:pointer;}
+  .bn-item.active{color:var(--accent);}
+  .stage{padding-bottom:60px;}
+  .home-wrap,.studio-wrap,.page-wrap,.brand-wrap{padding-left:20px;padding-right:20px;}
+  .topbar{padding-left:20px;padding-right:20px;}
+  .ws-header,.ws-pane{padding-left:20px;padding-right:20px;}
+  .create-hero h1{font-size:28px;}
+  .campaign-grid,.results-grid,.format-grid,.product-grid,.creative-strip,.identity-grid{grid-template-columns:1fr;}
+  .ws-columns{grid-template-columns:1fr;}
+  .stat-grid{grid-template-columns:repeat(2,1fr);}
+  .brand-section{grid-template-columns:1fr;gap:12px;}
+  .editor-inspector{position:fixed;right:0;top:54px;bottom:0;box-shadow:var(--shadow-lg);}
+  .editor-rail{width:56px;}
+  #editorCanvas{width:300px;height:375px;}
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <!-- ============================= SIDEBAR ============================= -->
+  <nav class="sidebar">
+    <div class="brand-row">
+      <svg class="brand-mark" width="26" height="26" viewBox="0 0 100 100">
+        <path d="M50 10 L76 52 L59 52 L66 90 L24 44 L43 44 Z" fill="#FF6A4D"/>
+        <path d="M50 10 L76 52 L59 52 L54 32 Z" fill="#B8482F"/>
+      </svg>
+      <span class="brand-word">BrandForge</span>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-item" data-nav="studio">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Create</span>
+      </div>
+      <div class="nav-item active" data-nav="home">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9h5v-5h2v5h5v-9"/></svg>
+        <span>Home</span>
+      </div>
+      <div class="nav-item" data-nav="campaigns">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M3.5 9.5h17"/></svg>
+        <span>Campaigns</span>
+      </div>
+      <div class="nav-item" data-nav="products">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 7 12 3 4 7v10l8 4 8-4Z"/><path d="M4 7l8 4 8-4M12 11v10"/></svg>
+        <span>Products</span>
+      </div>
+      <div class="nav-item" data-nav="brand">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="3.4"/></svg>
+        <span>Brand</span>
+      </div>
+      <div class="nav-item" data-nav="calendar">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>
+        <span>Calendar</span>
+      </div>
+      <div class="nav-item" data-nav="analytics">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10M11 20V4M18 20v-7"/></svg>
+        <span>Analytics</span>
+      </div>
+      <div class="nav-item" data-nav="integrations">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="12" r="3.2"/><circle cx="17" cy="6" r="3.2"/><circle cx="17" cy="18" r="3.2"/><path d="m9.7 10.6 4.6-3.2M9.7 13.4l4.6 3.2"/></svg>
+        <span>Integrations</span>
+      </div>
+    </div>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="biz-card">
+      <div class="biz-mark">AP</div>
+      <div>
+        <div class="biz-name">Armstrong Power</div>
+        <div class="biz-sub">Nassau, Bahamas</div>
+      </div>
+    </div>
+    <div class="account-row">
+      <div class="avatar">T</div>
+      <div>
+        <div class="account-name">Trevor</div>
+        <div class="account-role">Owner</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================= STAGE ============================= -->
+  <main class="stage" id="stage">
+
+    <!-- ===== HOME ===== -->
+    <section class="view active" id="view-home">
+      <div class="topbar">
+        <div class="greeting">Good afternoon, Trevor</div>
+        <div class="topbar-actions">
+          <div class="icon-btn" title="Notifications"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 8a6 6 0 1 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></div>
+          <div class="icon-btn" title="Help">?</div>
+        </div>
+      </div>
+
+      <div class="home-wrap">
+        <div class="create-hero">
+          <h1>What are you trying to&nbsp;accomplish?</h1>
+          <p class="lede">Describe your goal. BrandForge will turn it into a marketing campaign — strategy, copy, and creative, ready to publish.</p>
+        </div>
+
+        <div class="prompt-box">
+          <textarea class="prompt-input" id="goalInput" placeholder="I want to sell 20 portable power stations in Nassau this month.">I want to sell 20 portable power stations in Nassau this month.</textarea>
+          <div class="prompt-toolbar">
+            <div class="prompt-toolbar-left">
+              <button class="attach-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                Add product or context
+              </button>
+            </div>
+            <button class="btn btn-primary" id="createCampaignBtn">
+              Create Campaign
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="goal-examples">
+          <button class="chip" data-goal="I want to sell 40 units of my new product this quarter.">Sell a product</button>
+          <button class="chip" data-goal="I'm hosting a customer appreciation event next month and want to fill the room.">Promote an event</button>
+          <button class="chip" data-goal="I'm launching installation service for the power stations I sell and need first customers.">Launch a new service</button>
+          <button class="chip" data-goal="I want more repeat customers from my existing customer base this season.">Get more customers</button>
+        </div>
+
+        <div class="section-head">
+          <h2>Recent Campaigns</h2>
+          <span class="see-all" data-nav-to="campaigns">See all</span>
+        </div>
+        <div class="campaign-grid" id="homeCampaignGrid"></div>
+
+        <div class="section-head">
+          <h2>Recent Creative</h2>
+          <span class="see-all" data-nav-to="studio">Create new</span>
+        </div>
+        <div class="creative-strip" id="homeCreativeStrip"></div>
+      </div>
+    </section>
+
+    <!-- ===== CREATE STUDIO ===== -->
+    <section class="view" id="view-studio">
+      <div class="topbar"><div class="greeting">Create</div><div></div></div>
+      <div class="studio-wrap">
+        <div class="studio-head">
+          <h1>Create something new</h1>
+          <p>Generate on-brand creative for Armstrong Power in seconds, then push it straight into a campaign.</p>
+        </div>
+        <div class="studio-prompt">
+          <textarea class="studio-textarea" id="studioPrompt">Premium hurricane-season advertisement for a portable power station in a modern Bahamian home, dramatic storm outside, sophisticated editorial advertising photography.</textarea>
+        </div>
+        <div class="studio-controls">
+          <div class="control-group">
+            <div class="cg-label">Aspect Ratio</div>
+            <div class="control-chips" id="aspectChips">
+              <button class="chip active" data-ar="4:5">4:5</button>
+              <button class="chip" data-ar="1:1">1:1</button>
+              <button class="chip" data-ar="9:16">9:16</button>
+              <button class="chip" data-ar="16:9">16:9</button>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="cg-label">Style</div>
+            <div class="control-chips" id="styleChips">
+              <button class="chip active" data-style="Photographic">Photographic</button>
+              <button class="chip" data-style="Editorial">Editorial</button>
+              <button class="chip" data-style="Minimal">Minimal</button>
+              <button class="chip" data-style="Product">Product</button>
+              <button class="chip" data-style="Luxury">Luxury</button>
+            </div>
+          </div>
+        </div>
+        <div class="studio-generate-row">
+          <span class="eyebrow">4 variations · ~6 Forge Tokens</span>
+          <button class="btn btn-primary" id="studioGenerateBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>
+            Generate
+          </button>
+        </div>
+        <div class="studio-skeleton" id="studioSkeleton">
+          <div class="skeleton-tile"></div><div class="skeleton-tile"></div><div class="skeleton-tile"></div><div class="skeleton-tile"></div>
+        </div>
+        <div class="results-grid" id="studioResults"></div>
+      </div>
+    </section>
+
+    <!-- ===== CAMPAIGNS LIST ===== -->
+    <section class="view" id="view-campaigns">
+      <div class="topbar"><div class="greeting">Campaigns</div><div></div></div>
+      <div class="page-wrap">
+        <div class="page-head">
+          <div><h1>Campaigns</h1><div class="sub">Every goal you've turned into a marketing campaign.</div></div>
+          <button class="btn btn-primary" data-nav-to="home">New Campaign</button>
+        </div>
+        <div class="campaign-grid" id="campaignsListGrid"></div>
+      </div>
+    </section>
+
+    <!-- ===== CAMPAIGN WORKSPACE ===== -->
+    <section class="view" id="view-workspace">
+      <div class="ws-header">
+        <div class="ws-crumb" data-nav-to="campaigns">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg>
+          Campaigns
+        </div>
+        <div class="ws-title-row">
+          <div class="ws-title-left">
+            <h1>Hurricane Season Backup Power</h1>
+            <span class="status-pill active"><span class="dot"></span>Active</span>
+          </div>
+          <button class="icon-btn" title="Campaign settings"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1.1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.6 1Z"/></svg></button>
+        </div>
+        <div class="ws-tabs" id="wsTabs">
+          <div class="ws-tab active" data-pane="plan">Plan</div>
+          <div class="ws-tab" data-pane="create">Create</div>
+          <div class="ws-tab" data-pane="adapt">Adapt</div>
+          <div class="ws-tab" data-pane="publish">Publish</div>
+          <div class="ws-tab" data-pane="measure">Measure</div>
+          <div class="ws-tab" data-pane="improve">Improve</div>
+          <div class="ws-tab-indicator" id="wsTabIndicator"></div>
+        </div>
+      </div>
+
+      <!-- PLAN -->
+      <div class="ws-pane active" id="pane-plan">
+        <div class="plan-grid">
+          <div>
+            <div class="plan-kv">
+              <div class="k">Goal</div><div class="v">Sell 20 portable power stations this month.</div>
+              <div class="k">Audience</div><div class="v">Nassau homeowners preparing for hurricane season.</div>
+              <div class="k">Offer</div><div class="v">POWERCORE Backup 500 + battery pack.</div>
+              <div class="k">Price</div><div class="v price">$480</div>
+              <div class="k">CTA</div><div class="v">Message us to order.</div>
+            </div>
+          </div>
+          <div class="strategy-note">
+            <div class="eyebrow" style="margin-bottom:10px;">BrandForge Strategy</div>
+            <p>Storm-prep urgency is highest in the two weeks before peak season. We're leading with reliability and home comfort rather than technical specs, since <b>homeowners buy peace of mind, not watt-hours</b>. Creative should show the product in context — inside a real home — not on a white background.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CREATE -->
+      <div class="ws-pane" id="pane-create">
+        <div class="ws-columns">
+          <div class="panel">
+            <div class="panel-title">Brief</div>
+            <div class="brief-row"><div class="k">Goal</div><div class="v">Sell 20 power stations</div></div>
+            <div class="brief-row"><div class="k">Audience</div><div class="v">Nassau homeowners, storm season</div></div>
+            <div class="brief-row"><div class="k">Offer</div><div class="v">POWERCORE Backup 500</div></div>
+            <div class="brief-row"><div class="k">Price</div><div class="v price">$480</div></div>
+            <div class="brief-row"><div class="k">CTA</div><div class="v">Message us to order</div></div>
+          </div>
+
+          <div class="stage-preview-wrap">
+            <div class="stage-preview" id="mainCreativePreview">
+              <div class="flyer-render" id="mainFlyerRender"></div>
+              <div class="stage-shimmer" id="mainStageShimmer"></div>
+              <div class="edit-hint"><span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                Open in editor</span></div>
+            </div>
+            <div class="stage-caption">POWERCORE — Hero Creative · v3</div>
+          </div>
+
+          <div class="panel ai-panel">
+            <div class="ai-head">
+              <svg class="ai-spark" width="15" height="15" viewBox="0 0 100 100"><path d="M50 10 L76 52 L59 52 L66 90 L24 44 L43 44 Z" fill="#FF6A4D"/></svg>
+              <span class="ai-name">BrandForge AI</span>
+            </div>
+            <div class="ai-msg" id="aiMsg">Your headline is strong, but the offer could stand out more. Want me to bring the price forward?</div>
+            <div class="ai-actions">
+              <button class="ai-action-btn" data-ai-action="premium">Make it more premium <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+              <button class="ai-action-btn" data-ai-action="variations">Create 3 variations <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+              <button class="ai-action-btn" data-ai-action="cta">Increase CTA contrast <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+              <button class="ai-action-btn" data-ai-action="dark">Try a darker composition <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+              <button class="ai-action-btn" data-ai-action="story">Adapt for Story <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADAPT -->
+      <div class="ws-pane" id="pane-adapt">
+        <div class="format-toolbar">
+          <span class="eyebrow">6 formats · same campaign, recomposed per placement</span>
+          <button class="btn btn-secondary" id="recomposeBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v5h5M20 20v-5h-5"/><path d="M5.1 15a7 7 0 0 0 12.3 2.5M18.9 9A7 7 0 0 0 6.6 6.5"/></svg>
+            AI Recompose
+          </button>
+        </div>
+        <div class="format-grid" id="formatGrid"></div>
+      </div>
+
+      <!-- PUBLISH -->
+      <div class="ws-pane" id="pane-publish">
+        <div class="publish-grid">
+          <div>
+            <div class="publish-preview" id="publishPreview"></div>
+          </div>
+          <div>
+            <h2 style="font-size:18px;margin-bottom:16px;">Ready to publish?</h2>
+            <div class="channel-list" id="channelList"></div>
+            <div class="cg-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:9px;">Schedule</div>
+            <div class="schedule-row" id="scheduleRow">
+              <div class="schedule-opt active" data-sched="today">Today</div>
+              <div class="schedule-opt" data-sched="tomorrow">Tomorrow</div>
+              <div class="schedule-opt" data-sched="custom">Custom</div>
+            </div>
+            <div class="custom-date" id="customDateWrap" style="display:none;">
+              <input type="date" id="customDateInput" />
+            </div>
+            <div id="publishActionWrap">
+              <button class="btn btn-primary" id="scheduleBtn" style="width:100%;margin-top:20px;padding:12px;">Schedule Campaign</button>
+            </div>
+            <div class="publish-success" id="publishSuccess">
+              <div class="success-check"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div style="font-weight:600;font-size:15px;margin-bottom:4px;">Campaign scheduled.</div>
+              <div style="font-size:12.5px;color:var(--muted);" id="publishSuccessSub">Going live today across 3 channels.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEASURE -->
+      <div class="ws-pane" id="pane-measure">
+        <div id="measureContent"></div>
+      </div>
+
+      <!-- IMPROVE -->
+      <div class="ws-pane" id="pane-improve">
+        <div class="insight-card">
+          <div class="label">AI Analysis</div>
+          <p>Variation B is outperforming the original primarily because the offer is more visually prominent and the CTA has stronger contrast against the storm backdrop.</p>
+        </div>
+        <div class="insight-card action">
+          <div class="label">Recommended Action</div>
+          <p>Create 3 additional variations using Variation B's composition, then rotate budget toward the strongest performer after 48 hours.</p>
+          <button class="btn btn-primary" id="generateVariationsBtn">Generate Variations</button>
+        </div>
+        <div class="panel-title" style="margin-top:8px;">Optimization Log</div>
+        <div class="improve-log" id="improveLog"></div>
+      </div>
+    </section>
+
+    <!-- ===== PRODUCTS ===== -->
+    <section class="view" id="view-products">
+      <div class="topbar"><div class="greeting">Products</div><div></div></div>
+      <div class="page-wrap">
+        <div class="page-head">
+          <div><h1>Products</h1><div class="sub">What BrandForge knows about what you sell.</div></div>
+        </div>
+        <div class="product-grid" id="productGrid"></div>
+      </div>
+    </section>
+
+    <!-- ===== BRAND DNA ===== -->
+    <section class="view" id="view-brand">
+      <div class="topbar"><div class="greeting">Brand DNA</div><div></div></div>
+      <div class="brand-wrap">
+        <div class="brand-hero">
+          <h1>Brand DNA</h1>
+          <p>Everything BrandForge creates should feel like your brand — not like it came from an AI tool.</p>
+        </div>
+
+        <div class="brand-section">
+          <div class="bs-label">Identity</div>
+          <div class="identity-grid">
+            <div><div class="k">Business</div><div class="v">Armstrong Power</div></div>
+            <div><div class="k">Category</div><div class="v">Portable Backup Power</div></div>
+            <div><div class="k">Location</div><div class="v">Nassau, Bahamas</div></div>
+            <div><div class="k">Founded</div><div class="v">2021</div></div>
+          </div>
+        </div>
+
+        <div class="brand-section">
+          <div class="bs-label">Voice &amp; Tone</div>
+          <div class="tag-cluster">
+            <span class="dna-tag">Confident</span><span class="dna-tag">Clear</span>
+            <span class="dna-tag">Helpful</span><span class="dna-tag">Local</span>
+          </div>
+        </div>
+
+        <div class="brand-section">
+          <div class="bs-label">Audience</div>
+          <div class="identity-grid">
+            <div><div class="k">Primary</div><div class="v">Homeowners, ages 30–55</div></div>
+            <div><div class="k">Trigger</div><div class="v">Hurricane season preparation</div></div>
+          </div>
+        </div>
+
+        <div class="brand-section">
+          <div class="bs-label">Visual Style</div>
+          <div>
+            <div class="tag-cluster" style="margin-bottom:22px;">
+              <span class="dna-tag">Premium</span><span class="dna-tag">Editorial</span>
+              <span class="dna-tag">Modern</span><span class="dna-tag">Trustworthy</span>
+            </div>
+            <div class="swatch-row" style="margin-bottom:26px;">
+              <div class="swatch"><div class="sw" style="background:#12222B;"></div><div class="sw-label">#12222B</div></div>
+              <div class="swatch"><div class="sw" style="background:#E8A845;"></div><div class="sw-label">#E8A845</div></div>
+              <div class="swatch"><div class="sw" style="background:#F4EFE6;"></div><div class="sw-label">#F4EFE6</div></div>
+              <div class="swatch"><div class="sw" style="background:#2E4C50;"></div><div class="sw-label">#2E4C50</div></div>
+            </div>
+            <div class="type-sample">
+              <div class="ts-h">Keep your home powered.</div>
+              <div class="ts-b">Reliable backup power when the grid goes down. Armstrong Power's brand typeface pairs a confident serif headline with a clean grotesk for body copy — distinct from BrandForge's own interface type.</div>
+              <div class="ts-meta">DISPLAY: FRAUNCES 600 · BODY: HANKEN GROTESK 400</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="brand-section">
+          <div class="bs-label">Rules</div>
+          <div class="rules-list">
+            <div class="rule-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M5 13l4 4L19 7"/></svg>No exaggerated claims.</div>
+            <div class="rule-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M5 13l4 4L19 7"/></svg>Keep pricing visible.</div>
+            <div class="rule-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M5 13l4 4L19 7"/></svg>Use clear calls to action.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CALENDAR ===== -->
+    <section class="view" id="view-calendar">
+      <div class="topbar"><div class="greeting">Calendar</div><div></div></div>
+      <div class="page-wrap">
+        <div class="page-head"><div><h1>Calendar</h1><div class="sub">What's scheduled to publish next.</div></div></div>
+        <div class="timeline" id="calendarTimeline"></div>
+      </div>
+    </section>
+
+    <!-- ===== ANALYTICS ===== -->
+    <section class="view" id="view-analytics">
+      <div class="topbar"><div class="greeting">Analytics</div><div></div></div>
+      <div class="page-wrap">
+        <h1 style="font-size:22px;margin-bottom:20px;">Hurricane Season Backup Power</h1>
+        <div id="analyticsStandaloneContent"></div>
+      </div>
+    </section>
+
+    <!-- ===== INTEGRATIONS ===== -->
+    <section class="view" id="view-integrations">
+      <div class="topbar"><div class="greeting">Integrations</div><div></div></div>
+      <div class="page-wrap">
+        <div class="page-head"><div><h1>Integrations</h1><div class="sub">Where BrandForge can publish on your behalf.</div></div></div>
+        <div class="integration-grid" id="integrationGrid"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ===== MOBILE BOTTOM NAV ===== -->
+<div class="bottom-nav">
+  <div class="bn-item active" data-nav="home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9h5v-5h2v5h5v-9"/></svg>Home</div>
+  <div class="bn-item" data-nav="studio"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg>Create</div>
+  <div class="bn-item" data-nav="campaigns"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="5" width="17" height="14" rx="2"/></svg>Campaigns</div>
+  <div class="bn-item" data-nav="analytics"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10M11 20V4M18 20v-7"/></svg>Analytics</div>
+</div>
+
+<!-- ===== AI GENERATION OVERLAY ===== -->
+<div id="genOverlay">
+  <div class="gen-card">
+    <div class="gen-title">Building your campaign</div>
+    <div id="genSteps"></div>
+  </div>
+</div>
+
+<!-- ===== CREATIVE EDITOR ===== -->
+<div id="editorView">
+  <div class="editor-top">
+    <div class="editor-top-left">
+      <button class="icon-btn" id="editorCloseBtn" title="Close">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <span class="editor-title">POWERCORE — Hero Creative</span>
+    </div>
+    <div class="editor-top-right">
+      <button class="icon-btn" id="undoBtn" title="Undo"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-2"/></svg></button>
+      <button class="icon-btn" id="redoBtn" title="Redo"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h2"/></svg></button>
+      <button class="btn btn-secondary btn-sm" id="editorDoneBtn">Done editing</button>
+    </div>
+  </div>
+  <div class="editor-body">
+    <div class="editor-rail">
+      <div class="rail-btn active" data-rail="design">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/></svg>Design
+      </div>
+      <div class="rail-btn" data-rail="text">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 6h14M12 6v13"/></svg>Text
+      </div>
+      <div class="rail-btn" data-rail="media">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m5 17 4.5-4.5L13 16l3-3 3 3.5"/></svg>Media
+      </div>
+      <div class="rail-btn" data-rail="brandrail">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>Brand
+      </div>
+      <div class="rail-btn" data-rail="elements">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="8" r="4"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Elements
+      </div>
+      <div class="rail-btn" data-rail="layers">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 3 8 4.5-8 4.5-8-4.5Z"/><path d="m4 12 8 4.5 8-4.5M4 16.5 12 21l8-4.5"/></svg>Layers
+      </div>
+    </div>
+    <div class="editor-canvas-wrap">
+      <div id="editorCanvas"></div>
+    </div>
+    <div class="editor-inspector" id="editorInspector"></div>
+  </div>
+</div>
+
+<!-- ===== ADD PRODUCT MODAL ===== -->
+<div id="modalHost">
+  <div class="modal">
+    <h3>Add Product</h3>
+    <div class="modal-sub">Tell BrandForge about what you sell.</div>
+    <div class="field"><label>Product name</label><input type="text" id="npName" placeholder="POWERCORE Mini 250" /></div>
+    <div class="field"><label>Description</label><textarea id="npDesc" placeholder="Compact backup power for weekend trips and short outages."></textarea></div>
+    <div class="field"><label>Price</label><input type="text" id="npPrice" placeholder="$280" /></div>
+    <div class="field"><label>Category</label><select id="npCat"><option>Portable Power</option><option>Accessories</option><option>Installation</option></select></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="modalCancelBtn">Cancel</button>
+      <button class="btn btn-primary" id="modalAddBtn">Add Product</button>
+    </div>
+  </div>
+</div>
+
+<div id="toastHost"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================= FLYER ART (shared SVG scene) ============================= */
+function flyerSVG(opts){
+  opts = opts || {};
+  var tone = opts.tone || 'default'; // default | premium | luxury | tourist | dark
+  var skies = {
+    default: ['#1B3A45','#0E1E24','#D98A3D'],
+    premium: ['#131F26','#0A1216','#B8482F'],
+    luxury:  ['#171310','#0B0908','#C9A24B'],
+    tourist: ['#2C5E68','#12262B','#E8A845'],
+    dark:    ['#0C1114','#060809','#8A3A2A']
+  };
+  var s = skies[tone] || skies.default;
+  var grain = opts.grain ? '<rect width="800" height="1000" fill="url(#n)" opacity="0.05"/>' : '';
+  return ''+
+  '<svg viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">'+
+  '<defs>'+
+    '<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">'+
+      '<stop offset="0%" stop-color="'+s[0]+'"/><stop offset="55%" stop-color="'+s[1]+'"/><stop offset="100%" stop-color="'+s[1]+'"/>'+
+    '</linearGradient>'+
+    '<radialGradient id="glow" cx="72%" cy="30%" r="55%">'+
+      '<stop offset="0%" stop-color="'+s[2]+'" stop-opacity="0.55"/><stop offset="100%" stop-color="'+s[2]+'" stop-opacity="0"/>'+
+    '</radialGradient>'+
+    '<linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">'+
+      '<stop offset="0%" stop-color="#050403"/><stop offset="100%" stop-color="#020202"/>'+
+    '</linearGradient>'+
+    '<pattern id="rain" width="34" height="34" patternTransform="rotate(18)" patternUnits="userSpaceOnUse">'+
+      '<line x1="0" y1="0" x2="0" y2="24" stroke="#CFE8EE" stroke-width="1.4" opacity="0.16"/>'+
+    '</pattern>'+
+  '</defs>'+
+  '<rect width="800" height="1000" fill="url(#sky)"/>'+
+  '<rect width="800" height="1000" fill="url(#glow)"/>'+
+  '<rect width="800" height="1000" fill="url(#rain)"/>'+
+  // distant palms
+  '<g opacity="0.5" fill="#081014">'+
+    '<path d="M90 650 C70 610 60 560 90 520 C95 560 100 600 108 650 Z"/>'+
+    '<path d="M90 650 C120 615 150 600 175 610 C150 620 120 635 108 650 Z"/>'+
+    '<path d="M90 650 C55 630 30 615 12 620 C40 630 65 645 78 655 Z"/>'+
+    '<rect x="84" y="640" width="10" height="120" />'+
+  '</g>'+
+  // house silhouette, flat illustration
+  '<g>'+
+    '<polygon points="180,560 620,560 620,940 180,940" fill="#0A0F12"/>'+
+    '<polygon points="150,565 400,430 650,565" fill="#070B0D"/>'+
+    '<rect x="235" y="620" width="120" height="150" rx="4" fill="'+s[2]+'" opacity="0.85"/>'+
+    '<rect x="235" y="620" width="120" height="150" rx="4" fill="none" stroke="#1A1310" stroke-width="6"/>'+
+    '<rect x="445" y="640" width="90" height="90" rx="3" fill="'+s[2]+'" opacity="0.55"/>'+
+    '<rect x="445" y="640" width="90" height="90" rx="3" fill="none" stroke="#1A1310" stroke-width="5"/>'+
+  '</g>'+
+  // ground / patio
+  '<rect x="0" y="880" width="800" height="120" fill="url(#ground)"/>'+
+  // product: power station on patio table
+  '<g transform="translate(480,760)">'+
+    '<rect x="-10" y="118" width="220" height="14" rx="4" fill="#0A0705"/>'+
+    '<rect x="0" y="0" width="200" height="122" rx="16" fill="#1D2124"/>'+
+    '<rect x="0" y="0" width="200" height="122" rx="16" fill="none" stroke="#33383B" stroke-width="2"/>'+
+    '<rect x="16" y="18" width="168" height="46" rx="7" fill="#101315"/>'+
+    '<circle cx="34" cy="41" r="6" fill="'+ (tone==='dark'||tone==='premium' ? '#FF6A4D' : '#6FBF8A') +'"/>'+
+    '<rect x="52" y="34" width="90" height="6" rx="3" fill="#3A4044"/>'+
+    '<rect x="52" y="46" width="60" height="6" rx="3" fill="#2C3134"/>'+
+    '<rect x="16" y="78" width="76" height="28" rx="6" fill="#101315"/>'+
+    '<rect x="104" y="78" width="80" height="28" rx="6" fill="#101315"/>'+
+    '<rect x="-16" y="34" width="16" height="50" rx="6" fill="#15181A"/>'+
+  '</g>'+
+  grain+
+  '</svg>';
+}
+
+/* Element layouts per aspect for recomposition demo */
+function flyerLayers(variant){
+  variant = variant || {};
+  var headline = variant.headline || 'KEEP YOUR HOME\nPOWERED.';
+  return {headline:headline, sub:'Reliable backup power when the grid goes down.', price:'$480', cta:'MESSAGE US TO ORDER', brand:'POWERCORE'};
+}
+
+function renderFlyer(container, opts){
+  opts = opts || {};
+  var layout = opts.layout || 'poster'; // poster | story | banner | square | chat
+  var tone = opts.tone || 'default';
+  var copy = flyerLayers(opts);
+  var html = '<div style="position:relative;width:100%;height:100%;">'+
+    '<div style="position:absolute;inset:0;">'+flyerSVG({tone:tone, grain:opts.grain})+'</div>';
+
+  if(layout==='banner'){
+    html += '<div style="position:absolute;inset:0;display:flex;align-items:center;padding:6% 5%;gap:4%;">'+
+      '<div style="flex:1;">'+
+        '<div style="font-family:\'IBM Plex Mono\',monospace;letter-spacing:.15em;font-size:0.62em;color:#C9BFAF;margin-bottom:0.5em;text-transform:uppercase;">'+copy.brand+'</div>'+
+        '<div style="font-family:\'Fraunces\',serif;font-weight:700;font-size:1.55em;line-height:1.05;color:#FBF6EF;text-shadow:0 3px 16px rgba(0,0,0,.5);">Keep your home powered.</div>'+
+      '</div>'+
+      '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.5em;">'+
+        '<div style="font-family:\'IBM Plex Mono\',monospace;font-weight:500;color:#FF8266;background:rgba(15,13,12,.72);padding:0.35em 0.7em;border-radius:6px;font-size:0.85em;">'+copy.price+'</div>'+
+        '<div style="font-family:\'Hanken Grotesk\',sans-serif;font-weight:700;letter-spacing:.03em;background:#FF6A4D;color:#1B1108;padding:0.5em 0.9em;border-radius:6px;font-size:0.68em;white-space:nowrap;">'+copy.cta+'</div>'+
+      '</div>'+
+    '</div>';
+  } else if(layout==='story'){
+    html += '<div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:7% 8%;">'+
+      '<div style="font-family:\'IBM Plex Mono\',monospace;letter-spacing:.15em;font-size:0.6em;color:#C9BFAF;text-transform:uppercase;">'+copy.brand+'</div>'+
+      '<div style="text-align:center;">'+
+        '<div style="font-family:\'Fraunces\',serif;font-weight:700;font-size:1.7em;line-height:1.08;color:#FBF6EF;text-shadow:0 3px 16px rgba(0,0,0,.5);margin-bottom:0.3em;">KEEP YOUR<br/>HOME POWERED.</div>'+
+        '<div style="font-family:\'Hanken Grotesk\',sans-serif;font-size:0.7em;color:#E7DFD4;">'+copy.sub+'</div>'+
+      '</div>'+
+      '<div style="display:flex;flex-direction:column;align-items:center;gap:0.6em;">'+
+        '<div style="font-family:\'IBM Plex Mono\',monospace;font-weight:500;color:#FF8266;font-size:1em;">'+copy.price+'</div>'+
+        '<div style="font-family:\'Hanken Grotesk\',sans-serif;font-weight:700;letter-spacing:.03em;background:#FF6A4D;color:#1B1108;padding:0.7em 1.4em;border-radius:8px;font-size:0.72em;width:80%;text-align:center;">'+copy.cta+'</div>'+
+      '</div>'+
+    '</div>';
+  } else if(layout==='chat'){
+    html += '<div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:8%;gap:0.5em;">'+
+      '<div style="font-family:\'Fraunces\',serif;font-weight:700;font-size:1.25em;line-height:1.1;color:#FBF6EF;text-shadow:0 3px 14px rgba(0,0,0,.5);">Keep your home<br/>powered.</div>'+
+      '<div style="display:flex;align-items:center;gap:0.6em;margin-top:0.4em;">'+
+        '<div style="font-family:\'IBM Plex Mono\',monospace;font-weight:500;color:#FF8266;background:rgba(15,13,12,.72);padding:0.3em 0.6em;border-radius:6px;font-size:0.72em;">'+copy.price+'</div>'+
+        '<div style="font-family:\'Hanken Grotesk\',sans-serif;font-weight:700;letter-spacing:.02em;background:#FF6A4D;color:#1B1108;padding:0.4em 0.8em;border-radius:6px;font-size:0.62em;">'+copy.cta+'</div>'+
+      '</div>'+
+    '</div>';
+  } else { // poster / square default
+    html += '<div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:7%;">'+
+      '<div style="font-family:\'IBM Plex Mono\',monospace;letter-spacing:.15em;font-size:0.6em;color:#C9BFAF;text-transform:uppercase;">'+copy.brand+'</div>'+
+      '<div>'+
+        '<div style="font-family:\'Fraunces\',serif;font-weight:700;font-size:1.5em;line-height:1.08;color:#FBF6EF;text-shadow:0 3px 16px rgba(0,0,0,.5);margin-bottom:0.35em;">KEEP YOUR HOME<br/>POWERED.</div>'+
+        '<div style="font-family:\'Hanken Grotesk\',sans-serif;font-size:0.68em;color:#E7DFD4;margin-bottom:0.9em;max-width:75%;">'+copy.sub+'</div>'+
+        '<div style="display:flex;align-items:center;gap:0.7em;">'+
+          '<div style="font-family:\'IBM Plex Mono\',monospace;font-weight:500;color:#FF8266;background:rgba(15,13,12,.72);padding:0.35em 0.7em;border-radius:6px;font-size:0.78em;">'+copy.price+'</div>'+
+          '<div style="font-family:\'Hanken Grotesk\',sans-serif;font-weight:700;letter-spacing:.03em;background:#FF6A4D;color:#1B1108;padding:0.55em 1em;border-radius:6px;font-size:0.62em;">'+copy.cta+'</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+/* ============================= TOAST ============================= */
+function toast(msg){
+  var host = document.getElementById('toastHost');
+  var el = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = '<span class="dot"></span>'+msg;
+  host.appendChild(el);
+  setTimeout(function(){
+    el.classList.add('out');
+    setTimeout(function(){ el.remove(); }, 220);
+  }, 2600);
+}
+
+/* ============================= NAVIGATION ============================= */
+var views = ['home','studio','campaigns','workspace','products','brand','calendar','analytics','integrations'];
+function showView(name){
+  views.forEach(function(v){
+    document.getElementById('view-'+v).classList.toggle('active', v===name);
+  });
+  document.querySelectorAll('.nav-item[data-nav]').forEach(function(n){
+    n.classList.toggle('active', n.getAttribute('data-nav')===name);
+  });
+  document.querySelectorAll('.bn-item[data-nav]').forEach(function(n){
+    n.classList.toggle('active', n.getAttribute('data-nav')===name);
+  });
+  document.getElementById('stage').scrollTop = 0;
+  if(name==='analytics') renderAnalytics('analyticsStandaloneContent');
+}
+document.querySelectorAll('[data-nav]').forEach(function(el){
+  el.addEventListener('click', function(){ showView(el.getAttribute('data-nav')); });
+});
+document.querySelectorAll('[data-nav-to]').forEach(function(el){
+  el.addEventListener('click', function(){ showView(el.getAttribute('data-nav-to')); });
+});
+
+/* ============================= HOME: campaign + creative grids ============================= */
+var CAMPAIGNS = [
+  {id:'hurricane', name:'Hurricane Season Backup Power', status:'active', tone:'default', impressions:'2.4K', engagement:'+34%'},
+  {id:'backtoschool', name:'Back-to-School Bundle', status:'draft', tone:'tourist', impressions:'—', engagement:'—'},
+  {id:'founders', name:"Founder's Day Promo", status:'done', tone:'luxury', impressions:'6.1K', engagement:'+19%'}
+];
+function statusLabel(s){ return s==='active'?'Active':s==='draft'?'Draft':'Completed'; }
+
+function buildCampaignCard(c){
+  var card = document.createElement('div');
+  card.className = 'campaign-card';
+  var thumb = document.createElement('div');
+  thumb.className = 'campaign-thumb';
+  var pill = document.createElement('div');
+  pill.className = 'status-pill '+c.status;
+  pill.innerHTML = '<span class="dot"></span>'+statusLabel(c.status);
+  var art = document.createElement('div');
+  art.style.width='100%'; art.style.height='100%';
+  renderFlyer(art, {layout:'poster', tone:c.tone});
+  thumb.appendChild(art); thumb.appendChild(pill);
+  card.appendChild(thumb);
+  var body = document.createElement('div');
+  body.className='campaign-body';
+  body.innerHTML = '<div class="campaign-title">'+c.name+'</div>'+
+    '<div class="campaign-metrics">'+
+      '<div class="metric-inline"><div class="v mono">'+c.engagement+'</div><div class="l">engagement</div></div>'+
+      '<div class="metric-inline"><div class="v mono">'+c.impressions+'</div><div class="l">impressions</div></div>'+
+    '</div>';
+  card.appendChild(body);
+  card.addEventListener('click', function(){
+    if(c.id==='hurricane'){ openWorkspace(); }
+    else { toast('This demo focuses on Hurricane Season Backup Power'); }
+  });
+  return card;
+}
+function fillCampaignGrids(){
+  ['homeCampaignGrid','campaignsListGrid'].forEach(function(id){
+    var grid = document.getElementById(id);
+    grid.innerHTML='';
+    CAMPAIGNS.forEach(function(c){ grid.appendChild(buildCampaignCard(c)); });
+  });
+}
+fillCampaignGrids();
+
+var RECENT_CREATIVE = [
+  {label:'Hero — Storm Angle', tone:'default'},
+  {label:'Variation B', tone:'premium'},
+  {label:'Tourist Rental Angle', tone:'tourist'},
+  {label:'Founder\'s Day', tone:'luxury'}
+];
+(function(){
+  var strip = document.getElementById('homeCreativeStrip');
+  RECENT_CREATIVE.forEach(function(c){
+    var tile = document.createElement('div');
+    tile.className='creative-tile';
+    var art=document.createElement('div'); art.style.width='100%';art.style.height='100%';
+    renderFlyer(art,{layout:'poster', tone:c.tone});
+    var label=document.createElement('div'); label.className='creative-tile-label'; label.textContent=c.label;
+    tile.appendChild(art); tile.appendChild(label);
+    tile.addEventListener('click', function(){ showView('studio'); });
+    strip.appendChild(tile);
+  });
+})();
+
+/* ============================= GOAL EXAMPLE CHIPS ============================= */
+document.querySelectorAll('.goal-examples .chip').forEach(function(chip){
+  chip.addEventListener('click', function(){
+    document.getElementById('goalInput').value = chip.getAttribute('data-goal');
+    document.getElementById('goalInput').focus();
+  });
+});
+
+/* ============================= AI GENERATION OVERLAY -> WORKSPACE ============================= */
+var GEN_STEPS = ['Understanding your business...','Analyzing the offer...','Defining the audience...','Building campaign strategy...','Generating creative direction...'];
+document.getElementById('createCampaignBtn').addEventListener('click', runGeneration);
+function runGeneration(){
+  var overlay = document.getElementById('genOverlay');
+  var stepsHost = document.getElementById('genSteps');
+  stepsHost.innerHTML='';
+  var rows = GEN_STEPS.map(function(t){
+    var row = document.createElement('div');
+    row.className='gen-step';
+    row.innerHTML = '<span class="gen-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#12140F" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span><span>'+t+'</span>';
+    stepsHost.appendChild(row);
+    return row;
+  });
+  overlay.classList.add('active');
+  var i=0;
+  function step(){
+    if(i>0) rows[i-1].classList.remove('live'), rows[i-1].classList.add('done');
+    if(i<rows.length){
+      rows[i].classList.add('live');
+      i++;
+      setTimeout(step, 620);
+    } else {
+      setTimeout(function(){
+        overlay.classList.remove('active');
+        openWorkspace();
+        toast('Campaign strategy generated');
+      }, 450);
+    }
+  }
+  step();
+}
+function openWorkspace(){
+  showView('workspace');
+  setWsTab('plan');
+}
+
+/* ============================= WORKSPACE TABS ============================= */
+var wsPanes = ['plan','create','adapt','publish','measure','improve'];
+function setWsTab(name){
+  wsPanes.forEach(function(p){ document.getElementById('pane-'+p).classList.toggle('active', p===name); });
+  var tabs = document.querySelectorAll('.ws-tab');
+  var activeTab;
+  tabs.forEach(function(t){
+    var on = t.getAttribute('data-pane')===name;
+    t.classList.toggle('active', on);
+    if(on) activeTab = t;
+  });
+  if(activeTab){
+    var ind = document.getElementById('wsTabIndicator');
+    ind.style.left = activeTab.offsetLeft+'px';
+    ind.style.width = activeTab.offsetWidth+'px';
+  }
+  if(name==='create') renderMainFlyer();
+  if(name==='adapt') renderFormats();
+  if(name==='publish') renderPublish();
+  if(name==='measure') renderAnalytics('measureContent');
+  if(name==='improve') renderImproveLog();
+}
+document.querySelectorAll('.ws-tab').forEach(function(t){
+  t.addEventListener('click', function(){ setWsTab(t.getAttribute('data-pane')); });
+});
+window.addEventListener('resize', function(){
+  var active = document.querySelector('.ws-tab.active');
+  if(active){
+    var ind = document.getElementById('wsTabIndicator');
+    ind.style.left = active.offsetLeft+'px';
+    ind.style.width = active.offsetWidth+'px';
+  }
+});
+
+/* ---- CREATE pane: main flyer + AI director ---- */
+var creativeState = {tone:'default'};
+function renderMainFlyer(){
+  var host = document.getElementById('mainFlyerRender');
+  renderFlyer(host, {layout:'poster', tone:creativeState.tone});
+  setTimeout(function(){
+    var ind = document.getElementById('wsTabIndicator');
+    var active = document.querySelector('.ws-tab.active');
+    if(active){ ind.style.left = active.offsetLeft+'px'; ind.style.width = active.offsetWidth+'px'; }
+  },0);
+}
+document.getElementById('mainCreativePreview').addEventListener('click', openEditor);
+
+var AI_RESPONSES = {
+  premium: {msg:'Refining composition for a more premium feel — deeper shadows, tighter crop on the product.', tone:'premium'},
+  variations: {msg:'Generated 3 new variations from this composition. Open Create Studio to compare them side by side.', tone:'default'},
+  cta: {msg:'Increased contrast behind the call to action so it holds up on smaller placements.', tone:'default'},
+  dark: {msg:'Tried a darker, moodier composition — better for evening placements and Stories.', tone:'dark'},
+  story: {msg:'Adapted this composition for a vertical Story format. Check the Adapt tab to see it.', tone:'default'}
+};
+document.querySelectorAll('.ai-action-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var action = btn.getAttribute('data-ai-action');
+    var resp = AI_RESPONSES[action];
+    var shimmer = document.getElementById('mainStageShimmer');
+    document.getElementById('aiMsg').textContent = 'Refining composition...';
+    shimmer.classList.add('active');
+    setTimeout(function(){
+      shimmer.classList.remove('active');
+      creativeState.tone = resp.tone;
+      renderMainFlyer();
+      document.getElementById('aiMsg').textContent = resp.msg;
+      toast('BrandForge AI updated the creative');
+      if(action==='variations') logImprovement('Generated 3 variations from current composition.');
+    }, 850);
+  });
+});
+
+/* ============================= ADAPT: format grid ============================= */
+var FORMATS = [
+  {key:'original', name:'Original', size:'1600×2000', layout:'poster', cls:'fmt-original'},
+  {key:'ig', name:'4:5 Instagram', size:'1080×1350', layout:'poster', cls:'fmt-ig'},
+  {key:'story', name:'9:16 Story', size:'1080×1920', layout:'story', cls:'fmt-story'},
+  {key:'fb', name:'1:1 Facebook', size:'1080×1080', layout:'square', cls:'fmt-fb'},
+  {key:'banner', name:'16:9 Website Banner', size:'1920×1080', layout:'banner', cls:'fmt-banner'},
+  {key:'wa', name:'WhatsApp', size:'1080×1080', layout:'chat', cls:'fmt-wa'}
+];
+var recomposed = false;
+function renderFormats(){
+  var grid = document.getElementById('formatGrid');
+  grid.innerHTML='';
+  FORMATS.forEach(function(f){
+    var card = document.createElement('div');
+    card.className='format-card '+f.cls;
+    var layoutToUse = f.layout;
+    if(recomposed && f.key==='ig') layoutToUse='square';
+    if(recomposed && f.key==='banner') layoutToUse='chat';
+    card.innerHTML = '<div class="fc-head"><span class="fc-name">'+f.name+'</span><span class="fc-size mono">'+f.size+'</span></div>'+
+      '<div class="format-canvas" id="fmt-'+f.key+'"></div>';
+    grid.appendChild(card);
+    renderFlyer(card.querySelector('.format-canvas'), {layout:layoutToUse, tone:creativeState.tone});
+  });
+}
+document.getElementById('recomposeBtn').addEventListener('click', function(){
+  document.querySelectorAll('.format-canvas').forEach(function(c){ c.style.transition='opacity .18s ease'; c.style.opacity='0.25'; });
+  setTimeout(function(){
+    recomposed = !recomposed;
+    renderFormats();
+    toast('AI recomposed headline, CTA and product framing per format');
+  }, 260);
+});
+
+/* ============================= PUBLISH ============================= */
+var CHANNELS = [
+  {name:'Instagram', connected:true},
+  {name:'Facebook', connected:true},
+  {name:'WhatsApp', connected:true},
+  {name:'Website', connected:false}
+];
+function renderPublish(){
+  renderFlyer(document.getElementById('publishPreview'), {layout:'poster', tone:creativeState.tone});
+  var list = document.getElementById('channelList');
+  list.innerHTML='';
+  CHANNELS.forEach(function(ch){
+    var row = document.createElement('div');
+    row.className='channel-row';
+    row.innerHTML = '<div class="channel-icon">'+channelGlyph(ch.name)+'</div>'+
+      '<div class="channel-name">'+ch.name+'</div>'+
+      '<div class="channel-status '+(ch.connected?'on':'off')+'"><span class="dot"></span>'+(ch.connected?'Connected':'Not connected')+'</div>';
+    list.appendChild(row);
+  });
+  document.getElementById('publishSuccess').classList.remove('active');
+  document.getElementById('publishActionWrap').style.display='block';
+}
+function channelGlyph(name){
+  var paths = {
+    Instagram:'<rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16.2" cy="7.8" r="1" fill="currentColor"/>',
+    Facebook:'<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M13.5 9.5h1.5V7h-1.8c-1.7 0-2.7 1-2.7 2.7V11H9v2.5h1.5V18h2.3v-4.5h1.8l.3-2.5h-2.1V9.9c0-.5.2-.9.7-.9Z" fill="currentColor"/>',
+    WhatsApp:'<path d="M6 18l1-3.3A7 7 0 1 1 10 17Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9.5 9.8c.2-.5.6-.4 1-.4s.6 1 .8 1.3-.5.7-.3 1 .8.9 1.4 1.1.5-.6 1-.5 1.2.6 1.2 1-.6 1-1.1 1c-1 0-3.5-1.2-4-4Z" fill="currentColor"/>',
+    Website:'<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 12h17M12 3.5c2.4 2.3 3.6 5.3 3.6 8.5s-1.2 6.2-3.6 8.5c-2.4-2.3-3.6-5.3-3.6-8.5S9.6 5.8 12 3.5Z" fill="none" stroke="currentColor" stroke-width="1.4"/>'
+  };
+  return '<svg width="16" height="16" viewBox="0 0 24 24">'+(paths[name]||'')+'</svg>';
+}
+document.querySelectorAll('.schedule-opt').forEach(function(opt){
+  opt.addEventListener('click', function(){
+    document.querySelectorAll('.schedule-opt').forEach(function(o){ o.classList.remove('active'); });
+    opt.classList.add('active');
+    document.getElementById('customDateWrap').style.display = opt.getAttribute('data-sched')==='custom' ? 'block' : 'none';
+  });
+});
+document.getElementById('scheduleBtn').addEventListener('click', function(){
+  var sched = document.querySelector('.schedule-opt.active').getAttribute('data-sched');
+  var when = sched==='today' ? 'today' : sched==='tomorrow' ? 'tomorrow' : (document.getElementById('customDateInput').value || 'the selected date');
+  document.getElementById('publishActionWrap').style.display='none';
+  document.getElementById('publishSuccessSub').textContent = 'Going live '+when+' across 3 connected channels.';
+  document.getElementById('publishSuccess').classList.add('active');
+  toast('Campaign scheduled');
+  logImprovement('Campaign scheduled for '+when+'.');
+});
+
+/* ============================= ANALYTICS (shared: Measure tab + standalone) ============================= */
+function lineChartSVG(){
+  var points = [12,18,16,24,30,26,34,41,38,47,52,58];
+  var w=560,h=170,pad=28;
+  var max = Math.max.apply(null, points), min=0;
+  var stepX = (w-pad*2)/(points.length-1);
+  function y(v){ return h-pad - ((v-min)/(max-min))*(h-pad*1.4); }
+  var path = points.map(function(v,i){ return (i===0?'M':'L')+(pad+i*stepX).toFixed(1)+','+y(v).toFixed(1); }).join(' ');
+  var area = path+' L'+(pad+(points.length-1)*stepX).toFixed(1)+','+(h-pad)+' L'+pad+','+(h-pad)+' Z';
+  var lastX = pad+(points.length-1)*stepX, lastY = y(points[points.length-1]);
+  var gridLines = '';
+  for(var g=0; g<=3; g++){
+    var gy = pad*0.3 + g*((h-pad*1.4)/3);
+    gridLines += '<line x1="'+pad+'" y1="'+gy.toFixed(1)+'" x2="'+(w-pad)+'" y2="'+gy.toFixed(1)+'" stroke="var(--border)" stroke-width="1"/>';
+  }
+  return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" style="display:block;overflow:visible;">'+
+    '<defs><linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FF6A4D" stop-opacity="0.28"/><stop offset="100%" stop-color="#FF6A4D" stop-opacity="0"/></linearGradient></defs>'+
+    gridLines+
+    '<path d="'+area+'" fill="url(#areaFill)"/>'+
+    '<path d="'+path+'" fill="none" stroke="#FF8266" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>'+
+    '<circle cx="'+lastX.toFixed(1)+'" cy="'+lastY.toFixed(1)+'" r="4.5" fill="#FF6A4D" stroke="#0F0D0C" stroke-width="2"/>'+
+    '<text x="'+pad+'" y="'+(h-6)+'" fill="var(--muted)" font-size="10" font-family="IBM Plex Mono">Day 1</text>'+
+    '<text x="'+(w-pad-38)+'" y="'+(h-6)+'" fill="var(--muted)" font-size="10" font-family="IBM Plex Mono">Day 12</text>'+
+    '<text x="'+(lastX-14)+'" y="'+(lastY-12)+'" fill="#FF8266" font-size="11" font-weight="600" font-family="IBM Plex Mono">58</text>'+
+  '</svg>';
+}
+function statTile(label, value, deltaText){
+  var isUp = deltaText.indexOf('+')===0 || deltaText.indexOf('of')>-1;
+  return '<div class="stat-tile"><div class="l">'+label+'</div><div class="v mono">'+value+'</div>'+
+    '<div class="delta'+(isUp?' up':'')+'">'+
+      (deltaText.indexOf('+')===0 ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 15l6-6 6 6"/></svg>' : '')+
+      deltaText+
+    '</div></div>';
+}
+function renderAnalytics(hostId){
+  var host = document.getElementById(hostId);
+  host.innerHTML =
+    '<div class="stat-grid">'+
+      statTile('Impressions','24.6K','+18% vs. last campaign')+
+      statTile('Engagement','+34%','+9pts vs. baseline')+
+      statTile('Clicks','1,208','+22% vs. last campaign')+
+      statTile('Conversions','17','of 20 goal')+
+    '</div>'+
+    '<div class="chart-panel">'+
+      '<div class="chart-panel-head"><h3>Impressions over campaign</h3><span class="eyebrow">Last 12 days</span></div>'+
+      lineChartSVG()+
+    '</div>'+
+    '<div class="measure-cols">'+
+      '<div>'+
+        '<div class="panel-title">Best Performing Creative</div>'+
+        '<div class="best-creative-card">'+
+          '<div class="thumb" id="bestCreativeThumb"></div>'+
+          '<div class="best-creative-info">'+
+            '<div class="tag">Variation B</div>'+
+            '<h4>POWERCORE — Storm Angle, darker composition</h4>'+
+            '<div class="stat mono">+67.4%</div>'+
+            '<div style="font-size:11px;color:var(--muted);margin-top:2px;">engagement rate</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      '<div>'+
+        '<div class="panel-title">AI Analysis</div>'+
+        '<div class="insight-card"><p>Variation B is outperforming the original primarily because the offer is more visually prominent and the CTA has stronger contrast.</p></div>'+
+        '<div class="insight-card action">'+
+          '<div class="label">Recommended Action</div>'+
+          '<p>Create 3 additional variations using Variation B\'s composition.</p>'+
+          '<button class="btn btn-primary btn-sm" id="genVarFromAnalytics">Generate Variations</button>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  renderFlyer(document.getElementById('bestCreativeThumb'), {layout:'poster', tone:'dark'});
+  var genBtn = document.getElementById('genVarFromAnalytics');
+  if(genBtn) genBtn.addEventListener('click', function(){
+    toast('Generating variations from Variation B\'s composition...');
+    logImprovement('Generated 3 variations from Variation B.');
+  });
+}
+
+/* ============================= IMPROVE LOG ============================= */
+var improveLogItems = [
+  {text:'Reserved budget shifted toward Variation B after 48-hour test.', time:'2 days ago'},
+  {text:'CTA contrast increased across all formats.', time:'4 days ago'},
+  {text:'Campaign launched across Instagram, Facebook and WhatsApp.', time:'6 days ago'}
+];
+function logImprovement(text){
+  improveLogItems.unshift({text:text, time:'Just now'});
+  renderImproveLog();
+}
+function renderImproveLog(){
+  var host = document.getElementById('improveLog');
+  host.innerHTML='';
+  improveLogItems.forEach(function(item){
+    var row = document.createElement('div');
+    row.className='improve-log-item';
+    row.innerHTML = '<div class="idot"></div><div><div class="itext">'+item.text+'</div><div class="itime">'+item.time+'</div></div>';
+    host.appendChild(row);
+  });
+}
+
+/* ============================= CREATE STUDIO ============================= */
+var studioState = {ar:'4:5', style:'Photographic'};
+document.querySelectorAll('#aspectChips .chip').forEach(function(c){
+  c.addEventListener('click', function(){
+    document.querySelectorAll('#aspectChips .chip').forEach(function(x){x.classList.remove('active');});
+    c.classList.add('active'); studioState.ar = c.getAttribute('data-ar');
+  });
+});
+document.querySelectorAll('#styleChips .chip').forEach(function(c){
+  c.addEventListener('click', function(){
+    document.querySelectorAll('#styleChips .chip').forEach(function(x){x.classList.remove('active');});
+    c.classList.add('active'); studioState.style = c.getAttribute('data-style');
+  });
+});
+var arClass = {'4:5':'', '1:1':'ar-1-1', '9:16':'ar-9-16', '16:9':'ar-16-9'};
+var arLayout = {'4:5':'poster', '1:1':'square', '9:16':'story', '16:9':'banner'};
+var VARIANT_TONES = ['default','premium','dark','luxury'];
+document.getElementById('studioGenerateBtn').addEventListener('click', function(){
+  var skeleton = document.getElementById('studioSkeleton');
+  var results = document.getElementById('studioResults');
+  results.innerHTML='';
+  skeleton.classList.add('active');
+  setTimeout(function(){
+    skeleton.classList.remove('active');
+    ['A','B','C','D'].forEach(function(letter, i){
+      var card = document.createElement('div');
+      card.className='result-card';
+      card.innerHTML = '<div class="result-canvas '+(arClass[studioState.ar]||'')+'">'+
+          '<div class="result-label">'+studioState.style+' '+letter+'</div>'+
+          '<div class="result-overlay">'+
+            '<button data-act="edit">Edit</button>'+
+            '<button data-act="use">Use in Campaign</button>'+
+            '<button data-act="variation">Create Variation</button>'+
+            '<button data-act="download">Download</button>'+
+          '</div>'+
+        '</div>';
+      results.appendChild(card);
+      renderFlyer(card.querySelector('.result-canvas'), {layout:arLayout[studioState.ar], tone:VARIANT_TONES[i]});
+      card.querySelectorAll('[data-act]').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var act = btn.getAttribute('data-act');
+          if(act==='edit'){ openEditor(); }
+          else if(act==='use'){ toast('Added to Hurricane Season Backup Power'); }
+          else if(act==='variation'){ toast('Creating a variation of '+studioState.style+' '+letter+'...'); }
+          else if(act==='download'){ toast('Saved to your creative library'); }
+        });
+      });
+    });
+  }, 1050);
+});
+
+/* ============================= PRODUCTS ============================= */
+var PRODUCTS = [
+  {name:'PowerCore Backup 500', price:'$480', cat:'Portable Power', usage:'Used in 3 campaigns', tone:'default'},
+  {name:'PowerCore Mini 250', price:'$280', cat:'Portable Power', usage:'Used in 1 campaign', tone:'tourist'},
+  {name:'Solar Fold Panel 100W', price:'$150', cat:'Accessories', usage:'Used in 2 campaigns', tone:'luxury'},
+  {name:'Home Install & Setup', price:'$95', cat:'Installation', usage:'Not yet used', tone:'dark'},
+  {name:'Extended Battery Pack', price:'$210', cat:'Accessories', usage:'Used in 1 campaign', tone:'premium'}
+];
+function renderProducts(){
+  var grid = document.getElementById('productGrid');
+  grid.innerHTML='';
+  PRODUCTS.forEach(function(p){
+    var card = document.createElement('div');
+    card.className='product-card';
+    card.innerHTML = '<div class="product-thumb"></div>'+
+      '<div class="product-body">'+
+        '<div class="product-cat">'+p.cat+'</div>'+
+        '<div class="product-name">'+p.name+'</div>'+
+        '<div class="product-price mono">'+p.price+'</div>'+
+        '<div class="product-meta">'+p.usage+'</div>'+
+      '</div>';
+    grid.appendChild(card);
+    renderFlyer(card.querySelector('.product-thumb'), {layout:'square', tone:p.tone});
+  });
+  var add = document.createElement('div');
+  add.className='add-product-card';
+  add.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:13px;font-weight:600;">Add Product</span>';
+  add.addEventListener('click', function(){ document.getElementById('modalHost').classList.add('active'); });
+  grid.appendChild(add);
+}
+renderProducts();
+document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
+document.getElementById('modalHost').addEventListener('click', function(e){ if(e.target.id==='modalHost') closeModal(); });
+function closeModal(){ document.getElementById('modalHost').classList.remove('active'); }
+document.getElementById('modalAddBtn').addEventListener('click', function(){
+  var name = document.getElementById('npName').value.trim() || 'New Product';
+  var price = document.getElementById('npPrice').value.trim() || '$0';
+  var cat = document.getElementById('npCat').value;
+  PRODUCTS.unshift({name:name, price:price, cat:cat, usage:'Not yet used', tone:'default'});
+  renderProducts();
+  closeModal();
+  document.getElementById('npName').value=''; document.getElementById('npDesc').value=''; document.getElementById('npPrice').value='';
+  toast('Product added');
+});
+
+/* ============================= CALENDAR / INTEGRATIONS ============================= */
+(function(){
+  var items = [
+    {when:'Today, 2:00 PM', name:'Hurricane Season Backup Power', channel:'Instagram · Facebook · WhatsApp', tone:'default'},
+    {when:'Fri, Sep 19', name:"Founder's Day Promo", channel:'Facebook', tone:'luxury'},
+    {when:'Mon, Sep 22', name:'Back-to-School Bundle', channel:'Instagram', tone:'tourist'}
+  ];
+  var host = document.getElementById('calendarTimeline');
+  items.forEach(function(it){
+    var row = document.createElement('div');
+    row.className='timeline-item';
+    row.innerHTML = '<div class="tl-when mono">'+it.when+'</div>'+
+      '<div class="timeline-card"><div class="tc-thumb"></div><div><div class="tc-name">'+it.name+'</div><div class="tc-channel">'+it.channel+'</div></div></div>';
+    host.appendChild(row);
+    renderFlyer(row.querySelector('.tc-thumb'), {layout:'square', tone:it.tone});
+  });
+})();
+
+(function(){
+  var integrations = [
+    {name:'Instagram', sub:'Feed & Story publishing', connected:true},
+    {name:'Facebook', sub:'Page publishing', connected:true},
+    {name:'WhatsApp', sub:'Business messaging', connected:true},
+    {name:'Website', sub:'Banner embed', connected:false},
+    {name:'Google Business Profile', sub:'Local posts', connected:false}
+  ];
+  var grid = document.getElementById('integrationGrid');
+  integrations.forEach(function(ig){
+    var card = document.createElement('div');
+    card.className='integration-card';
+    card.innerHTML = '<div class="integration-top"><div class="channel-icon">'+channelGlyph(ig.name.split(' ')[0])+'</div><div><div class="in-name">'+ig.name+'</div><div class="in-sub">'+ig.sub+'</div></div></div>'+
+      '<div class="channel-status '+(ig.connected?'on':'off')+'" style="justify-content:flex-start;"><span class="dot"></span>'+(ig.connected?'Connected':'Not connected')+'</div>'+
+      (ig.connected ? '' : '<button class="btn btn-secondary btn-sm" data-connect="'+ig.name+'">Connect</button>');
+    grid.appendChild(card);
+  });
+  grid.querySelectorAll('[data-connect]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var card = btn.closest('.integration-card');
+      var status = card.querySelector('.channel-status');
+      status.classList.remove('off'); status.classList.add('on');
+      status.innerHTML = '<span class="dot"></span>Connected';
+      btn.remove();
+      toast(btn.getAttribute('data-connect')+' connected');
+    });
+  });
+})();
+
+/* ============================= CREATIVE EDITOR ============================= */
+var editorHistory = [];
+var editorHistoryIndex = -1;
+var selectedEl = null;
+
+var EDITOR_ELEMENTS = [
+  {id:'headline', type:'headline-el', text:'KEEP YOUR HOME\nPOWERED.', x:7, y:58, w:80, fontSize:30, weight:700, align:'left', color:'#FBF6EF'},
+  {id:'sub', type:'sub-el', text:'Reliable backup power when the grid goes down.', x:7, y:76, w:62, fontSize:13.5, weight:500, align:'left', color:'#E7DFD4'},
+  {id:'price', type:'price-el', text:'$480', x:7, y:88, w:16, fontSize:15, weight:500, align:'center', color:'#FF8266'},
+  {id:'cta', type:'cta-el', text:'MESSAGE US TO ORDER', x:27, y:88, w:44, fontSize:11.5, weight:700, align:'center', color:'#1B1108'},
+  {id:'brandtag', type:'brandtag-el', text:'POWERCORE', x:7, y:6, w:50, fontSize:11, weight:500, align:'left', color:'#C9BFAF'}
+];
+
+function openEditor(){
+  document.getElementById('editorView').classList.add('active');
+  var canvas = document.getElementById('editorCanvas');
+  canvas.innerHTML = '<div class="flyer-bg">'+flyerSVG({tone:creativeState.tone})+'</div>';
+  EDITOR_ELEMENTS.forEach(function(spec){ canvas.appendChild(buildEditorEl(spec)); });
+  selectEl(null);
+  pushHistory();
+}
+document.getElementById('editorCloseBtn').addEventListener('click', closeEditor);
+document.getElementById('editorDoneBtn').addEventListener('click', closeEditor);
+function closeEditor(){
+  document.getElementById('editorView').classList.remove('active');
+  renderMainFlyer();
+  toast('Changes saved to this creative');
+}
+
+function buildEditorEl(spec){
+  var el = document.createElement('div');
+  el.className = 'el '+spec.type;
+  el.dataset.id = spec.id;
+  el.style.left = spec.x+'%';
+  el.style.top = spec.y+'%';
+  el.style.width = spec.w+'%';
+  el.style.fontSize = spec.fontSize+'px';
+  el.style.fontWeight = spec.weight;
+  el.style.textAlign = spec.align;
+  el.style.color = spec.color;
+  if(spec.type==='cta-el' || spec.type==='price-el'){ el.style.padding = '0.5em 0.7em'; }
+  el.textContent = spec.text;
+  el.style.whiteSpace = 'pre-line';
+  attachDrag(el);
+  el.addEventListener('mousedown', function(){ selectEl(el); });
+  el.addEventListener('dblclick', function(e){
+    e.stopPropagation();
+    el.contentEditable = 'true';
+    el.focus();
+  });
+  el.addEventListener('blur', function(){
+    el.contentEditable = 'false';
+    pushHistory();
+  });
+  return el;
+}
+
+function attachDrag(el){
+  var dragging=false, startX,startY, origLeft, origTop, canvas;
+  el.addEventListener('pointerdown', function(e){
+    if(el.isContentEditable) return;
+    dragging=true; canvas = document.getElementById('editorCanvas');
+    startX=e.clientX; startY=e.clientY;
+    origLeft = parseFloat(el.style.left); origTop = parseFloat(el.style.top);
+    el.setPointerCapture(e.pointerId);
+  });
+  el.addEventListener('pointermove', function(e){
+    if(!dragging) return;
+    var rect = canvas.getBoundingClientRect();
+    var dxPct = ((e.clientX-startX)/rect.width)*100;
+    var dyPct = ((e.clientY-startY)/rect.height)*100;
+    var newLeft = Math.max(0, Math.min(94, origLeft+dxPct));
+    var newTop = Math.max(0, Math.min(94, origTop+dyPct));
+    el.style.left = newLeft+'%'; el.style.top = newTop+'%';
+    if(selectedEl===el) updateInspectorPosition();
+  });
+  el.addEventListener('pointerup', function(e){
+    if(dragging){ dragging=false; pushHistory(); }
+  });
+}
+
+document.getElementById('editorCanvas').addEventListener('mousedown', function(e){
+  if(e.target.id==='editorCanvas' || e.target.classList.contains('flyer-bg')) selectEl(null);
+});
+
+function selectEl(el){
+  document.querySelectorAll('#editorCanvas .el').forEach(function(e){ e.classList.remove('selected'); });
+  selectedEl = el;
+  if(el) el.classList.add('selected');
+  renderInspector();
+}
+
+var SWATCHES = ['#FBF6EF','#FF6A4D','#FF8266','#6FBF8A','#E0A94D','#12140F'];
+
+function renderInspector(){
+  var host = document.getElementById('editorInspector');
+  if(!selectedEl){
+    host.innerHTML = '<div class="insp-empty">Select an element on the canvas to edit its text, size, color and position.</div>';
+    return;
+  }
+  var fontSize = parseFloat(selectedEl.style.fontSize);
+  var weight = selectedEl.style.fontWeight;
+  var align = selectedEl.style.textAlign;
+  var color = selectedEl.style.color;
+  host.innerHTML =
+    '<div class="insp-group"><div class="insp-label">Content</div><textarea class="insp-text-input" id="inspText" rows="2">'+selectedEl.textContent+'</textarea></div>'+
+    '<div class="insp-group"><div class="insp-label">Weight</div><div class="insp-btn-set" id="inspWeight">'+
+      '<div class="insp-btn" data-w="400">Regular</div><div class="insp-btn" data-w="600">Semibold</div><div class="insp-btn" data-w="700">Bold</div>'+
+    '</div></div>'+
+    '<div class="insp-group"><div class="insp-label">Size — '+Math.round(fontSize)+'px</div><input type="range" class="insp-slider" id="inspSize" min="9" max="48" value="'+fontSize+'"></div>'+
+    '<div class="insp-group"><div class="insp-label">Alignment</div><div class="insp-btn-set" id="inspAlign">'+
+      '<div class="insp-btn" data-a="left">Left</div><div class="insp-btn" data-a="center">Center</div><div class="insp-btn" data-a="right">Right</div>'+
+    '</div></div>'+
+    '<div class="insp-group"><div class="insp-label">Color</div><div class="swatch-mini-row" id="inspColor">'+
+      SWATCHES.map(function(c){ return '<div class="swatch-mini" data-c="'+c+'" style="background:'+c+';"></div>'; }).join('')+
+    '</div></div>'+
+    '<div class="insp-group"><div class="insp-label">Position</div><div class="insp-row">'+
+      '<input class="insp-num" id="inspX" type="number" value="'+Math.round(parseFloat(selectedEl.style.left))+'">'+
+      '<input class="insp-num" id="inspY" type="number" value="'+Math.round(parseFloat(selectedEl.style.top))+'">'+
+    '</div></div>'+
+    '<div class="insp-group insp-row">'+
+      '<button class="btn btn-secondary btn-sm" id="inspDup" style="flex:1;">Duplicate</button>'+
+      '<button class="btn btn-secondary btn-sm" id="inspDel" style="flex:1;">Delete</button>'+
+    '</div>';
+
+  document.querySelectorAll('#inspWeight .insp-btn').forEach(function(b){
+    b.classList.toggle('active', String(weight)===b.getAttribute('data-w') || (weight==='bold' && b.getAttribute('data-w')==='700'));
+    b.addEventListener('click', function(){ selectedEl.style.fontWeight=b.getAttribute('data-w'); renderInspector(); pushHistory(); });
+  });
+  document.querySelectorAll('#inspAlign .insp-btn').forEach(function(b){
+    b.classList.toggle('active', align===b.getAttribute('data-a'));
+    b.addEventListener('click', function(){ selectedEl.style.textAlign=b.getAttribute('data-a'); renderInspector(); pushHistory(); });
+  });
+  document.querySelectorAll('#inspColor .swatch-mini').forEach(function(sw){
+    sw.classList.toggle('active', color===sw.getAttribute('data-c') || hexClose(color, sw.getAttribute('data-c')));
+    sw.addEventListener('click', function(){ selectedEl.style.color=sw.getAttribute('data-c'); renderInspector(); pushHistory(); });
+  });
+  document.getElementById('inspText').addEventListener('input', function(e){ selectedEl.textContent = e.target.value; });
+  document.getElementById('inspText').addEventListener('blur', pushHistory);
+  document.getElementById('inspSize').addEventListener('input', function(e){ selectedEl.style.fontSize = e.target.value+'px'; document.querySelector('.insp-label').textContent; renderSizeLabel(e.target.value); });
+  document.getElementById('inspSize').addEventListener('change', pushHistory);
+  document.getElementById('inspX').addEventListener('change', function(e){ selectedEl.style.left = e.target.value+'%'; pushHistory(); });
+  document.getElementById('inspY').addEventListener('change', function(e){ selectedEl.style.top = e.target.value+'%'; pushHistory(); });
+  document.getElementById('inspDup').addEventListener('click', function(){
+    var clone = selectedEl.cloneNode(true);
+    clone.dataset.id = selectedEl.dataset.id+'-copy'+Date.now();
+    clone.style.left = (parseFloat(selectedEl.style.left)+3)+'%';
+    clone.style.top = (parseFloat(selectedEl.style.top)+3)+'%';
+    attachDrag(clone);
+    clone.addEventListener('mousedown', function(){ selectEl(clone); });
+    clone.addEventListener('dblclick', function(e){ e.stopPropagation(); clone.contentEditable='true'; clone.focus(); });
+    clone.addEventListener('blur', function(){ clone.contentEditable='false'; pushHistory(); });
+    document.getElementById('editorCanvas').appendChild(clone);
+    selectEl(clone);
+    pushHistory();
+    toast('Element duplicated');
+  });
+  document.getElementById('inspDel').addEventListener('click', function(){
+    selectedEl.remove();
+    selectEl(null);
+    pushHistory();
+  });
+}
+function renderSizeLabel(v){
+  var lbl = document.querySelector('#editorInspector .insp-group .insp-label');
+  if(lbl) lbl.textContent = 'Size — '+Math.round(v)+'px';
+}
+function hexClose(a,b){ return (a||'').toLowerCase().indexOf((b||'').toLowerCase().replace('#',''))>-1; }
+function updateInspectorPosition(){
+  var xi=document.getElementById('inspX'), yi=document.getElementById('inspY');
+  if(xi) xi.value = Math.round(parseFloat(selectedEl.style.left));
+  if(yi) yi.value = Math.round(parseFloat(selectedEl.style.top));
+}
+
+/* history (canvas innerHTML snapshots) */
+function pushHistory(){
+  var canvas = document.getElementById('editorCanvas');
+  editorHistory = editorHistory.slice(0, editorHistoryIndex+1);
+  editorHistory.push(canvas.innerHTML);
+  editorHistoryIndex = editorHistory.length-1;
+}
+function restoreHistory(){
+  var canvas = document.getElementById('editorCanvas');
+  canvas.innerHTML = editorHistory[editorHistoryIndex];
+  rewireCanvasElements();
+  selectEl(null);
+}
+function rewireCanvasElements(){
+  var canvas = document.getElementById('editorCanvas');
+  canvas.querySelectorAll('.el').forEach(function(el){
+    attachDrag(el);
+    el.addEventListener('mousedown', function(){ selectEl(el); });
+    el.addEventListener('dblclick', function(e){ e.stopPropagation(); el.contentEditable='true'; el.focus(); });
+    el.addEventListener('blur', function(){ el.contentEditable='false'; pushHistory(); });
+  });
+}
+document.getElementById('undoBtn').addEventListener('click', function(){
+  if(editorHistoryIndex>0){ editorHistoryIndex--; restoreHistory(); }
+});
+document.getElementById('redoBtn').addEventListener('click', function(){
+  if(editorHistoryIndex<editorHistory.length-1){ editorHistoryIndex++; restoreHistory(); }
+});
+document.addEventListener('keydown', function(e){
+  if(!document.getElementById('editorView').classList.contains('active')) return;
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='z'){
+    e.preventDefault();
+    if(e.shiftKey){ if(editorHistoryIndex<editorHistory.length-1){ editorHistoryIndex++; restoreHistory(); } }
+    else { if(editorHistoryIndex>0){ editorHistoryIndex--; restoreHistory(); } }
+  }
+});
+
+/* rail: Layers panel swaps inspector content when active */
+document.querySelectorAll('.rail-btn').forEach(function(rb){
+  rb.addEventListener('click', function(){
+    document.querySelectorAll('.rail-btn').forEach(function(r){ r.classList.remove('active'); });
+    rb.classList.add('active');
+    var mode = rb.getAttribute('data-rail');
+    if(mode==='layers'){ renderLayersPanel(); }
+    else { renderInspector(); }
+  });
+});
+function renderLayersPanel(){
+  var host = document.getElementById('editorInspector');
+  var canvas = document.getElementById('editorCanvas');
+  var els = Array.prototype.slice.call(canvas.querySelectorAll('.el'));
+  host.innerHTML = '<div class="insp-label" style="margin-bottom:10px;">Layers</div>'+
+    els.reverse().map(function(el){
+      return '<div class="layer-item'+(el===selectedEl?' selected':'')+'" data-lid="'+el.dataset.id+'">'+ (el.textContent.slice(0,26)||'Element') +'</div>';
+    }).join('');
+  host.querySelectorAll('.layer-item').forEach(function(item){
+    item.addEventListener('click', function(){
+      var target = canvas.querySelector('[data-id="'+item.getAttribute('data-lid')+'"]');
+      selectEl(target);
+      document.querySelector('.rail-btn.active').classList.remove('active');
+      document.querySelector('[data-rail="design"]').classList.add('active');
+      renderInspector();
+    });
+  });
+}
+
+/* ============================= INITIAL RENDER ============================= */
+renderMainFlyer();
+renderImproveLog();
+
+})();
+</script>
+</body>
+</html>

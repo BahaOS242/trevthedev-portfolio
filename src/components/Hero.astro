@@ -25,7 +25,9 @@
 		</div>
 
 		<figure id="hero-figure">
-			<img src="/trevor.jpeg" alt="Trevor Armstrong" id="hero-portrait" />
+			<div id="hero-portrait-frame">
+				<img src="/trevor.jpeg" alt="Trevor Armstrong" id="hero-portrait" />
+			</div>
 			<figcaption>Fig. 01 — TrevTheDev, 2026</figcaption>
 		</figure>
 	</div>
@@ -80,22 +82,22 @@
 	}
 
 	#hero-heading {
-		font-family: var(--font-serif);
-		font-weight: 500;
+		font-family: var(--font-display);
+		font-weight: 900;
 		font-size: clamp(56px, 8vw, 104px);
-		line-height: 0.95;
-		letter-spacing: -0.01em;
+		line-height: 0.92;
+		letter-spacing: -0.03em;
 		color: var(--ink);
 		margin: 0;
 	}
 
 	#hero-role {
-		font-family: var(--font-serif);
-		font-style: italic;
-		font-weight: 500;
+		font-family: var(--font-display);
+		font-weight: 600;
 		font-size: clamp(18px, 2vw, 24px);
-		color: var(--ink);
+		color: var(--ink-soft);
 		margin: 24px 0 0;
+		letter-spacing: -0.01em;
 	}
 
 	#hero-body {
@@ -111,8 +113,11 @@
 		margin-top: 36px;
 	}
 
-	#hero-cta-primary,
-	#hero-cta-secondary {
+	#hero-ctas {
+		align-items: center;
+	}
+
+	#hero-cta-primary {
 		display: inline-block;
 		border-radius: 24px;
 		padding: 13px 28px;
@@ -120,22 +125,50 @@
 		font-weight: 500;
 		width: fit-content;
 		text-decoration: none;
-	}
-
-	#hero-cta-primary {
 		background: var(--ink);
 		color: #fff;
 	}
 
 	#hero-cta-secondary {
-		background: transparent;
+		display: inline-block;
+		font-size: 14px;
+		font-weight: 600;
+		width: fit-content;
+		text-decoration: underline;
+		text-underline-offset: 3px;
 		color: var(--ink);
-		border: 1px solid var(--border);
 	}
 
 	#hero-figure {
 		margin: 0;
 		justify-self: end;
+	}
+
+	#hero-portrait-frame {
+		position: relative;
+		padding: 12px;
+	}
+
+	#hero-portrait-frame::before,
+	#hero-portrait-frame::after {
+		content: "";
+		position: absolute;
+		width: 24px;
+		height: 24px;
+		border-color: var(--ink);
+		border-style: solid;
+	}
+
+	#hero-portrait-frame::before {
+		top: 0;
+		left: 0;
+		border-width: 2px 0 0 2px;
+	}
+
+	#hero-portrait-frame::after {
+		bottom: 0;
+		right: 0;
+		border-width: 0 2px 2px 0;
 	}
 
 	#hero-portrait {
@@ -145,7 +178,6 @@
 		object-fit: cover;
 		display: block;
 		border: 1px solid var(--border);
-		box-shadow: 0 24px 48px rgba(26, 29, 46, 0.16);
 	}
 
 	#hero-figure figcaption {

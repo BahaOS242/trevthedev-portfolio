@@ -1,51 +1,70 @@
 ---
-const projects = [
-	{
-		title: "WhatsApp AI Receptionist",
-		description: "An AI-powered receptionist that handles customer conversations, captures leads, and helps businesses turn WhatsApp messages into appointments.",
-		tags: ["Astro", "TypeScript", "Conversational AI"],
-		href: "/whatsapp-ai-receptionist",
-	},
-	{
-		title: "GrowthPulse Dashboard",
-		description: "A real-time analytics dashboard for tracking marketing funnel metrics, built with React and a REST API backend.",
-		tags: ["React", "REST API"],
-	},
-	{
-		title: "StoreFront Boost",
-		description: "A custom e-commerce backend integration that automates inventory syncing and growth reporting.",
-		tags: ["PHP", "SQL"],
-	},
-	{
-		title: "LeadGen Landing Kit",
-		description: "A set of high-conversion landing page templates built for rapid A/B testing.",
-		tags: ["HTML5", "CSS"],
-	},
-	{
-		title: "AI Content Assistant",
-		description: "An internal tool powered by Claude that drafts and optimizes marketing copy at scale.",
-		tags: ["Claude", "REST API"],
-	},
-];
+import { items } from "@wix/data";
+
+const COLLECTION_ID = "PortfolioProjects";
+
+interface ProjectRecord {
+	_id: string;
+	title: string;
+	description: string;
+	githubUrl: string;
+	demoUrl?: string;
+	language?: string;
+	tags?: string[];
+	order?: number;
+}
+
+let projects: ProjectRecord[] = [];
+
+try {
+	const response = await items.query(COLLECTION_ID, {
+		paging: { limit: 20, offset: 0 },
+		sort: [{ fieldName: "order", order: "ASC" }],
+	});
+	projects = (response.items ?? []) as ProjectRecord[];
+} catch (error) {
+	console.error("Failed to load portfolio projects from CMS:", error);
+}
+
+function resolveHref(url: string | undefined): string | undefined {
+	if (!url) return undefined;
+	return url;
+}
 ---
 
 <section id="work">
 	<div id="work-inner">
 		<h2>Selected Work</h2>
-		<div id="work-grid">
-			{
-				projects.map((project) => (
-					<a href={project.href ?? "#"} class="work-card">
-						<div class="work-card-thumb" />
-						<h3>{project.title}</h3>
-						<p>{project.description}</p>
-						<div class="work-card-tags">
-							{project.tags.map((tag) => <span>{tag}</span>)}
-						</div>
-					</a>
-				))
-			}
-		</div>
+		{
+			projects.length === 0 ? (
+				<p id="work-empty">Projects are managed in the CMS — add one to feature it here.</p>
+			) : (
+				<div id="work-grid">
+					{projects.map((project) => (
+						<article class="work-card">
+							<div class="work-card-thumb" />
+							<h3>{project.title}</h3>
+							<p>{project.description}</p>
+							{project.tags && project.tags.length > 0 && (
+								<div class="work-card-tags">
+									{project.tags.map((tag) => <span>{tag}</span>)}
+								</div>
+							)}
+							<div class="work-card-links">
+								<a href={resolveHref(project.githubUrl)} target="_blank" rel="noopener noreferrer" class="work-card-link">
+									View on GitHub &rarr;
+								</a>
+								{project.demoUrl && (
+									<a href={resolveHref(project.demoUrl)} class="work-card-link work-card-link-secondary">
+										Live Demo
+									</a>
+								)}
+							</div>
+						</article>
+					))}
+				</div>
+			)
+		}
 	</div>
 </section>
 
@@ -69,6 +88,12 @@ const projects = [
 		margin: 0 0 32px;
 	}
 
+	#work-empty {
+		font-size: 14px;
+		color: var(--ink-soft);
+		margin: 0;
+	}
+
 	#work-grid {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
@@ -76,18 +101,17 @@ const projects = [
 	}
 
 	.work-card {
-		display: block;
-		text-decoration: none;
+		display: flex;
+		flex-direction: column;
 		background: var(--surface);
 		border: 1px solid var(--border);
 		border-radius: 16px;
 		padding: 20px;
-		transition: transform 0.15s ease, box-shadow 0.15s ease;
+		transition: border-color 0.15s ease;
 	}
 
 	.work-card:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 12px 24px rgba(26, 29, 46, 0.08);
+		border-color: var(--ink);
 	}
 
 	.work-card-thumb {
@@ -116,14 +140,42 @@ const projects = [
 		display: flex;
 		flex-wrap: wrap;
 		gap: 8px;
+		margin-bottom: 16px;
 	}
 
 	.work-card-tags span {
-		font-size: 12px;
+		font-size: 11px;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
 		padding: 4px 10px;
 		border-radius: 12px;
 		background: var(--bg-2);
 		color: var(--ink-soft);
+	}
+
+	.work-card-links {
+		margin-top: auto;
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		padding-top: 8px;
+	}
+
+	.work-card-link {
+		font-size: 13px;
+		font-weight: 600;
+		color: var(--ink);
+		text-decoration: none;
+	}
+
+	.work-card-link-secondary {
+		color: var(--ink-soft);
+		font-weight: 500;
+	}
+
+	.work-card-link:hover {
+		text-decoration: underline;
 	}
 
 	@media (max-width: 780px) {
