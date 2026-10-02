@@ -1,41 +1,63 @@
 ---
-const caseStudy = {
-	name: "Fuel & Flow Pilates",
-	category: "Booking & Scheduling",
-	url: "https://www.fuelandflowbahamas.com/",
-	summary:
-		"A live studio site for a Pilates instructor in Nassau, Bahamas — class booking, event ticketing, membership plans, gift cards, and a members area, built and shipped on Wix.",
-	scope: [
-		"Wix Bookings for class scheduling and instructor calendar management",
-		"Wix Events & Tickets for workshops and pop-up classes",
-		"Wix Pricing Plans for recurring membership packages, plus Gift Cards",
-		"A Members Area for returning clients",
-		"Page titles and meta written around local search intent (\"Pilates Classes in Nassau, Bahamas\"), with sitemap and robots.txt configured for indexing",
-	],
-};
+const caseStudies = [
+	{
+		name: "Shipping OS",
+		category: "Logistics SaaS",
+		url: "https://shipping-os-kappa.vercel.app/demo",
+		linkLabel: "Try the interactive demo",
+		summary:
+			"A modular, multi-tenant logistics platform for Bahamian freight forwarders, mailboat operators, couriers, warehouses and charter companies — one codebase, configured per business, with an interactive demo prospects can try in three minutes.",
+		scope: [
+			"Multi-tenant architecture with tenant isolation enforced in the service layer, backed by concurrent isolation tests",
+			"Module registry and business-type presets that drive navigation, route guards and onboarding for each operator",
+			"Bookings, vessel capacity, manifests, tracking, dispatch, proof of delivery, customer portal and WhatsApp updates",
+			"An AI tool contract where every consequential write requires human confirmation and is audited",
+			"A config-driven interactive demo with six scenarios, built with Next.js, TypeScript and Tailwind and deployed on Vercel",
+		],
+	},
+	{
+		name: "Fuel & Flow Pilates",
+		category: "Booking & Scheduling",
+		url: "https://www.fuelandflowbahamas.com/",
+		summary:
+			"A live studio site for a Pilates instructor in Nassau, Bahamas — class booking, event ticketing, membership plans, gift cards, and a members area, built and shipped on Wix.",
+		scope: [
+			"Wix Bookings for class scheduling and instructor calendar management",
+			"Wix Events & Tickets for workshops and pop-up classes",
+			"Wix Pricing Plans for recurring membership packages, plus Gift Cards",
+			"A Members Area for returning clients",
+			"Page titles and meta written around local search intent (\"Pilates Classes in Nassau, Bahamas\"), with sitemap and robots.txt configured for indexing",
+		],
+		linkLabel: "Visit the live site",
+	},
+];
 ---
 
 <section id="case-studies">
 	<div id="case-studies-inner">
-		<p id="case-studies-kicker">Case Study</p>
-		<h2 id="case-studies-heading">A real business, live in production</h2>
+		<p id="case-studies-kicker">Case Studies</p>
+		<h2 id="case-studies-heading">Real products, live in production</h2>
 		<p id="case-studies-intro">
-			Not a mockup — an actual studio site handling real bookings, memberships, and events.
+			Not mockups — shipped software built for real Bahamian businesses.
 		</p>
 
-		<article class="case-card">
-			<header class="case-card-header">
-				<h3>{caseStudy.name}</h3>
-				<span class="case-card-tag">{caseStudy.category}</span>
-			</header>
-			<p class="case-card-summary">{caseStudy.summary}</p>
-			<ul class="case-card-scope">
-				{caseStudy.scope.map((item) => <li>{item}</li>)}
-			</ul>
-			<a href={caseStudy.url} target="_blank" rel="noopener noreferrer" class="case-card-link">
-				Visit the live site &rarr;
-			</a>
-		</article>
+		<div id="case-studies-list">
+			{caseStudies.map((caseStudy) => (
+				<article class="case-card">
+					<header class="case-card-header">
+						<h3>{caseStudy.name}</h3>
+						<span class="case-card-tag">{caseStudy.category}</span>
+					</header>
+					<p class="case-card-summary">{caseStudy.summary}</p>
+					<ul class="case-card-scope">
+						{caseStudy.scope.map((item) => <li>{item}</li>)}
+					</ul>
+					<a href={caseStudy.url} target="_blank" rel="noopener noreferrer" class="case-card-link">
+						{caseStudy.linkLabel} &rarr;
+					</a>
+				</article>
+			))}
+		</div>
 	</div>
 </section>
 
@@ -77,8 +99,14 @@ const caseStudy = {
 		margin: 0 0 48px;
 	}
 
+	#case-studies-list {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 24px;
+		align-items: start;
+	}
+
 	.case-card {
-		max-width: 640px;
 		border: 1px solid var(--border);
 		border-radius: 16px;
 		padding: 32px;
@@ -154,6 +182,12 @@ const caseStudy = {
 		text-decoration: none;
 		border-bottom: 1px solid var(--ink);
 		padding-bottom: 2px;
+	}
+
+	@media (max-width: 780px) {
+		#case-studies-list {
+			grid-template-columns: 1fr;
+		}
 	}
 
 	@media (max-width: 640px) {
