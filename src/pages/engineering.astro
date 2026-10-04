@@ -1,0 +1,149 @@
+---
+import FM from '../layouts/FM.astro';
+import ThemeToggle from '../components/fm/ThemeToggle.astro';
+import Footer from '../components/fm/Footer.astro';
+import { site, SITE_URL } from '../data/site';
+
+
+const title = 'Trevor Armstrong — Software & AI Engineer (Remote, Bahamas)';
+const description =
+  'Software & AI engineer in Nassau, Bahamas shipping multi-tenant SaaS and LLM tools with TypeScript, Next.js and PostgreSQL. Open to remote roles.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    url: `${SITE_URL}/engineering`,
+    name: title,
+    mainEntity: {
+      '@type': 'Person',
+      '@id': `${SITE_URL}/#trevor`,
+      name: site.name,
+      alternateName: ['TrevTheDev', 'TrevTheWebDev'],
+      jobTitle: 'Software & AI Engineer',
+      image: `${SITE_URL}/trevor.jpeg`,
+      email: `mailto:${site.email}`,
+      address: { '@type': 'PostalAddress', addressLocality: site.city, addressCountry: site.country },
+      alumniOf: { '@type': 'CollegeOrUniversity', name: 'Bahamas Technical and Vocational Institute (BTVI)' },
+      sameAs: [site.github, site.linkedin],
+      knowsAbout: ['TypeScript', 'JavaScript', 'Python', 'SQL', 'Next.js', 'PostgreSQL', 'Prisma', 'Multi-tenant SaaS', 'Large language models', 'AI agents', 'Astro', 'Vercel'],
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Engineering', item: `${SITE_URL}/engineering` },
+    ],
+  },
+];
+---
+<FM title={title} description={description} ogType="profile" jsonLd={jsonLd}>
+<div class="wrap-narrow">
+  <header class="site-header">
+    <a href="/" class="logo" aria-label="TrevTheDev — home"><span style="background: var(--teal)">TREV</span>/engineering</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="#systems">Systems</a>
+      <a href="#stack">Stack</a>
+      <a href="/" style="color: var(--hl3)">For businesses</a>
+      <ThemeToggle />
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="eng-title">
+      <div class="hero-copy">
+        <p class="open box bg-teal mono">Open to remote software &amp; AI engineering roles</p>
+        <h1 id="eng-title" class="display">I ship multi-tenant SaaS and AI systems <span style="color: var(--hl)">people actually use.</span></h1>
+        <p class="lede">Trevor Armstrong — software &amp; AI engineer in Nassau, Bahamas (UTC−5). TypeScript, Next.js, PostgreSQL and LLM tooling, from schema to deploy.</p>
+        <div class="btns">
+          {site.resumeUrl && <a href={site.resumeUrl} class="press btn box shadow bg-yellow">Download résumé ↓</a>}
+          <a href={site.github} rel="me noopener" class="press btn box shadow bg-surface">GitHub</a>
+          <a href={site.linkedin} rel="me noopener" class="press btn box shadow bg-surface">LinkedIn</a>
+        </div>
+      </div>
+      <pre class="term" aria-label="Profile summary"><span class="c">$ trev --profile</span>
+<span class="k">role</span>       software &amp; AI engineer
+<span class="k">location</span>   Nassau, BS · remote
+<span class="k">education</span>  Software Eng., BTVI
+<span class="k">shipping</span>   multi-tenant SaaS
+<span class="k">ai</span>         LLM tools, agents
+<span class="k">status</span>     <span class="y">available</span><span class="cursor" aria-hidden="true">▮</span></pre>
+    </section>
+
+    <section id="systems" class="sec" aria-labelledby="systems-title">
+      <p class="kicker" id="systems-title">// SYSTEMS I'VE BUILT</p>
+      <article class="flagship box bg-surface shadow-lg" style="--sh: var(--yellow)">
+        <div class="flag-copy">
+          <span class="mono" style="color: var(--hl)">FLAGSHIP · LOGISTICS SAAS</span>
+          <h2 class="display" style="font-size: 36px">Shipping OS</h2>
+          <p class="muted">A modular, multi-tenant platform for freight forwarders, mailboat operators, couriers, warehouses and charters — one codebase, configured per business.</p>
+          <div class="btns">
+            <a href="https://shipping-os-kappa.vercel.app/demo" rel="noopener" class="btn box bg-yellow" style="font-family: var(--sans); padding: 12px 18px">Live demo ▶</a>
+            <a href="https://github.com/BahaOS242/Shipping_OS" rel="noopener" class="btn box bg-surface" style="font-family: var(--sans); padding: 12px 18px">Source</a>
+          </div>
+        </div>
+        <ul class="flag-list">
+          <li class="box"><strong>Tenant isolation</strong> enforced in the service layer, backed by concurrent isolation tests</li>
+          <li class="box"><strong>Module registry</strong> and business-type presets driving navigation, route guards and onboarding</li>
+          <li class="box"><strong>AI tool contract</strong> — every consequential write requires human confirmation and is audited</li>
+          <li class="box"><strong>Config-driven demo</strong> with six scenarios — Next.js, TypeScript, Tailwind on Vercel</li>
+        </ul>
+      </article>
+      <div class="grid" style="--min: 260px; gap: 20px">
+        <a href="/whatsapp-ai-receptionist" class="press box shadow card bg-rose"><span class="mono small">TYPESCRIPT · CONVERSATIONAL AI</span><h3 class="card-title">BahaOS</h3><span>Multi-tenant WhatsApp AI receptionist: business hours, responses and lead qualification.</span></a>
+        <a href="/brandforge" class="press box shadow card bg-yellow"><span class="mono small">AI · IN DEVELOPMENT</span><h3 class="card-title">BrandForge AI</h3><span>AI marketing OS — goal to strategy, creative, publishing and optimization.</span></a>
+        <a href="https://github.com/BahaOS242/island-sol" rel="noopener" class="press box shadow card bg-teal"><span class="mono small">WIX HEADLESS · NEXT.JS</span><h3 class="card-title">Island Sol</h3><span>Headless e-commerce storefront with Wh-based pricing models.</span></a>
+        <a href="/#audit" class="press box card bg-white" style="box-shadow: 6px 6px 0 var(--teal)"><span class="mono small">ASTRO · TYPESCRIPT</span><h3 class="card-title">Growth Audit engine</h3><span>Deterministic, weighted site scoring across five categories, wired into lead capture. Try it on any site.</span></a>
+      </div>
+    </section>
+
+    <section id="stack" class="sec grid" style="--min: 260px; gap: 20px" aria-label="Tech stack">
+      <div class="box bg-surface stack"><h2>Languages</h2><p>TypeScript, JavaScript, Python, SQL, HTML/CSS</p></div>
+      <div class="box bg-surface stack"><h2>Backend &amp; data</h2><p>Next.js, PostgreSQL, Prisma, Better Auth, REST APIs, testing</p></div>
+      <div class="box bg-surface stack"><h2>AI</h2><p>Claude, AI APIs, Claude Code, prompt engineering, workflow automation</p></div>
+      <div class="box bg-surface stack"><h2>Ship &amp; ops</h2><p>Vercel, Git &amp; GitHub, Wix Headless, Astro</p></div>
+    </section>
+
+    <section class="hire box bg-teal shadow-lg" style="--sh: var(--rose)" aria-labelledby="hire-title">
+      <div style="flex: 1 1 420px">
+        <h2 id="hire-title" class="display">Hiring? Let's talk.</h2>
+        <a href={`mailto:${site.email}`} class="mail">{site.email}</a>
+      </div>
+      <div class="btns">
+        {site.resumeUrl && <a href={site.resumeUrl} class="btn btn-dark">Résumé (PDF) ↓</a>}
+        <a href={site.github} rel="me noopener" class="btn btn-white">GitHub</a>
+      </div>
+    </section>
+  </main>
+</div>
+<Footer engineering />
+</FM>
+
+<style>
+  .hero { display: flex; flex-wrap: wrap; gap: 40px; align-items: stretch; padding: 32px 0 64px; }
+  .hero-copy { flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 22px; }
+  .open { align-self: flex-start; padding: 8px 14px; font-size: 14px; }
+  h1 { font-size: clamp(36px, 4.8vw, 70px); line-height: 1.02; letter-spacing: -0.03em; }
+  .lede { font-size: 20px; max-width: 600px; }
+  .term { flex: 1 1 360px; min-width: 0; margin: 0; background: #0d0a1e; border: 3px solid #fff; box-shadow: 10px 10px 0 var(--teal); padding: 26px; font-family: var(--mono); font-size: 14px; line-height: 1.8; color: #e8e4f5; overflow-x: auto; white-space: pre; }
+  .term .c { color: #c9c3e3; } .term .k { color: var(--teal); } .term .y { color: var(--yellow); }
+  .sec { padding: 0 0 64px; }
+  .small { font-size: 13px; }
+  .card-title { font-size: 22px; }
+  .card span:last-child { font-size: 16px; line-height: 1.5; }
+  .flagship { padding: 36px; display: flex; flex-wrap: wrap; gap: 32px; margin-bottom: 28px; }
+  .flag-copy { flex: 1 1 380px; display: flex; flex-direction: column; gap: 14px; }
+  .flag-copy p { font-size: 17px; line-height: 1.6; }
+  .flag-list { flex: 1 1 440px; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .flag-list li { padding: 14px 16px; font-size: 16px; line-height: 1.5; }
+  .flag-list strong { color: var(--hl2); }
+  .stack { padding: 26px; }
+  .stack h2 { font-family: var(--display); font-size: 18px; color: var(--hl); }
+  .stack p { margin-top: 10px; font-size: 16px; line-height: 1.7; }
+  .hire { padding: 40px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between; margin-bottom: 64px; }
+  .hire h2 { font-size: clamp(26px, 3vw, 40px); margin-bottom: 8px; }
+  .mail { font-size: 20px; font-weight: 700; text-decoration: underline; overflow-wrap: anywhere; }
+  @media (max-width: 600px) { .flagship, .hire { padding: 22px; } }
+</style>

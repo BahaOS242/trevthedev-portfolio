@@ -1,0 +1,191 @@
+---
+import FM from '../../layouts/FM.astro';
+import ThemeToggle from '../../components/fm/ThemeToggle.astro';
+import Footer from '../../components/fm/Footer.astro';
+import { wa, discoveryCall } from '../../data/site';
+
+
+const unlock = wa('Hi Trev, I ran the Growth Audit and want the full $99 diagnostic report');
+const auditCall = wa('Hi Trev, I ran the Growth Audit and want a free discovery call');
+---
+<FM title="Your Growth Audit Results | TrevTheDev" description="Your free website Growth Audit score, category breakdown and top three opportunities." noindex>
+<div class="wrap-narrow">
+  <header class="site-header">
+    <a href="/" class="logo" aria-label="TrevTheDev — home"><span style="background: var(--pink)">TREV</span>FM 242</a>
+    <nav class="site-nav" aria-label="Main">
+      <ThemeToggle />
+      <a href="/">← Back to site</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="empty box bg-surface" data-empty hidden>
+      <h1 class="display">No audit yet</h1>
+      <p class="muted">Run the free Growth Audit on your website to see your score and top fixes.</p>
+      <a href="/#audit" class="btn btn-dark" style="align-self: flex-start">Run my free Growth Audit ▶</a>
+    </section>
+
+    <div data-report hidden>
+      <section class="top">
+        <div class="score box shadow-lg bg-yellow" style="--sh: var(--pink)">
+          <span class="mono small">GROWTH SCORE</span>
+          <h1 class="sr-only">Your Growth Audit results</h1>
+          <p class="num"><strong data-score>0</strong><span>/100</span></p>
+          <p class="verdict" data-verdict></p>
+        </div>
+        <div class="cats box bg-surface">
+          <h2 class="cats-h">By category</h2>
+          <div class="bars" data-bars></div>
+          <p class="mono subtle note">Scores reflect what's publicly detectable on your site today — not a guarantee of business performance.</p>
+        </div>
+      </section>
+
+      <section class="sec">
+        <h2 class="h2" style="font-size: clamp(28px, 3.4vw, 44px); margin-bottom: 24px" data-opps-title>Your top 3 opportunities</h2>
+        <div class="grid" style="--min: 280px; gap: 20px" data-opps></div>
+      </section>
+
+      <section class="sec row">
+        <div class="box bg-surface next">
+          <h2 class="cats-h">What happens next</h2>
+          <ol>
+            <li><span class="badge bg-teal">✓</span><span>Your score is ready — you're looking at it.</span></li>
+            <li><span class="badge bg-teal">✓</span><span>Trev has your full report, every check included.</span></li>
+            <li><span class="badge bg-yellow flash">●</span><span>Trev will reach out within the hour to walk you through it.</span></li>
+          </ol>
+        </div>
+        <div class="box bg-white offer" style="box-shadow: 10px 10px 0 var(--teal)">
+          <span class="mono small">FREE · NO OBLIGATION</span>
+          <h2 class="offer-h">Want these fixed? Let's talk it through.</h2>
+          <p>Book a free discovery call. If it's a fit, your first strategy meeting is free too — you leave with a plan and a fixed custom quote.</p>
+          <a href={auditCall} rel="noopener" class="btn btn-dark">Book my free discovery call ▶</a>
+        </div>
+      </section>
+
+      <section class="unlock box bg-pink">
+        <div style="flex: 1 1 420px">
+          <h2 class="offer-h">Unlock the full diagnostic report</h2>
+          <p>Every check, every fix, prioritized. Hire Trev within 45 days and the full $99 comes off your final bill.</p>
+        </div>
+        <a href={unlock} rel="noopener" class="btn btn-white">Unlock — $99 →</a>
+      </section>
+    </div>
+  </main>
+</div>
+<Footer />
+
+<template data-bar-tpl>
+  <div class="bar">
+    <div class="bar-label"><span data-l></span><span data-v></span></div>
+    <div class="track"><div class="fill"></div></div>
+  </div>
+</template>
+<template data-opp-tpl>
+  <article class="box card opp">
+    <span class="mono" data-k></span>
+    <h3 class="opp-h" data-t></h3>
+    <p data-w></p>
+    <p class="fix" data-f></p>
+  </article>
+</template>
+</FM>
+
+<script>
+  import type { AuditResult, Check, Severity } from '../../lib/audit-engine';
+  import { getPlainEnglish } from '../../lib/plain-english';
+
+  const $ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel)!;
+  const tone = (score: number) => (score < 50 ? 'var(--rose)' : score < 70 ? 'var(--yellow)' : 'var(--teal)');
+  const SEV: Record<Severity, number> = { high: 3, medium: 2, low: 1 };
+
+  let stored: { result: AuditResult } | null = null;
+  try { stored = JSON.parse(sessionStorage.getItem('growthAudit') || 'null'); } catch {}
+
+  if (!stored?.result?.categories) {
+    $('[data-empty]').hidden = false;
+  } else {
+    const r = stored.result;
+    let host = r.url;
+    try { host = new URL(r.url).hostname.replace(/^www\./, ''); } catch {}
+
+    $('[data-score]').textContent = String(r.score);
+    $('[data-verdict]').textContent =
+      r.score >= 80 ? `${host} is in great shape — a few tweaks left.`
+      : r.score >= 60 ? `${host} is solid, with clear room to grow.`
+      : `${host} has room to grow — ${r.opportunitiesCount} opportunities found.`;
+
+    const barTpl = $<HTMLTemplateElement>('[data-bar-tpl]');
+    r.categories.forEach((c, i) => {
+      const node = barTpl.content.cloneNode(true) as DocumentFragment;
+      $('[data-l]', node).textContent = c.label;
+      $('[data-v]', node).textContent = String(c.score);
+      const fill = $('.fill', node);
+      fill.style.width = `${c.score}%`;
+      fill.style.background = tone(c.score);
+      fill.style.animationDelay = `${i * 0.1}s`;
+      $('[data-bars]').append(node);
+    });
+
+    const fails: Check[] = r.categories
+      .flatMap((c) => c.checks)
+      .filter((c) => c.status === 'fail')
+      .sort((a, b) => SEV[b.severity] - SEV[a.severity] || b.maxPoints - a.maxPoints)
+      .slice(0, 3);
+
+    const colors = ['bg-rose', 'bg-yellow', 'bg-teal'];
+    const oppTpl = $<HTMLTemplateElement>('[data-opp-tpl]');
+    if (!fails.length) $('[data-opps-title]').textContent = 'No major issues found — nice work.';
+    if (fails.length && fails.length < 3) $('[data-opps-title]').textContent = `Your top ${fails.length === 1 ? 'opportunity' : `${fails.length} opportunities`}`;
+    fails.forEach((check, i) => {
+      const copy = getPlainEnglish(check);
+      const node = oppTpl.content.cloneNode(true) as DocumentFragment;
+      $('article', node).classList.add(colors[i]);
+      $('[data-k]', node).textContent = `0${i + 1} · ${check.category.toUpperCase()}`;
+      $('[data-t]', node).textContent = copy.title;
+      $('[data-w]', node).textContent = copy.whyItHurts;
+      $('[data-f]', node).textContent = copy.howTrevFixes;
+      $('[data-opps]').append(node);
+    });
+
+    $('[data-report]').hidden = false;
+  }
+</script>
+
+<style>
+  [hidden] { display: none !important; }
+  .small { font-size: 13px; }
+  .empty { padding: 40px; display: flex; flex-direction: column; gap: 16px; margin: 32px 0 72px; }
+  .empty h1 { font-size: clamp(32px, 4vw, 52px); }
+  .top { display: flex; flex-wrap: wrap; gap: 32px; align-items: stretch; padding: 24px 0 48px; }
+  .score { flex: 1 1 320px; padding: 32px; display: flex; flex-direction: column; gap: 14px; justify-content: center; }
+  .num { display: flex; align-items: baseline; gap: 8px; font-family: var(--display); }
+  .num strong { font-weight: 900; font-size: 120px; line-height: 0.9; }
+  .num span { font-weight: 700; font-size: 28px; }
+  .verdict { font-size: 18px; font-weight: 600; overflow-wrap: anywhere; }
+  .cats { flex: 999 1 520px; min-width: 0; padding: 32px; display: flex; flex-direction: column; gap: 18px; }
+  .cats-h { font-family: var(--display); font-size: 20px; }
+  .bars { display: flex; flex-direction: column; gap: 18px; }
+  .note { font-weight: 400; font-size: 12px; }
+  .sec { padding: 0 0 48px; }
+  .next { flex: 1 1 380px; padding: 32px; display: flex; flex-direction: column; gap: 16px; }
+  .next ol { padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; font-size: 17px; }
+  .next li { display: flex; gap: 14px; align-items: flex-start; }
+  .badge { flex: none; border: 2px solid var(--line); padding: 2px 8px; font-family: var(--mono); font-weight: 700; }
+  .offer { flex: 1 1 380px; padding: 32px; display: flex; flex-direction: column; gap: 14px; }
+  .offer p, .unlock p { font-size: 17px; line-height: 1.5; }
+  .offer .btn { margin-top: 6px; }
+  .offer-h { font-family: var(--display); font-weight: 700; font-size: 24px; line-height: 1.15; }
+  .unlock { padding: 32px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between; margin-bottom: 72px; }
+  .unlock p { margin-top: 8px; }
+  @media (max-width: 600px) { .score, .cats, .next, .offer, .unlock, .empty { padding: 22px; } .num strong { font-size: 88px; } }
+</style>
+
+<style is:global>
+  .bar { display: flex; flex-direction: column; gap: 6px; }
+  .bar-label { display: flex; justify-content: space-between; font-weight: 700; }
+  .track { height: 18px; border: 3px solid var(--line); background: var(--bg); }
+  .track .fill { height: 100%; }
+  .opp p { font-size: 16px; line-height: 1.5; }
+  .opp .fix { font-weight: 600; }
+  .opp-h { font-family: var(--display); font-size: 19px; line-height: 1.25; }
+</style>

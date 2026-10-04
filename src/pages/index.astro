@@ -1,24 +1,487 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Nav from '../components/Nav.astro';
-import Hero from '../components/Hero.astro';
-import About from '../components/About.astro';
-import Experience from '../components/Experience.astro';
-import CaseStudies from '../components/CaseStudies.astro';
-import GraphicDesign from '../components/GraphicDesign.astro';
-import Projects from '../components/Projects.astro';
-import SiteAuditor from '../components/SiteAuditor.astro';
-import Contact from '../components/Contact.astro';
----
+import FM from '../layouts/FM.astro';
+import ThemeToggle from '../components/fm/ThemeToggle.astro';
+import Footer from '../components/fm/Footer.astro';
+import { site, SITE_URL, discoveryCall, faqs } from '../data/site';
 
-<Layout>
-	<Nav />
-	<Hero />
-	<About />
-	<Experience />
-	<CaseStudies />
-	<Projects />
-	<GraphicDesign />
-	<SiteAuditor />
-	<Contact />
-</Layout>
+
+const title = 'Web Design & WhatsApp AI in Nassau, Bahamas | TrevTheDev';
+const description =
+  'Nassau web designer building websites that sell, WhatsApp AI receptionists and local SEO for Bahamian businesses. Live in 14 days. Free Growth Audit.';
+
+const personId = `${SITE_URL}/#trevor`;
+const businessId = `${SITE_URL}/#business`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE_URL}/#website`,
+    url: `${SITE_URL}/`,
+    name: site.brand,
+    alternateName: ['TrevTheWebDev', 'Trev the Web Dev'],
+    publisher: { '@id': businessId },
+    inLanguage: 'en',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': personId,
+    name: site.name,
+    alternateName: ['TrevTheDev', 'TrevTheWebDev'],
+    jobTitle: 'Web Developer & AI Engineer',
+    url: `${SITE_URL}/`,
+    image: `${SITE_URL}/trevor.jpeg`,
+    email: `mailto:${site.email}`,
+    telephone: site.phone,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: site.city,
+      addressRegion: site.region,
+      addressCountry: site.country,
+    },
+    sameAs: [site.github, site.linkedin],
+    worksFor: { '@id': businessId },
+    knowsAbout: ['Web design', 'Web development', 'Local SEO', 'WhatsApp automation', 'Conversational AI', 'TypeScript', 'Next.js', 'Astro'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    '@id': businessId,
+    name: `${site.brand} — Web Design & WhatsApp AI`,
+    alternateName: 'TrevTheWebDev',
+    description,
+    url: `${SITE_URL}/`,
+    image: `${SITE_URL}/og.png`,
+    logo: `${SITE_URL}/apple-touch-icon.png`,
+    email: site.email,
+    telephone: site.phone,
+    founder: { '@id': personId },
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: site.city,
+      addressRegion: site.region,
+      addressCountry: site.country,
+    },
+    geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng },
+    areaServed: [
+      { '@type': 'City', name: 'Nassau' },
+      { '@type': 'Country', name: 'The Bahamas' },
+    ],
+    sameAs: [site.github, site.linkedin],
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'The Island Growth Stack',
+      itemListElement: [
+        ['Website That Sells', 'Mobile-first website design and development that books or sells.'],
+        ['WhatsApp AI Receptionist', 'An AI assistant that answers and qualifies WhatsApp enquiries 24/7.'],
+        ['Local SEO — Get Found in Nassau', 'Local search optimization and Google Business Profile setup.'],
+        ['Launch Campaign', 'Flyers and email creative for your launch.'],
+        ['Free Growth Audit', 'An instant score of how your website performs on visibility, conversion, experience, trust and technical health.'],
+      ].map(([name, desc]) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name, description: desc, areaServed: 'BS' },
+      })),
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const ticker = 'GET FOUND ✺ GET MESSAGES ✺ GET BOOKED ✺ FUEL & FLOW PILATES — LIVE ✺ SHIPPING OS — LIVE ✺ BAHAOS WHATSAPP AI ✺ YOU OWN EVERY LOGIN ✺';
+---
+<FM title={title} description={description} jsonLd={jsonLd}>
+<div class="page">
+
+<div class="wrap">
+  <header class="site-header">
+    <a href="/" class="logo" aria-label="TrevTheDev — home"><span style="background: var(--pink)">TREV</span>FM 242</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="#proof">Proof</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#guarantee">Guarantees</a>
+      <a href="/engineering" style="color: var(--hl2)">For employers</a>
+      <ThemeToggle />
+      <a href={discoveryCall} rel="noopener" class="press bg-teal box shadow nav-cta">Free discovery call</a>
+    </nav>
+  </header>
+</div>
+
+<main id="main">
+<div class="wrap">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <p class="onair"><span class="flash dot" aria-hidden="true"></span>ON AIR · Nassau owners still answering DMs at midnight</p>
+      <h1 id="hero-title" class="display hero-h1">Every missed message is a customer <span class="tag">calling your competitor.</span></h1>
+      <p class="hero-lede">A website that sells, a WhatsApp AI that replies in seconds, and a Google listing customers can find — built in Nassau, Bahamas, <strong>live in 14 days or I keep working free.</strong></p>
+
+      <form id="audit" class="audit box" data-audit-form novalidate>
+        <div class="audit-head">
+          <h2 class="audit-title">See what your site is costing you</h2>
+          <span class="pill mono">FREE · 60 SEC</span>
+        </div>
+        <div class="audit-fields">
+          <label class="field">YOUR WEBSITE<input name="url" type="text" inputmode="url" autocomplete="url" placeholder="yourbusiness.com" required></label>
+          <label class="field">YOUR NAME<input name="name" type="text" autocomplete="name" placeholder="First name" required></label>
+          <label class="field">EMAIL<input name="email" type="email" autocomplete="email" placeholder="you@business.com" required></label>
+        </div>
+        <button type="submit" class="audit-btn" data-audit-submit>Run my free Growth Audit ▶</button>
+        <p class="audit-msg" role="status" aria-live="polite" data-audit-msg></p>
+        <ol class="audit-steps">
+          <li><strong class="mono">01</strong> Your score, instantly</li>
+          <li><strong class="mono">02</strong> Your top 3 fixes</li>
+          <li><strong class="mono">03</strong> Trev follows up within the hour</li>
+        </ol>
+        <p class="audit-alt">Rather talk first? <a href={discoveryCall} rel="noopener">Book a free discovery call →</a></p>
+      </form>
+      {site.capacity && (
+        <p class="mono capacity">● Taking {site.capacity.slots} new builds this month — next opening {site.capacity.nextOpening}</p>
+      )}
+    </div>
+
+    <div class="scene" aria-hidden="true">
+      <div class="night-only">
+        <span class="twinkle star" style="left: 30px; top: 30px; width: 6px; height: 6px"></span>
+        <span class="twinkle star" style="left: 200px; top: 70px; width: 4px; height: 4px; animation-delay: -1s"></span>
+        <span class="twinkle star" style="right: 60px; top: 160px; width: 5px; height: 5px; animation-delay: -1.8s"></span>
+        <div class="moon"></div>
+      </div>
+      <div class="day-only">
+        <div class="spin sun"></div>
+        <div class="drift cloud" style="left: 30px; top: 40px; width: 130px; height: 44px"></div>
+        <div class="drift2 cloud" style="left: 210px; top: 96px; width: 90px; height: 34px"></div>
+      </div>
+
+      <div class="bob radio">
+        <span class="mono radio-meta">NOW PLAYING · TREV FM 242.0</span>
+        <strong class="radio-song">"More Bookings (While You Sleep)"</strong>
+        <div class="eq"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <div class="bob chat">11:48 PM: "Space Saturday?" → <span>Booked ✓</span></div>
+
+      <svg class="sway palm" width="110" height="280" viewBox="0 0 110 260" fill="none" stroke-width="4"><path d="M58 258 C 52 180, 60 110, 54 60"></path><path d="M54 60 C 30 40, 10 50, 2 70 C 25 58, 40 60, 54 60 Z" fill="#2E8C86"></path><path d="M54 60 C 78 38, 98 46, 108 66 C 84 56, 70 58, 54 60 Z" fill="#2E8C86"></path><path d="M54 60 C 44 30, 52 10, 66 2 C 62 26, 60 42, 54 60 Z" fill="#2E8C86"></path></svg>
+
+      <div class="street">
+        <div class="bldg bg-rose" style="height: 290px; border-right: 0">
+          <div class="wins"><span class="shutter" style="background: var(--yellow)"></span><span class="shutter" style="background: var(--yellow)"></span></div>
+          <strong>WEBSITE</strong><span class="door" style="background: var(--yellow)"></span>
+        </div>
+        <div class="bldg bg-yellow" style="height: 370px">
+          <span class="neon sign">OPEN 24/7</span>
+          <div class="wins"><span class="shutter" style="background: var(--teal)"></span><span class="shutter" style="background: var(--teal)"></span></div>
+          <strong>WHATSAPP AI</strong><span class="door" style="background: var(--cream)"></span>
+        </div>
+        <div class="bldg bg-teal" style="height: 250px; border-left: 0">
+          <div class="wins"><span class="shutter" style="background: var(--rose)"></span><span class="shutter" style="background: var(--rose)"></span></div>
+          <strong>GOOGLE</strong><span class="door" style="background: var(--yellow)"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="ticker-band" aria-hidden="true">
+  <div class="ticker"><span>{ticker}</span><span>{ticker}</span></div>
+</div>
+<p class="sr-only">Get found, get messages, get booked. Live projects: Fuel &amp; Flow Pilates, Shipping OS and the BahaOS WhatsApp AI receptionist.</p>
+
+<div class="wrap">
+  <section class="grid section-top" style="--min: 320px" aria-label="Industries served">
+    <a href="#proof" class="press box bg-surface card" style="box-shadow: 6px 6px 0 var(--rose)">
+      <span class="mono small" style="color: var(--hl3)">BUILT FOR · STUDIOS &amp; WELLNESS</span>
+      <h2 class="card-title big">Fitness, Pilates, spas and salons</h2>
+      <span class="muted body">Class booking, memberships, gift cards and reminders — proven live with Fuel &amp; Flow.</span>
+    </a>
+    <a href="#proof" class="press box bg-surface card" style="box-shadow: 6px 6px 0 var(--teal)">
+      <span class="mono small" style="color: var(--hl2)">BUILT FOR · FREIGHT &amp; LOGISTICS</span>
+      <h2 class="card-title big">Forwarders, couriers and mailboats</h2>
+      <span class="muted body">Bookings, manifests, tracking and WhatsApp updates — proven with Shipping OS.</span>
+    </a>
+  </section>
+
+  <section id="calls" class="section" aria-labelledby="calls-title" style="padding-top: 88px">
+    <p class="kicker">// FROM THE CALLER LINE</p>
+    <h2 id="calls-title" class="h2" style="margin-bottom: 40px">Sound familiar?</h2>
+    <div class="grid" style="--min: 270px">
+      <blockquote class="press box shadow card bg-rose"><span class="mono small">LINE 1 · 11:48 PM</span><p class="quote">"People message after hours and I lose them by morning."</p></blockquote>
+      <blockquote class="press box shadow card bg-yellow"><span class="mono small">LINE 2</span><p class="quote">"Nobody finds us on Google. It's all word of mouth."</p></blockquote>
+      <blockquote class="press box shadow card bg-teal"><span class="mono small">LINE 3</span><p class="quote">"My last developer vanished with the password."</p></blockquote>
+      <blockquote class="press box card bg-white" style="box-shadow: 6px 6px 0 var(--pink)"><span class="mono small">LINE 4</span><p class="quote">"Bookings are a mess of DMs, calls and screenshots."</p></blockquote>
+    </div>
+  </section>
+
+  <section class="section-sm" aria-label="Before and after">
+    <div class="split box shadow-lg" style="--sh: var(--teal)">
+      <div class="bg-surface split-col">
+        <h3 class="split-h" style="color: var(--hl3)">RIGHT NOW</h3>
+        <ul class="muted"><li>Missed DMs after hours become lost sales</li><li>Customers search and find your competitor</li><li>Bookings live in your phone and memory</li><li>Someone else holds your logins</li></ul>
+      </div>
+      <div class="bg-cream split-col">
+        <h3 class="split-h">14 DAYS FROM NOW</h3>
+        <ul style="font-weight: 500"><li>WhatsApp AI answers and qualifies in seconds</li><li>Local SEO puts you in Nassau searches</li><li>Online booking, payments and reminders</li><li>You own the domain, code and every login</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="section-sm row tracks" aria-labelledby="tracks-title">
+    <div style="flex: 1 1 340px">
+      <p class="kicker">// THE TRACKLIST</p>
+      <h2 id="tracks-title" class="h2" style="margin-bottom: 16px">The Island Growth Stack</h2>
+      <p class="lede">One builder. One deadline. More customers, faster, with less of your time.</p>
+    </div>
+    <ol class="tracklist box">
+      <li class="bg-rose"><span class="mono">A1</span><h3>Website That Sells</h3><span>Mobile-first, books or buys</span></li>
+      <li class="bg-yellow"><span class="mono">A2</span><h3><a href="/whatsapp-ai-receptionist">WhatsApp AI Receptionist</a></h3><span>Replies in seconds, 24/7</span></li>
+      <li class="bg-teal"><span class="mono">B1</span><h3>Get Found in Nassau</h3><span>Local SEO + Google profile</span></li>
+      <li class="bg-white"><span class="mono">B2</span><h3><a href="/email-marketing">Launch Campaign</a></h3><span>Flyers + email creative</span></li>
+      <li class="bg-ink"><span class="mono" style="color: var(--yellow)">★</span><h3>Bonus: Free Growth Audit</h3><a href="#audit" class="up">Run it up top ↑</a></li>
+    </ol>
+  </section>
+
+  <section id="pricing" class="section-sm" aria-labelledby="pricing-title">
+    <p class="kicker">// PRICING</p>
+    <h2 id="pricing-title" class="h2" style="margin-bottom: 12px">Custom pricing. <span style="color: var(--hl)">Free to start.</span></h2>
+    <p class="lede" style="max-width: 720px; margin-bottom: 36px">Every business is different, so every build is quoted to fit. The first three steps cost you nothing — you only pay once you've seen the plan and approved a fixed quote.</p>
+    <ol class="grid steps" style="--min: 240px; gap: 20px">
+      <li class="box card bg-teal"><span class="mono">01 · FREE</span><h3 class="card-title">Growth Audit</h3><span>See where your site is losing customers today.</span></li>
+      <li class="box card bg-yellow"><span class="mono">02 · FREE</span><h3 class="card-title">Discovery call</h3><span>A quick chat about your business, goals and what's not working.</span></li>
+      <li class="box card bg-rose"><span class="mono">03 · FREE</span><h3 class="card-title">First strategy meeting</h3><span>Walk away with a growth plan and a fixed custom quote — yours to keep either way.</span></li>
+      <li class="box card bg-surface"><span class="mono" style="color: var(--hl)">04 · YOU APPROVE</span><h3 class="card-title">Build + launch</h3><span class="muted">Live in 14 days. No surprise invoices.</span></li>
+    </ol>
+    <div class="cta-row">
+      <a href={discoveryCall} rel="noopener" class="press btn box shadow bg-pink" style="font-size: 17px; padding: 18px 26px">Book my free discovery call ▶</a>
+      <span class="mono subtle" style="font-weight: 400; font-size: 14px">No obligation. No pressure. No card.</span>
+    </div>
+  </section>
+
+  <section id="guarantee" class="section-sm guarantee" aria-labelledby="guarantee-title">
+    <div class="seal" aria-hidden="true"><div class="spin seal-ring"></div><span>ZERO-RISK<br>START</span></div>
+    <div class="g-list">
+      <h2 id="guarantee-title" class="sr-only">Guarantees</h2>
+      <p class="box bg-yellow"><strong>Free discovery call + first meeting</strong> — a plan and a quote before you spend a dollar.</p>
+      <p class="box bg-teal"><strong>Live in 14 days</strong> — or I keep working free until it is.</p>
+      <p class="box bg-rose"><strong>You own everything</strong> — domain, code, accounts. No hostage websites, ever.</p>
+      <p class="box bg-cream"><strong>Risk-free audit</strong> — hire me within 45 days and the $99 report comes off your bill.</p>
+    </div>
+  </section>
+
+  <section id="proof" class="section-sm" aria-labelledby="proof-title">
+    <span id="work"></span>
+    <p class="kicker">// PROOF</p>
+    <h2 id="proof-title" class="h2" style="margin-bottom: 36px">Not mockups. Live.</h2>
+    <div class="row" style="margin-bottom: 24px">
+      <a href="https://shipping-os-kappa.vercel.app/demo" rel="noopener" class="press box shadow bg-surface video">
+        <span class="play"><svg width="30" height="30" viewBox="0 0 24 24" fill="#15112B" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg></span>
+        <strong class="card-title big">Try the Shipping OS interactive demo</strong>
+        <span class="mono subtle small">Six real scenarios · no sign-up</span>
+      </a>
+      {site.testimonial && (
+        <figure class="box bg-cream testimonial" style="box-shadow: 6px 6px 0 var(--pink)">
+          <blockquote>"{site.testimonial.quote}"</blockquote>
+          <figcaption><strong>{site.testimonial.name}</strong><span>{site.testimonial.role}</span></figcaption>
+        </figure>
+      )}
+    </div>
+    <div class="grid" style="--min: 340px">
+      <article class="press box shadow bg-surface proj">
+        <a href="https://www.fuelandflowbahamas.com/" rel="noopener" class="proj-link">
+          <div class="proj-art bg-rose"><span class="display">Fuel &amp; Flow</span><span class="mono">fuelandflowbahamas.com</span></div>
+          <div class="proj-body">
+            <h3 class="card-title big">Fuel &amp; Flow Pilates</h3>
+            <p class="muted">Live Nassau Pilates studio website — class bookings, events, memberships and gift cards.</p>
+            {site.fuelFlowResult && (
+              <div class="chips"><span style="border-color: var(--rose)">BEFORE: {site.fuelFlowResult.before}</span><span style="border-color: var(--teal)">AFTER: {site.fuelFlowResult.after}</span></div>
+            )}
+            <span class="go">Visit live site ▶</span>
+          </div>
+        </a>
+      </article>
+      <article class="press box shadow bg-surface proj">
+        <a href="https://shipping-os-kappa.vercel.app/demo" rel="noopener" class="proj-link">
+          <div class="proj-art bg-teal"><span class="display">Shipping OS</span><span class="mono">multi-tenant logistics SaaS</span></div>
+          <div class="proj-body">
+            <h3 class="card-title big">Shipping OS</h3>
+            <p class="muted">Multi-tenant logistics SaaS for Bahamian freight forwarders and couriers — six-scenario interactive demo.</p>
+            <span class="go">Try the demo ▶</span>
+          </div>
+        </a>
+      </article>
+    </div>
+  </section>
+
+  <section id="faq" class="section-faq" aria-labelledby="faq-title">
+    <h2 id="faq-title" class="h2" style="font-size: clamp(30px, 3.6vw, 48px); margin-bottom: 24px">Quick questions</h2>
+    <div class="faq">
+      {faqs.map((f) => (
+        <details><summary>{f.q}</summary><p>{f.a}</p></details>
+      ))}
+    </div>
+  </section>
+
+  <section class="final box shadow-lg bg-pink" style="--sh: var(--yellow)" aria-labelledby="final-title">
+    <h2 id="final-title" class="display">Still losing customers after dark?</h2>
+    <div class="btns">
+      <a href="#audit" class="btn btn-dark">Run free audit ↑</a>
+      <a href={discoveryCall} rel="noopener" class="btn btn-white">Free discovery call</a>
+    </div>
+  </section>
+</div>
+</main>
+
+<Footer />
+</div>
+</FM>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-audit-form]');
+  const btn = document.querySelector<HTMLButtonElement>('[data-audit-submit]');
+  const msg = document.querySelector<HTMLElement>('[data-audit-msg]');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form || !btn || !msg) return;
+    const data = new FormData(form);
+    const url = String(data.get('url') ?? '').trim();
+    const name = String(data.get('name') ?? '').trim();
+    const email = String(data.get('email') ?? '').trim();
+    if (!url || !name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      msg.textContent = 'Please add your website, name and a valid email.';
+      return;
+    }
+    const label = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Scanning your site…';
+    msg.textContent = '';
+    try {
+      const res = await fetch('/api/audit', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ url, name, email }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || 'Something went wrong. Please try again.');
+      sessionStorage.setItem('growthAudit', JSON.stringify({ name, result: body }));
+      window.location.href = '/audit/results';
+    } catch (err) {
+      msg.textContent = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
+      btn.disabled = false;
+      btn.textContent = label;
+    }
+  });
+</script>
+
+<style>
+  .page { overflow: hidden; }
+  .small { font-size: 13px; }
+  .body { font-size: 17px; line-height: 1.5; }
+  .card-title.big { font-size: 22px; }
+
+  .hero { display: flex; flex-wrap: wrap; gap: 48px; align-items: stretch; padding-top: 28px; }
+  .hero-copy { flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 24px; padding-bottom: 56px; }
+  .onair { align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; background: var(--yellow); color: var(--ink); border: 3px solid var(--line); padding: 8px 14px; font-family: var(--mono); font-size: 14px; font-weight: 700; }
+  .dot { width: 10px; height: 10px; flex: none; border-radius: 50%; background: #e0115f; }
+  .hero-h1 { font-size: clamp(38px, 5.2vw, 78px); line-height: 1; letter-spacing: -0.03em; }
+  .tag { background: var(--pink); color: var(--ink); border: 3px solid var(--line); padding: 0 10px; display: inline-block; transform: rotate(-1deg); margin-top: 6px; }
+  .hero-lede { font-size: 20px; line-height: 1.5; max-width: 580px; color: var(--muted); }
+  .hero-lede strong { color: var(--hl); }
+
+  .audit { background: var(--white); color: var(--ink); box-shadow: 10px 10px 0 var(--pink); padding: 28px; display: flex; flex-direction: column; gap: 16px; max-width: 680px; }
+  .audit-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline; }
+  .audit-title { font-family: var(--display); font-weight: 700; font-size: 22px; }
+  .pill { background: var(--yellow); border: 2px solid var(--ink); padding: 4px 10px; font-size: 13px; }
+  .audit-fields { display: flex; flex-wrap: wrap; gap: 12px; }
+  .audit-fields .field { flex: 1 1 180px; }
+  .audit-btn { min-height: 60px; border: 3px solid var(--ink); background: var(--ink); color: var(--yellow); font-family: var(--display); font-weight: 700; font-size: 18px; cursor: pointer; padding: 12px; }
+  .audit-btn:disabled { opacity: .75; cursor: progress; }
+  .audit-msg:empty { display: none; }
+  .audit-msg { font-weight: 700; color: #b0126a; }
+  .audit-steps { padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; font-size: 14px; font-weight: 600; color: #3d3760; }
+  .audit-steps li { border: 2px solid var(--ink); padding: 10px 12px; }
+  .audit-steps strong { color: var(--ink); }
+  .audit-alt { font-size: 15px; font-weight: 600; color: #3d3760; }
+  .audit-alt a { color: #b0126a; text-decoration: underline; }
+  .capacity { font-size: 14px; color: var(--hl); }
+
+  .scene { flex: 1 1 440px; position: relative; min-height: 640px; }
+  .star { position: absolute; background: #fff; border-radius: 50%; }
+  .moon { position: absolute; right: 40px; top: 20px; width: 96px; height: 96px; border-radius: 50%; background: #fff6cc; border: 3px solid var(--line); box-shadow: inset -22px -6px 0 #e8dfa8; }
+  .sun { position: absolute; right: 40px; top: 16px; width: 108px; height: 108px; border-radius: 50%; background: var(--yellow); border: 3px solid var(--line); }
+  .cloud { position: absolute; background: #fff; border: 3px solid var(--line); border-radius: 30px; }
+  .radio { position: absolute; left: 0; top: 120px; z-index: 2; width: 250px; background: var(--ink); color: #fff; border: 3px solid #fff; box-shadow: 6px 6px 0 var(--teal); padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .radio-meta { font-size: 12px; font-weight: 400; color: #c9c3e3; }
+  .radio-song { font-family: var(--display); font-size: 16px; line-height: 1.2; }
+  .eq { display: flex; align-items: flex-end; gap: 5px; height: 40px; color: var(--pink); }
+  .chat { position: absolute; right: 0; top: 230px; z-index: 2; background: #fff; color: var(--ink); border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--yellow); padding: 12px 14px; font-weight: 700; font-size: 14px; max-width: 200px; animation-delay: -1.4s; }
+  .chat span { color: #0f7a3d; }
+  .palm { position: absolute; left: -10px; bottom: 0; z-index: 1; stroke: var(--line); }
+  .street { position: absolute; left: 70px; right: 0; bottom: 0; display: flex; align-items: flex-end; }
+  .bldg { flex: 1 1 0; border: 3px solid var(--line); display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 22px 10px 0; }
+  .bldg strong { font-family: var(--display); font-size: 14px; }
+  .wins { display: flex; gap: 8px; }
+  .wins span { width: 22px; height: 44px; border: 3px solid var(--ink); }
+  .door { width: 46px; height: 70px; border: 3px solid var(--ink); border-bottom: 0; }
+  .sign { background: var(--ink); color: var(--pink); font-family: var(--display); font-weight: 900; font-size: 13px; padding: 6px 10px; border: 3px solid var(--pink); }
+  @media (max-width: 600px) { .scene { min-height: 520px; } .radio { width: 210px; } }
+
+  .ticker-band { background: var(--yellow); color: var(--ink); border-block: 3px solid var(--line); padding: 14px 0; overflow: hidden; white-space: nowrap; font-family: var(--display); font-weight: 900; font-size: 17px; }
+  .ticker span { padding-right: 40px; }
+
+  .section-top { padding-top: 72px; }
+  .section-sm { padding: 24px 0 64px; }
+  .section-faq { padding: 0 0 64px; }
+  .quote { margin-top: 12px; font-size: 19px; line-height: 1.45; font-weight: 600; }
+
+  .split { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); }
+  .split-col { padding: 36px; }
+  .split-col:first-child { border-right: 3px solid var(--line); }
+  @media (max-width: 760px) { .split-col:first-child { border-right: 0; border-bottom: 3px solid var(--line); } }
+  .split-h { font-family: var(--display); font-size: 20px; }
+  .split ul { margin-top: 18px; padding-left: 22px; font-size: 18px; line-height: 1.9; }
+
+  .tracks { gap: 32px; }
+  .tracklist { flex: 1 1 520px; padding: 0; list-style: none; }
+  .tracklist li { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: baseline; padding: 20px 24px; border-bottom: 3px solid var(--line); }
+  .tracklist li:last-child { border-bottom: 0; }
+  .tracklist .mono { width: 40px; }
+  .tracklist h3 { font-family: var(--display); font-size: 18px; flex: 1 1 200px; }
+  .tracklist h3 a { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+  .tracklist li > span:last-child { font-weight: 500; }
+  .tracklist .up { font-weight: 700; color: var(--yellow); min-height: 44px; display: inline-flex; align-items: center; }
+
+  .steps { padding: 0; list-style: none; }
+  .steps span:last-child { font-size: 16px; line-height: 1.5; }
+  .cta-row { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+
+  .guarantee { display: flex; flex-wrap: wrap; gap: 48px; align-items: center; }
+  .seal { flex: 0 0 230px; height: 230px; position: relative; display: flex; align-items: center; justify-content: center; margin-inline: auto; }
+  .seal-ring { position: absolute; inset: 0; border-radius: 50%; border: 3px dashed var(--ink); background: var(--yellow); box-shadow: 0 0 0 3px var(--line); }
+  .seal span { position: relative; text-align: center; font-family: var(--display); font-weight: 900; font-size: 20px; line-height: 1.1; color: var(--ink); }
+  .g-list { flex: 1 1 480px; display: flex; flex-direction: column; gap: 14px; }
+  .g-list p { padding: 20px 22px; font-size: 18px; }
+
+  .video { flex: 999 1 520px; min-height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; padding: 28px; text-align: center; }
+  .play { width: 88px; height: 88px; border-radius: 50%; background: var(--yellow); border: 3px solid var(--line); display: flex; align-items: center; justify-content: center; }
+  .testimonial { flex: 1 1 340px; padding: 28px; display: flex; flex-direction: column; gap: 18px; }
+  .testimonial blockquote { font-family: var(--display); font-weight: 700; font-size: 20px; line-height: 1.35; }
+  .testimonial figcaption { display: flex; flex-direction: column; margin-top: auto; }
+  .proj-link { display: flex; flex-direction: column; height: 100%; }
+  .proj-art { height: 200px; border-bottom: 3px solid var(--line); display: flex; flex-direction: column; gap: 8px; align-items: center; justify-content: center; text-align: center; padding: 16px; }
+  .proj-art .display { font-size: clamp(28px, 3vw, 40px); }
+  .proj-art .mono { font-size: 13px; }
+  .proj-body { padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chips span { border: 2px solid; padding: 6px 10px; font-family: var(--mono); font-size: 13px; }
+  .go { font-weight: 700; color: var(--hl); }
+
+  .faq { display: flex; flex-direction: column; gap: 12px; }
+  .final { margin-bottom: 72px; padding: 40px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between; }
+  .final h2 { font-size: clamp(26px, 3vw, 40px); line-height: 1.05; flex: 1 1 420px; }
+  @media (max-width: 600px) { .final, .audit { padding: 22px; } .split-col { padding: 24px; } }
+</style>

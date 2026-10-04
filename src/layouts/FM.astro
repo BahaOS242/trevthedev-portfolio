@@ -1,0 +1,93 @@
+---
+import '@fontsource/unbounded/latin-700.css';
+import '@fontsource/unbounded/latin-900.css';
+import '@fontsource/space-mono/latin-400.css';
+import '@fontsource/space-mono/latin-700.css';
+import '@fontsource/space-grotesk/latin-400.css';
+import '@fontsource/space-grotesk/latin-500.css';
+import '@fontsource/space-grotesk/latin-600.css';
+import '@fontsource/space-grotesk/latin-700.css';
+import '../styles/fm.css';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+  ogImage?: string;
+  ogType?: 'website' | 'profile';
+  jsonLd?: Record<string, unknown>[];
+}
+
+const { title, description, noindex = false, ogImage = '/og.png', ogType = 'website', jsonLd = [] } = Astro.props;
+const path = Astro.url.pathname.replace(/(.)\/$/, '$1');
+const canonical = new URL(path, Astro.site).href;
+const image = new URL(ogImage, Astro.site).href;
+---
+<!doctype html>
+<html lang="en" data-theme="night">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title>
+<meta name="description" content={description}>
+<link rel="canonical" href={canonical}>
+{noindex ? <meta name="robots" content="noindex, follow"> : <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">}
+<meta name="author" content={site.name}>
+<meta name="theme-color" content="#15112B">
+<meta name="geo.region" content="BS-NP">
+<meta name="geo.placename" content={site.city}>
+<meta name="geo.position" content={`${site.geo.lat};${site.geo.lng}`}>
+<meta name="ICBM" content={`${site.geo.lat}, ${site.geo.lng}`}>
+
+<meta property="og:type" content={ogType}>
+<meta property="og:site_name" content={site.brand}>
+<meta property="og:locale" content={site.locale}>
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:url" content={canonical}>
+<meta property="og:image" content={image}>
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content={`${site.brand} — websites, WhatsApp AI and local SEO in ${site.city}, Bahamas`}>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content={title}>
+<meta name="twitter:description" content={description}>
+<meta name="twitter:image" content={image}>
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="sitemap" href="/sitemap-index.xml">
+
+<script is:inline>
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'day' || t === 'night') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+{jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<slot />
+<script is:inline>
+  document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
+    var root = document.documentElement;
+    var sync = function () {
+      var night = root.dataset.theme !== 'day';
+      btn.setAttribute('aria-label', night ? 'Switch to day mode' : 'Switch to night mode');
+      btn.setAttribute('aria-pressed', String(!night));
+    };
+    sync();
+    btn.addEventListener('click', function () {
+      root.dataset.theme = root.dataset.theme === 'day' ? 'night' : 'day';
+      try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+      document.querySelector('meta[name=theme-color]').setAttribute('content', root.dataset.theme === 'day' ? '#E3F6FA' : '#15112B');
+      sync();
+    });
+  });
+</script>
+</body>
+</html>

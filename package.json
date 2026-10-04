@@ -14,6 +14,10 @@
     "skills": "wix skills"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource/space-grotesk": "^5.3.0",
+    "@fontsource/space-mono": "^5.3.0",
+    "@fontsource/unbounded": "^5.3.0",
     "@wix/astro": "^2.39.0",
     "@wix/astro-pages": "^2.0.4",
     "@wix/dashboard": "^1.3.43",

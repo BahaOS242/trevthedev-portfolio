@@ -1,0 +1,25 @@
+---
+import { site, wa } from '../../data/site';
+interface Props { engineering?: boolean }
+const { engineering = false } = Astro.props;
+---
+<footer class="site-footer" id="contact">
+  <div class="wrap foot">
+    <a href={`mailto:${site.email}`} class="foot-mail">{site.email}</a>
+    <nav class="foot-links" aria-label="Contact and profiles">
+      <a href={wa()} rel="noopener">WhatsApp</a>
+      <a href={site.linkedin} rel="me noopener">LinkedIn</a>
+      <a href={site.github} rel="me noopener">GitHub</a>
+      {engineering
+        ? <a href="/" class="foot-alt">Own a business? Grow it →</a>
+        : <a href="/engineering/" class="foot-alt">Hiring? Engineering profile →</a>}
+    </nav>
+  </div>
+  <p class="wrap foot-legal">© {new Date().getFullYear()} {site.name} · Web design, WhatsApp AI &amp; local SEO · {site.city}, Bahamas</p>
+</footer>
+<style>
+  .foot { padding-top: 44px; padding-bottom: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; align-items: center; }
+  .foot-mail { font-family: var(--display); font-weight: 700; font-size: clamp(18px, 2.6vw, 30px); color: var(--hl); overflow-wrap: anywhere; }
+  .foot-links .foot-alt { border-color: var(--teal); color: var(--hl2); }
+  .foot-legal { padding-bottom: 36px; font-family: var(--mono); font-size: 12px; color: var(--subtle); }
+</style>
