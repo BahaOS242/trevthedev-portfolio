@@ -2,12 +2,16 @@
 import FM from '../layouts/FM.astro';
 import ThemeToggle from '../components/fm/ThemeToggle.astro';
 import Footer from '../components/fm/Footer.astro';
+import WebDevelopment from '../components/fm/WebDevelopment.astro';
 import { site, SITE_URL, discoveryCall, faqs } from '../data/site';
 
 
-const title = 'Web Design & WhatsApp AI in Nassau, Bahamas | TrevTheDev';
+const title = 'Web Developer in Nassau, Bahamas | TrevTheDev';
 const description =
-  'Nassau web designer building websites that sell, WhatsApp AI receptionists and local SEO for Bahamian businesses. Live in 14 days. Free Growth Audit.';
+  'TrevTheDev builds fast, conversion-focused websites for businesses in Nassau and across The Bahamas, combining web development, UX, SEO and strategy.';
+// Visible on the page in the "What does TrevTheDev do?" answer (WebDevelopment.astro).
+const summary =
+  'Nassau, Bahamas-based web developer who designs and develops conversion-focused websites for businesses, combining web development, UX, SEO foundations, performance and conversion strategy.';
 
 const personId = `${SITE_URL}/#trevor`;
 const businessId = `${SITE_URL}/#business`;
@@ -29,7 +33,8 @@ const jsonLd = [
     '@id': personId,
     name: site.name,
     alternateName: ['TrevTheDev', 'TrevTheWebDev'],
-    jobTitle: 'Web Developer & AI Engineer',
+    jobTitle: 'Web Developer',
+    description: summary,
     url: `${SITE_URL}/`,
     image: `${SITE_URL}/trevor.jpeg`,
     email: `mailto:${site.email}`,
@@ -42,15 +47,15 @@ const jsonLd = [
     },
     sameAs: [site.github, site.linkedin],
     worksFor: { '@id': businessId },
-    knowsAbout: ['Web design', 'Web development', 'Local SEO', 'WhatsApp automation', 'Conversational AI', 'TypeScript', 'Next.js', 'Astro'],
+    knowsAbout: ['Web development', 'Web design', 'Conversion-focused web design', 'Conversion rate optimization', 'Local SEO', 'Website performance', 'Mobile-first web design', 'E-commerce websites', 'Landing pages', 'Next.js', 'React', 'TypeScript', 'Wix Studio', 'Wix Headless', 'WhatsApp automation'],
   },
   {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
     '@id': businessId,
-    name: `${site.brand} — Web Design & WhatsApp AI`,
+    name: `${site.brand} — Web Development`,
     alternateName: 'TrevTheWebDev',
-    description,
+    description: `${site.brand} is a ${summary}`,
     url: `${SITE_URL}/`,
     image: `${SITE_URL}/og.png`,
     logo: `${SITE_URL}/apple-touch-icon.png`,
@@ -66,16 +71,23 @@ const jsonLd = [
     geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng },
     areaServed: [
       { '@type': 'City', name: 'Nassau' },
+      { '@type': 'AdministrativeArea', name: 'New Providence' },
       { '@type': 'Country', name: 'The Bahamas' },
     ],
     sameAs: [site.github, site.linkedin],
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
-      name: 'The Island Growth Stack',
+      name: 'Web development and growth services',
+      // Each entry matches a service described on this page.
       itemListElement: [
-        ['Website That Sells', 'Mobile-first website design and development that books or sells.'],
-        ['WhatsApp AI Receptionist', 'An AI assistant that answers and qualifies WhatsApp enquiries 24/7.'],
+        ['Business Websites', "Professional websites designed around a company's services, customers and growth goals."],
+        ['Conversion Landing Pages', 'Focused pages designed around one offer, audience and action.'],
+        ['E-commerce Websites', 'Online stores that make discovering products, understanding value and completing purchases simple.'],
+        ['Booking & Lead Generation', 'Booking systems, forms, WhatsApp integrations, lead capture and customer journeys.'],
+        ['Website Redesigns', 'Modernising an existing website without throwing away what already works.'],
+        ['SEO Foundations', 'Technical and on-page foundations that make a website easier for search engines and AI systems to understand.'],
         ['Local SEO — Get Found in Nassau', 'Local search optimization and Google Business Profile setup.'],
+        ['WhatsApp AI Receptionist', 'An AI assistant that answers and qualifies WhatsApp enquiries 24/7.'],
         ['Launch Campaign', 'Flyers and email creative for your launch.'],
         ['Free Growth Audit', 'An instant score of how your website performs on visibility, conversion, experience, trust and technical health.'],
       ].map(([name, desc]) => ({
@@ -104,6 +116,7 @@ const ticker = 'GET FOUND ✺ GET MESSAGES ✺ GET BOOKED ✺ FUEL & FLOW PILATE
   <header class="site-header">
     <a href="/" class="logo" aria-label="TrevTheDev — home"><span style="background: var(--pink)">TREV</span>FM 242</a>
     <nav class="site-nav" aria-label="Main">
+      <a href="#web-development">Websites</a>
       <a href="#proof">Proof</a>
       <a href="#pricing">Pricing</a>
       <a href="#guarantee">Guarantees</a>
@@ -230,6 +243,8 @@ const ticker = 'GET FOUND ✺ GET MESSAGES ✺ GET BOOKED ✺ FUEL & FLOW PILATE
     </div>
   </section>
 
+  <WebDevelopment />
+
   <section id="services" class="section-sm row tracks" aria-labelledby="tracks-title">
     <div style="flex: 1 1 340px">
       <p class="kicker">// THE TRACKLIST</p>
@@ -237,7 +252,7 @@ const ticker = 'GET FOUND ✺ GET MESSAGES ✺ GET BOOKED ✺ FUEL & FLOW PILATE
       <p class="lede">One builder. One deadline. More customers, faster, with less of your time.</p>
     </div>
     <ol class="tracklist box">
-      <li class="bg-rose"><span class="mono">A1</span><h3>Website That Sells</h3><span>Mobile-first, books or buys</span></li>
+      <li class="bg-rose"><span class="mono">A1</span><h3><a href="#web-development">Website That Sells</a></h3><span>Mobile-first, books or buys</span></li>
       <li class="bg-yellow"><span class="mono">A2</span><h3><a href="/whatsapp-ai-receptionist">WhatsApp AI Receptionist</a></h3><span>Replies in seconds, 24/7</span></li>
       <li class="bg-teal"><span class="mono">B1</span><h3>Get Found in Nassau</h3><span>Local SEO + Google profile</span></li>
       <li class="bg-white"><span class="mono">B2</span><h3><a href="/email-marketing">Launch Campaign</a></h3><span>Flyers + email creative</span></li>
@@ -291,7 +306,7 @@ const ticker = 'GET FOUND ✺ GET MESSAGES ✺ GET BOOKED ✺ FUEL & FLOW PILATE
     </div>
     <div class="grid" style="--min: 340px">
       <article class="press box shadow bg-surface proj">
-        <a href="https://www.fuelandflowbahamas.com/" rel="noopener" class="proj-link">
+        <a href="/work/fuel-and-flow" class="proj-link">
           <div class="proj-art bg-rose"><span class="display">Fuel &amp; Flow</span><span class="mono">fuelandflowbahamas.com</span></div>
           <div class="proj-body">
             <h3 class="card-title big">Fuel &amp; Flow Pilates</h3>
@@ -299,17 +314,17 @@ const ticker = 'GET FOUND ✺ GET MESSAGES ✺ GET BOOKED ✺ FUEL & FLOW PILATE
             {site.fuelFlowResult && (
               <div class="chips"><span style="border-color: var(--rose)">BEFORE: {site.fuelFlowResult.before}</span><span style="border-color: var(--teal)">AFTER: {site.fuelFlowResult.after}</span></div>
             )}
-            <span class="go">Visit live site ▶</span>
+            <span class="go">Read the case study ▶</span>
           </div>
         </a>
       </article>
       <article class="press box shadow bg-surface proj">
-        <a href="https://shipping-os-kappa.vercel.app/demo" rel="noopener" class="proj-link">
+        <a href="/work/shipping-os" class="proj-link">
           <div class="proj-art bg-teal"><span class="display">Shipping OS</span><span class="mono">multi-tenant logistics SaaS</span></div>
           <div class="proj-body">
             <h3 class="card-title big">Shipping OS</h3>
             <p class="muted">Multi-tenant logistics SaaS for Bahamian freight forwarders and couriers — six-scenario interactive demo.</p>
-            <span class="go">Try the demo ▶</span>
+            <span class="go">Read the case study ▶</span>
           </div>
         </a>
       </article>

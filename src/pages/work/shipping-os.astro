@@ -1,0 +1,36 @@
+---
+import CaseStudy from '../../components/fm/CaseStudy.astro';
+---
+<CaseStudy
+  slug="shipping-os"
+  title="Shipping OS Case Study: Bahamas Logistics SaaS | TrevTheDev"
+  description="Shipping OS is a multi-tenant logistics platform for Bahamian freight forwarders, mailboat operators and couriers, built with Next.js and TypeScript."
+  name="Shipping OS"
+  category="Logistics SaaS"
+  accent="var(--teal)"
+  headline="one platform, configured per business."
+  summary="A modular, multi-tenant logistics platform for Bahamian freight forwarders, mailboat operators, couriers, warehouses and charter companies — one codebase, configured per business, with an interactive demo prospects can try in three minutes."
+  liveUrl="https://shipping-os-kappa.vercel.app/demo"
+  liveLabel="Try the interactive demo"
+  journey={{
+    heading: 'What it handles',
+    points: [
+      'Bookings, vessel capacity, manifests and tracking',
+      'Dispatch, proof of delivery and a customer portal',
+      'WhatsApp updates for customers',
+      'Navigation, route guards and onboarding tailored to each type of operator',
+    ],
+  }}
+  built={[
+    'Multi-tenant architecture with tenant isolation enforced in the service layer, backed by concurrent isolation tests',
+    'A module registry and business-type presets that drive navigation, route guards and onboarding for each operator',
+    'An AI tool contract where every consequential write requires human confirmation and is audited',
+    'A config-driven interactive demo with six scenarios',
+  ]}
+  stack={['Next.js', 'TypeScript', 'Tailwind CSS', 'Vercel']}
+  related={[
+    { href: '/work/fuel-and-flow', label: 'Fuel & Flow Pilates case study: a live booking website in Nassau' },
+    { href: '/engineering', label: 'Engineering profile: systems, stack and experience' },
+    { href: '/#web-development', label: 'Conversion-focused web development for Bahamian businesses' },
+  ]}
+/>

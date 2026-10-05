@@ -1,0 +1,246 @@
+---
+import { site, wa } from '../../data/site';
+
+const startProject = wa("Hi Trev, I'd like to start a website project");
+
+const pillars = [
+  {
+    title: 'Get found',
+    body: 'SEO-friendly architecture, semantic content, metadata, structured data, fast performance and local search signals help search engines understand what you do and where.',
+    color: 'var(--teal)',
+  },
+  {
+    title: 'Build trust',
+    body: 'Clear positioning, real proof, case studies, testimonials, a strong visual hierarchy and transparent information reduce the uncertainty that stops people from reaching out.',
+    color: 'var(--yellow)',
+  },
+  {
+    title: 'Convert',
+    body: 'Strategic calls to action, landing pages, forms, WhatsApp, booking flows, offers and a page structure built to turn attention into action.',
+    color: 'var(--pink)',
+  },
+  {
+    title: 'Keep growing',
+    body: 'Analytics, SEO foundations, CMS architecture, content systems, integrations and scalable development, so the site can keep improving after launch.',
+    color: 'var(--rose)',
+  },
+];
+
+const journey = [
+  ['Get found', 'Search engines need to understand what the business does, where it operates and who it serves.'],
+  ['Get attention', 'The first few seconds need to communicate the offer clearly.'],
+  ['Build trust', 'Proof, positioning, design, information architecture and social proof remove friction.'],
+  ['Create action', 'The visitor should always understand the next step.'],
+  ['Measure & improve', 'Analytics and real customer behaviour show what to improve after launch.'],
+];
+
+const builds = [
+  ['Business websites', "Professional websites designed around your services, your customers and your growth goals."],
+  ['Conversion landing pages', 'Focused pages built around one offer, one audience and one action.'],
+  ['E-commerce', 'Online stores that make it simple to discover products, understand their value and complete a purchase.'],
+  ['Booking & lead generation', 'Booking systems, forms, WhatsApp integrations, lead capture and the customer journey that connects them.'],
+  ['Website redesigns', "Modernise an existing website without throwing away what already works — including the search visibility you've earned."],
+  ['SEO foundations', 'Technical and on-page foundations that make a website easier for search engines and AI assistants to understand.'],
+];
+
+const process = [
+  ['Strategy', 'Understand the business, the customer, the offer, the competition and the action you want people to take.'],
+  ['Structure', 'Plan the pages, information architecture, user journey, SEO structure and conversion paths.'],
+  ['Design', 'Create a visual system that communicates the brand and makes the important actions obvious.'],
+  ['Develop', 'Build it responsive, fast and accessible, with integrations, CMS functionality and SEO foundations in place.'],
+  ['Optimise', 'Launch, measure, find the friction and keep improving the site over time.'],
+];
+
+const stack = [
+  'Next.js', 'React', 'TypeScript', 'JavaScript', 'HTML & CSS', 'Wix Studio', 'Wix CMS', 'Wix Headless',
+  'PostgreSQL', 'APIs & integrations', 'CMS architecture', 'Responsive development', 'Performance', 'SEO implementation', 'Analytics',
+];
+
+const fuelFlow = ['Class booking', 'Memberships', 'Events', 'Gift cards', 'Members area', 'Local SEO targeting', 'CMS architecture', 'Conversion-focused UX'];
+---
+<section id="web-development" class="wd" aria-labelledby="wd-title">
+  <div class="wd-head">
+    <div class="wd-intro">
+      <p class="kicker">// WEB DEVELOPMENT</p>
+      <h2 id="wd-title" class="h2">Websites built to convert visitors into <span style="color: var(--hl)">customers.</span></h2>
+      <p class="wd-lede">I design and develop fast, modern websites for businesses in Nassau and across The Bahamas — built around how your customers search, decide and buy.</p>
+      <p class="wd-copy">A website should do more than look professional. It should make it easy for the right person to find you, understand what you offer, trust your business and take the next step — whether that's an inquiry, a booking, a lead or a sale.</p>
+    </div>
+    <aside class="wd-answer box bg-surface" aria-labelledby="wd-answer-title">
+      <h3 id="wd-answer-title" class="mono wd-answer-q">What does TrevTheDev do?</h3>
+      <p>TrevTheDev is {site.name}, a Nassau, Bahamas-based web developer who designs and develops conversion-focused websites for businesses. Each site combines web development, UX, SEO foundations, performance and conversion strategy to help businesses turn online visitors into inquiries, bookings, leads and customers.</p>
+      <p class="wd-where"><span aria-hidden="true">●</span> Based in Nassau, The Bahamas. Working with businesses across New Providence and the rest of The Bahamas — and with clients remotely.</p>
+    </aside>
+  </div>
+
+  <div class="wd-block">
+    <h3 class="wd-h3">What a business website should do</h3>
+    <ul class="wd-pillars">
+      {pillars.map((p, i) => (
+        <li class="box bg-surface wd-pillar" style={`--accent: ${p.color}`}>
+          <span class="mono wd-num">0{i + 1}</span>
+          <h4>{p.title}</h4>
+          <p>{p.body}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="wd-block">
+    <h3 class="wd-h3">Not just a website. <span style="color: var(--hl2)">A customer journey.</span></h3>
+    <p class="wd-sub">Most business websites are built page by page. I build them around the path a customer actually takes — from searching to deciding to getting in touch.</p>
+    <ol class="wd-journey">
+      {journey.map(([h, p], i) => (
+        <li>
+          <span class="wd-node mono" aria-hidden="true">0{i + 1}</span>
+          <h4>{h}</h4>
+          <p>{p}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <div class="wd-block">
+    <h3 class="wd-h3">What I build</h3>
+    <ul class="wd-builds">
+      {builds.map(([h, p]) => (
+        <li class="box wd-build"><h4>{h}</h4><p>{p}</p></li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="wd-block wd-proof">
+    <article class="box bg-cream wd-ff shadow-lg" style="--sh: var(--pink)" aria-labelledby="wd-ff-title">
+      <p class="mono wd-tag">PROOF · LIVE CLIENT WEBSITE</p>
+      <h3 id="wd-ff-title" class="wd-ff-title">A real business. A real website. A real customer journey.</h3>
+      <p>Fuel &amp; Flow Pilates is a live studio website in Nassau, built so a new client can find the studio, understand the classes and book — and a regular can buy a membership or gift card without sending a single message.</p>
+      <ul class="wd-chips" aria-label="What the Fuel & Flow website includes">
+        {fuelFlow.map((f) => <li>{f}</li>)}
+      </ul>
+      <div class="btns">
+        <a href="/work/fuel-and-flow" class="btn btn-dark">Read the Fuel &amp; Flow case study ▶</a>
+        <a href="https://www.fuelandflowbahamas.com/" rel="noopener" class="btn btn-white">Visit the live site ↗</a>
+      </div>
+    </article>
+    <aside class="box bg-surface wd-system" aria-labelledby="wd-system-title">
+      <h3 id="wd-system-title" class="wd-system-title">A website is one part of the system</h3>
+      <p class="muted">The site is where customers decide. What happens around it matters too — how fast messages get answered, and whether you can see what's working.</p>
+      <ul>
+        <li><a href="/whatsapp-ai-receptionist">BahaOS, the WhatsApp receptionist that answers and books 24/7</a></li>
+        <li><a href="#audit">The free Growth Audit that scores your current website</a></li>
+        <li><a href="#proof">More live work, including Shipping OS</a></li>
+      </ul>
+    </aside>
+  </div>
+
+  <div class="wd-block wd-how">
+    <div>
+      <h3 class="wd-h3">How I work</h3>
+      <ol class="wd-process">
+        {process.map(([h, p], i) => (
+          <li><span class="mono wd-pnum" aria-hidden="true">0{i + 1}</span><div><h4>{h}</h4><p>{p}</p></div></li>
+        ))}
+      </ol>
+    </div>
+    <aside class="box bg-surface wd-stack" aria-labelledby="wd-stack-title">
+      <h4 id="wd-stack-title" class="mono">UNDER THE HOOD</h4>
+      <p class="muted">Chosen per project — the outcome comes first, the tools second.</p>
+      <ul>{stack.map((s) => <li>{s}</li>)}</ul>
+    </aside>
+  </div>
+
+  <div class="wd-cta box shadow-lg bg-yellow" style="--sh: var(--teal)">
+    <div class="wd-cta-copy">
+      <h3 class="wd-cta-title">Your website should be doing more than existing.</h3>
+      <p>If your website isn't bringing people closer to contacting, booking or buying from you, let's fix the journey.</p>
+      <p class="wd-cta-mail">Prefer email? <a href={`mailto:${site.email}`}>{site.email}</a></p>
+    </div>
+    <div class="btns">
+      <a href={startProject} rel="noopener" class="btn btn-dark">Start a project ▶</a>
+      <a href="#audit" class="btn btn-white">Get a free Growth Audit ↑</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .wd { padding: 40px 0 72px; display: flex; flex-direction: column; gap: 72px; }
+  .wd-head { display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-end; }
+  .wd-intro { flex: 999 1 540px; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+  .wd-lede { font-size: 21px; line-height: 1.5; font-weight: 500; max-width: 720px; }
+  .wd-copy { font-size: 18px; line-height: 1.6; color: var(--muted); max-width: 680px; }
+  .wd-answer { flex: 1 1 340px; padding: 26px; display: flex; flex-direction: column; gap: 14px; box-shadow: 6px 6px 0 var(--teal); }
+  .wd-answer-q { font-size: 13px; color: var(--hl2); letter-spacing: .04em; }
+  .wd-answer p { font-size: 16px; line-height: 1.6; }
+  .wd-where { font-family: var(--mono); font-size: 13px; color: var(--subtle); }
+  .wd-where span { color: var(--hl); }
+
+  .wd-block { display: flex; flex-direction: column; gap: 24px; }
+  .wd-h3 { font-family: var(--display); font-weight: 900; font-size: clamp(24px, 2.8vw, 36px); line-height: 1.1; letter-spacing: -0.02em; }
+  .wd-sub { font-size: 18px; line-height: 1.55; color: var(--muted); max-width: 720px; margin-top: -8px; }
+  h4 { font-family: var(--display); font-weight: 700; font-size: 19px; line-height: 1.2; }
+
+  .wd-pillars, .wd-builds, .wd-journey, .wd-process, .wd-chips, .wd-stack ul, .wd-system ul { list-style: none; padding: 0; }
+  .wd-pillars { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); }
+  .wd-pillar { padding: 26px; display: flex; flex-direction: column; gap: 12px; border-top: 10px solid var(--accent); }
+  .wd-pillar p { font-size: 16px; line-height: 1.55; color: var(--muted); }
+  .wd-num { font-size: 13px; color: var(--subtle); }
+
+  .wd-journey { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; border: 3px solid var(--line); }
+  .wd-journey li { position: relative; padding: 26px 22px 28px; display: flex; flex-direction: column; gap: 10px; border-right: 3px solid var(--line); background: var(--surface); }
+  .wd-journey li:last-child { border-right: 0; }
+  .wd-journey li:not(:last-child)::after { content: '▶'; position: absolute; right: -14px; top: 28px; z-index: 1; width: 25px; height: 25px; display: grid; place-items: center; font-size: 11px; background: var(--yellow); color: var(--ink); border: 3px solid var(--line); }
+  .wd-journey p { font-size: 15px; line-height: 1.55; color: var(--muted); }
+  .wd-node { align-self: flex-start; background: var(--teal); color: var(--ink); border: 3px solid var(--line); padding: 4px 9px; font-size: 13px; }
+  .wd-journey li:nth-child(2) .wd-node { background: var(--yellow); }
+  .wd-journey li:nth-child(3) .wd-node { background: var(--rose); }
+  .wd-journey li:nth-child(4) .wd-node { background: var(--pink); }
+  .wd-journey li:nth-child(5) .wd-node { background: var(--white); }
+  @media (max-width: 900px) {
+    .wd-journey { grid-template-columns: 1fr; }
+    .wd-journey li { border-right: 0; border-bottom: 3px solid var(--line); }
+    .wd-journey li:last-child { border-bottom: 0; }
+    .wd-journey li:not(:last-child)::after { content: '▼'; right: auto; left: 22px; top: auto; bottom: -14px; }
+  }
+
+  .wd-builds { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); }
+  .wd-build { padding: 22px 24px; display: flex; flex-direction: column; gap: 8px; transition: transform .1s, box-shadow .1s; }
+  .wd-build:hover { transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--line); }
+  .wd-build p { font-size: 15px; line-height: 1.55; color: var(--muted); }
+
+  .wd-proof { flex-direction: row; flex-wrap: wrap; gap: 28px; align-items: stretch; }
+  .wd-ff { flex: 999 1 520px; min-width: 0; padding: 32px; display: flex; flex-direction: column; gap: 16px; }
+  .wd-tag { font-size: 13px; }
+  .wd-ff-title { font-family: var(--display); font-weight: 900; font-size: clamp(24px, 2.6vw, 32px); line-height: 1.12; }
+  .wd-ff > p:not(.wd-tag) { font-size: 17px; line-height: 1.6; }
+  .wd-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .wd-chips li { border: 2px solid var(--ink); padding: 6px 10px; font-family: var(--mono); font-size: 13px; font-weight: 700; background: var(--white); }
+  .wd-system { flex: 1 1 320px; padding: 28px; display: flex; flex-direction: column; gap: 14px; }
+  .wd-system-title { font-family: var(--display); font-weight: 700; font-size: 21px; line-height: 1.2; }
+  .wd-system p { font-size: 16px; line-height: 1.55; }
+  .wd-system ul { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
+  .wd-system a { display: block; padding: 12px 14px; border: 3px solid var(--line); font-weight: 700; line-height: 1.35; }
+  .wd-system a::after { content: ' →'; color: var(--hl); }
+  .wd-system a:hover { background: var(--bg); }
+
+  .wd-how { flex-direction: row; flex-wrap: wrap; gap: 32px; align-items: flex-start; }
+  .wd-how > div { flex: 999 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
+  .wd-process { display: flex; flex-direction: column; border-left: 3px solid var(--line); }
+  .wd-process li { display: flex; gap: 18px; align-items: flex-start; padding: 0 0 22px 22px; position: relative; }
+  .wd-process li:last-child { padding-bottom: 0; }
+  .wd-process li::before { content: ''; position: absolute; left: -10px; top: 6px; width: 14px; height: 14px; background: var(--yellow); border: 3px solid var(--line); transform: rotate(45deg); }
+  .wd-pnum { font-size: 13px; color: var(--hl2); padding-top: 3px; }
+  .wd-process p { margin-top: 6px; font-size: 16px; line-height: 1.55; color: var(--muted); }
+  .wd-stack { flex: 1 1 320px; padding: 26px; display: flex; flex-direction: column; gap: 12px; }
+  .wd-stack h4 { font-family: var(--mono); font-size: 13px; color: var(--hl2); }
+  .wd-stack p { font-size: 15px; }
+  .wd-stack ul { display: flex; flex-wrap: wrap; gap: 8px; }
+  .wd-stack li { border: 2px solid var(--line); padding: 5px 9px; font-family: var(--mono); font-size: 12px; }
+
+  .wd-cta { padding: 40px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between; }
+  .wd-cta-copy { flex: 1 1 460px; display: flex; flex-direction: column; gap: 10px; }
+  .wd-cta-title { font-family: var(--display); font-weight: 900; font-size: clamp(26px, 3vw, 40px); line-height: 1.08; }
+  .wd-cta p { font-size: 18px; line-height: 1.5; max-width: 620px; }
+  .wd-cta-mail { font-size: 15px !important; }
+  .wd-cta-mail a { text-decoration: underline; font-weight: 700; overflow-wrap: anywhere; }
+  @media (max-width: 600px) { .wd { gap: 56px; } .wd-ff, .wd-cta, .wd-system, .wd-answer { padding: 22px; } }
+</style>

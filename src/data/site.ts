@@ -33,6 +33,18 @@ export const discoveryCall = wa('Hi Trev, I want to book a free discovery call')
 
 export const faqs = [
   {
+    q: 'Can you redesign my existing website?',
+    a: "Yes. I can modernise an existing website's design, structure, speed and SEO foundations without throwing away what already works, like your content and the search visibility you've earned.",
+  },
+  {
+    q: 'Will my website be SEO-friendly?',
+    a: "Yes. Every site is built with SEO foundations: semantic structure, metadata, structured data, fast performance, mobile-first layouts and local search signals. Nobody can honestly guarantee a #1 ranking, but these foundations give search engines what they need to understand your business.",
+  },
+  {
+    q: 'Do you only work with businesses in Nassau?',
+    a: "I'm based in Nassau and work with businesses across New Providence and the rest of The Bahamas. I also work with clients remotely.",
+  },
+  {
     q: "I'm not technical. How much of my time does this take?",
     a: 'A kickoff chat and a review before launch. I handle the build, setup and content structure.',
   },
