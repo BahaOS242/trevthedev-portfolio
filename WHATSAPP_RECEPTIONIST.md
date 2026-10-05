@@ -26,7 +26,7 @@ exact boundary between what's real and what's simulated.
 ## Architecture
 
 ```
-Visitor types in the chat widget (ReceptionistDemo.astro)
+Visitor types in the chat widget (src/pages/whatsapp-ai-receptionist.astro)
         │  POST { messages: ChatMessage[] }
         ▼
 src/pages/api/receptionist.ts        — Astro server route (the "webhook")
@@ -115,7 +115,7 @@ would stay the same.
 ## Customer ROI calculator
 
 `src/lib/receptionist/roi.ts` holds the calculation as pure functions
-(`calculateRoi`), independent of the DOM — `ReceptionistEconomics.astro`'s
+(`calculateRoi`), independent of the DOM — the receptionist page's
 client script only wires inputs/sliders to it and formats the output. No
 network call is involved; every input change recomputes instantly in the
 browser.

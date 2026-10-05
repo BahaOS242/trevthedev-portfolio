@@ -1,19 +1,737 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import ReceptionistNav from "../components/ReceptionistNav.astro";
-import ReceptionistHero from "../components/ReceptionistHero.astro";
-import ReceptionistCapabilities from "../components/ReceptionistCapabilities.astro";
-import ReceptionistDemo from "../components/ReceptionistDemo.astro";
-import ReceptionistEconomics from "../components/ReceptionistEconomics.astro";
----
+import '@fontsource/bowlby-one/latin-400.css';
+import '@fontsource/archivo/latin-400.css';
+import '@fontsource/archivo/latin-600.css';
+import '@fontsource/archivo/latin-800.css';
+import '@fontsource/martian-mono/latin-400.css';
+import '@fontsource/martian-mono/latin-700.css';
+import FM from '../layouts/FM.astro';
+import { SITE_URL, site, wa } from '../data/site';
+import { AI_COST_MONTHLY } from '../lib/receptionist/roi';
 
-<Layout
-	title="WhatsApp AI Receptionist — TrevTheDev"
-	description="An AI-powered receptionist that handles customer conversations, captures leads, and helps businesses turn WhatsApp messages into appointments. Live portfolio demo."
->
-	<ReceptionistNav />
-	<ReceptionistHero />
-	<ReceptionistCapabilities />
-	<ReceptionistDemo />
-	<ReceptionistEconomics />
-</Layout>
+const title = 'WhatsApp AI Receptionist for Bahamas Clinics | BahaOS';
+const description =
+  'BahaOS answers your WhatsApp 24/7 — books appointments, moves cancellations and hands tricky questions to staff. Built in Nassau. Try the live demo.';
+const walkthrough = wa('Hi Trev, I want a walkthrough of the BahaOS WhatsApp AI receptionist');
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'BahaOS WhatsApp AI Receptionist',
+    serviceType: 'WhatsApp AI receptionist',
+    description,
+    url: `${SITE_URL}/whatsapp-ai-receptionist`,
+    image: `${SITE_URL}/proof/whatsapp-ai-receptionist.webp`,
+    provider: { '@id': `${SITE_URL}/#business` },
+    areaServed: { '@type': 'Country', name: 'The Bahamas' },
+    offers: {
+      '@type': 'Offer',
+      price: AI_COST_MONTHLY,
+      priceCurrency: 'USD',
+      priceSpecification: { '@type': 'UnitPriceSpecification', price: AI_COST_MONTHLY, priceCurrency: 'USD', unitText: 'MONTH' },
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'WhatsApp AI Receptionist', item: `${SITE_URL}/whatsapp-ai-receptionist` },
+    ],
+  },
+];
+
+const tickerWords = ['Answered at 2:14am', 'Booked while you slept', 'Thursday cancel → refilled', 'No voicemail tag', 'Replies in seconds', 'Front desk gets the morning back'];
+
+const jobs = [
+  ['Answer', "Hours, prices, insurance and directions, straight from your clinic's own details.", '"Do you take NIB?" → plan list, 3 sec'],
+  ['Qualify', "Spots who's ready to book and saves their name and number as a lead.", '"Haven\'t been in 2 yrs" → new patient'],
+  ['Book', 'Service, day, time, name. It remembers what you already said and never asks twice.', '"Cleaning Fri 3pm" → 1 question left'],
+  ['Follow up', 'Moves and cancels without fuss, then offers the open slot to the next patient.', '"Cancel Thursday" → slot reopened'],
+  ['Escalate', 'Knows when to stop guessing and passes billing or clinical questions to a person.', '"About my bill" → front desk, flagged'],
+];
+
+const dials = [
+  { title: 'Recover missed bookings', tag: 'Recover', rows: [
+    ['rMissed', 'Messages that never got a reply, per month', 0, 120, 1, 20],
+    ['rNew', 'Value of a new patient', 50, 1500, 10, 300],
+    ['rRec', 'Share the AI turns into bookings', 0, 100, 5, 50],
+  ] },
+  { title: 'Keep patients coming back', tag: 'Retain', rows: [
+    ['rActive', 'Active patients', 0, 3000, 50, 500],
+    ['rLift', 'Retention lift from reminders and follow-ups', 0, 30, 1, 10],
+    ['rRetVal', 'Yearly value of a returning patient', 100, 3000, 50, 800],
+  ] },
+  { title: 'Win back lapsed patients', tag: 'Reactivate', rows: [
+    ['rInactive', 'Patients not seen in 18+ months', 0, 1500, 10, 100],
+    ['rReact', 'Share who rebook after a WhatsApp nudge', 0, 60, 1, 20],
+  ] },
+] as const;
+---
+<FM title={title} description={description} jsonLd={jsonLd}>
+<div class="rush">
+
+<div class="ro-ticker" aria-hidden="true"><div class="ro-ticker-track">{[...tickerWords, ...tickerWords].map((w) => <span>{w}</span>)}</div></div>
+
+<div class="ro-wrap">
+  <nav class="ro-nav" aria-label="Main">
+    <a class="ro-logo" href="#top"><span class="ro-logo-mark" aria-hidden="true"></span>BahaOS</a>
+    <div class="ro-nav-links">
+      <a href="#night">Night shift</a>
+      <a href="#jobs">What it does</a>
+      <a href="#numbers">Your numbers</a>
+      <a href="/">← TrevTheDev</a>
+      <a class="ro-btn ro-sm" href="#join">Get it for your practice</a>
+    </div>
+  </nav>
+</div>
+
+<main id="main">
+<div class="ro-wrap">
+  <header class="ro-hero" id="top">
+    <div>
+      <span class="ro-stamp">WhatsApp AI receptionist · built in Nassau</span>
+      <h1>Lock up at five. <span class="ro-hl">Wake up</span> to a <span class="ro-aq">full book.</span></h1>
+      <p class="ro-lede">BahaOS answers your clinic's WhatsApp all night. It books the 2am toothache, moves the Thursday cancel and fills the gap, so <strong>the day is lined up before you unlock the door.</strong></p>
+      <div class="ro-cta-row">
+        <a class="ro-btn" href="#night">Run a night shift ▸</a>
+        <a class="ro-btn ro-alt" href="#numbers">What's it worth to me?</a>
+      </div>
+      <div class="ro-proof"><span>Replies in seconds, 24/7</span><span>Never re-asks</span><span>Hands off to staff</span></div>
+    </div>
+
+    <div class="ro-stage">
+      <div class="ro-burst" aria-hidden="true"></div>
+      <div class="ro-phone">
+        <div class="ro-screen">
+          <div class="ro-chat-top">
+            <div class="ro-avatar" aria-hidden="true">BS</div>
+            <div><b>BrightSmile Dental</b><small data-chat-state>online · answers 24/7</small></div>
+            <span class="ro-live">Live demo</span>
+          </div>
+          <div class="ro-chat">
+            <div class="k-msgs" role="log" aria-live="polite" aria-label="Demo conversation" data-msgs></div>
+            <div class="k-chips" data-chips></div>
+            <form class="k-form" autocomplete="off" data-form>
+              <label class="sr-only" for="heroField">Message</label>
+              <input class="k-field" id="heroField" placeholder="Type a message…" maxlength="500" data-field>
+              <button class="k-send" type="submit" aria-label="Send" data-send>➤</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <p class="ro-hint">Try it: "my tooth hurts" · "how much?" · "book a cleaning"</p>
+    </div>
+  </header>
+</div>
+
+<div class="ro-band" aria-hidden="true"></div>
+
+<section class="ro-night" id="night" aria-labelledby="night-title">
+  <div class="ro-wrap">
+    <div class="ro-sec-head">
+      <div>
+        <p class="ro-kicker">Interactive model · one Tuesday</p>
+        <h2 id="night-title">The desk closes. <em>The rush doesn't.</em></h2>
+      </div>
+      <p>Drag the needle or press play. These are sample messages a three-chair clinic gets in one day. Most of the bookable ones land when nobody is at the desk.</p>
+    </div>
+
+    <div class="ro-clock">
+      <div class="ro-track" data-track>
+        <div class="ro-open"><span>Desk staffed 8am–5pm</span></div>
+        <div class="ro-needle" data-needle data-time="12:00am"></div>
+      </div>
+      <div class="ro-hours" aria-hidden="true"><span>12am</span><span>6am</span><span>12pm</span><span>6pm</span><span>12am</span></div>
+      <div class="ro-controls">
+        <button class="ro-btn ro-sm" type="button" data-play>▶ Play the day</button>
+        <label class="sr-only" for="scrub">Time of day</label>
+        <input type="range" id="scrub" min="0" max="24" step="0.05" value="24" data-scrub>
+      </div>
+      <div class="ro-legend">
+        <span><i style="background:#00b8c4"></i>Booked</span>
+        <span><i style="background:#ffc629"></i>Answered</span>
+        <span><i style="background:#ffffff"></i>Rescheduled</span>
+        <span><i style="background:#ff5c8a"></i>Sent to staff</span>
+      </div>
+    </div>
+
+    <div class="ro-night-grid">
+      <div class="ro-feed" aria-live="polite" data-feed></div>
+      <div>
+        <div class="ro-score">
+          <div class="ro-tile ro-big"><b data-s="booked">$0</b><span>booked into the calendar</span></div>
+          <div class="ro-tile"><b data-s="msgs">0</b><span>conversations handled</span></div>
+          <div class="ro-tile ro-aqt"><b data-s="after">0</b><span>after hours</span></div>
+          <div class="ro-tile"><b data-s="appts">0</b><span>appointments made</span></div>
+          <div class="ro-tile ro-aqt"><b data-s="mins">0m</b><span>front-desk time saved</span></div>
+        </div>
+        <p class="ro-footnote">Sample day for illustration. Booked value uses first-visit prices. Time saved assumes 4 minutes of staff time per conversation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ro-fringe" aria-hidden="true"></div>
+
+<section id="jobs" aria-labelledby="jobs-title">
+  <div class="ro-wrap">
+    <div class="ro-sec-head">
+      <div>
+        <p class="ro-kicker">In order, every conversation</p>
+        <h2 id="jobs-title">Five jobs. Zero missed beats.</h2>
+      </div>
+      <p>A patient message moves through these steps like a group moving down Bay Street. The receptionist keeps time so your staff don't have to.</p>
+    </div>
+    <ol class="ro-lineup">
+      {jobs.map(([h, p, eg], i) => (
+        <li class="ro-job"><span class="ro-n" aria-hidden="true">{i + 1}</span><h3>{h}</h3><p>{p}</p><p class="ro-eg">{eg}</p></li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<div class="ro-band" aria-hidden="true"></div>
+
+<section id="numbers" aria-labelledby="numbers-title">
+  <div class="ro-wrap">
+    <div class="ro-sec-head">
+      <div>
+        <p class="ro-kicker">Interactive model · your clinic</p>
+        <h2 id="numbers-title">Score your year.</h2>
+      </div>
+      <p>Set the dials to match your clinic. The board adds up what recovered bookings, better retention and win-backs could be worth against the ${AI_COST_MONTHLY} a month plan.</p>
+    </div>
+    <div class="ro-roi">
+      <div class="ro-dials">
+        {dials.map((d) => (
+          <fieldset class="ro-dial">
+            <legend><h3>{d.title} <small>{d.tag}</small></h3></legend>
+            {d.rows.map(([id, label, min, max, step, value]) => (
+              <div class="ro-row">
+                <label for={id}>{label}</label><output for={id} data-o={id}></output>
+                <input type="range" id={id} min={min} max={max} step={step} value={value} data-dial>
+              </div>
+            ))}
+          </fieldset>
+        ))}
+      </div>
+      <aside class="ro-board" aria-live="polite" aria-label="Estimated yearly impact">
+        <p class="ro-kicker" style="color: var(--ro-gold)">The judges' sheet</p>
+        <div class="ro-lines">
+          <div><span>Recovered bookings</span><b data-b="rec"></b></div>
+          <div><span>Retained patients</span><b data-b="ret"></b></div>
+          <div><span>Won-back patients</span><b data-b="react"></b></div>
+          <div class="ro-cost"><span>BahaOS, 12 months</span><b data-b="cost"></b></div>
+        </div>
+        <div class="ro-multiple"><b data-b="mult"></b><span>back for every $1 spent</span></div>
+        <div class="ro-net"><span data-b="net"></span><small>net yearly impact</small></div>
+        <p class="ro-footnote">Planning model using your inputs, not a promise of results. Recover × 12 months; retain uses the lift you set; win-backs use the yearly patient value.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="ro-finale" id="join" aria-labelledby="join-title">
+  <div class="ro-wrap ro-finale-inner">
+    <div>
+      <p class="ro-kicker" style="color: var(--ro-ink)">Rush out with us</p>
+      <h2 id="join-title">Your front desk, on all night.</h2>
+      <p>We connect BahaOS to your WhatsApp Business number and calendar, load your prices and policies, and your team keeps final say on anything sensitive.</p>
+    </div>
+    <div class="ro-price">
+      <p class="ro-kicker" style="color: var(--ro-ink)">One plan</p>
+      <p><b>${AI_COST_MONTHLY}</b> / month</p>
+      <ul><li>Unlimited WhatsApp conversations</li><li>Calendar booking and reminders</li><li>Staff hand-off for anything tricky</li></ul>
+      <a class="ro-btn" href={walkthrough} rel="noopener">Book a walkthrough ▸</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="ro-footer">
+  <div class="ro-wrap">
+    <span>BahaOS by <a href="/">{site.name}</a> · {site.city}, Bahamas · <a href="/engineering">Engineering profile</a></span>
+    <span>BrightSmile Dental is a demo clinic. The chat runs the real receptionist engine, but nothing is booked or sent.</span>
+  </div>
+</footer>
+</div>
+</FM>
+
+<script>
+  import type { ChatMessage, SimulatedAction } from '../lib/receptionist/types';
+  import { NIGHT_FEED, fmtHour, type NightOutcome } from '../lib/receptionist/night-feed';
+  import { calculateRoi, AI_COST_ANNUAL } from '../lib/receptionist/roi';
+
+  const q = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel)!;
+  const money = (n: number) =>
+    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Math.round(n || 0));
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, reduce ? 0 : ms));
+
+  /* ---------------- live chat (real engine via /api/receptionist) ---------------- */
+  const msgs = q('[data-msgs]');
+  const chips = q('[data-chips]');
+  const form = q<HTMLFormElement>('[data-form]');
+  const field = q<HTMLInputElement>('[data-field]');
+  const sendBtn = q<HTMLButtonElement>('[data-send]');
+  const stateEl = q('[data-chat-state]');
+  let history: ChatMessage[] = [];
+  let busy = false;
+
+  const stamp = (iso?: string) => {
+    try { return new Date(iso ?? Date.now()).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); } catch { return ''; }
+  };
+  const scroll = () => { msgs.scrollTop = msgs.scrollHeight; };
+
+  function bubble(text: string, who: 'in' | 'out', iso?: string) {
+    const b = document.createElement('div');
+    b.className = `k-msg k-${who}`;
+    b.textContent = text;
+    const ts = document.createElement('span');
+    ts.className = 'k-ts';
+    ts.textContent = stamp(iso) + (who === 'out' ? ' ✓✓' : '');
+    b.appendChild(ts);
+    msgs.appendChild(b);
+    scroll();
+  }
+
+  const ACTION_LABELS: Record<SimulatedAction['type'], string> = {
+    booking_captured: 'Booking request captured',
+    reschedule_captured: 'Reschedule captured',
+    cancellation_captured: 'Cancellation captured',
+    escalation_created: 'Sent to front desk',
+    lead_captured: 'Lead captured',
+  };
+  const labelize = (k: string) => k.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (c) => c.toUpperCase());
+
+  function ticket(action: SimulatedAction) {
+    const t = document.createElement('div');
+    t.className = `k-ticket${action.type === 'escalation_created' ? ' k-esc' : ''}`;
+    const h = document.createElement('strong');
+    h.textContent = `✓ ${ACTION_LABELS[action.type]}`;
+    t.appendChild(h);
+    for (const [k, v] of Object.entries(action.details ?? {})) {
+      const row = document.createElement('span');
+      row.textContent = `${labelize(k)}: ${v}`;
+      t.appendChild(row);
+    }
+    const note = document.createElement('small');
+    note.textContent = 'Demo only — nothing was actually booked or sent.';
+    t.appendChild(note);
+    msgs.appendChild(t);
+    scroll();
+    if (action.type === 'booking_captured') stateEl.textContent = 'appointment booked ✓';
+  }
+
+  function setChips(list?: string[]) {
+    chips.replaceChildren();
+    for (const c of list ?? []) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'k-chip';
+      b.textContent = c;
+      b.addEventListener('click', () => send(c));
+      chips.appendChild(b);
+    }
+  }
+
+  let typing: HTMLElement | null = null;
+  function showTyping() {
+    if (typing) return;
+    typing = document.createElement('div');
+    typing.className = 'k-typing';
+    typing.innerHTML = '<i></i><i></i><i></i>';
+    msgs.appendChild(typing);
+    scroll();
+  }
+  function hideTyping() { typing?.remove(); typing = null; }
+
+  function setBusy(v: boolean) { busy = v; field.disabled = v; sendBtn.disabled = v; }
+
+  async function call(payload: ChatMessage[]) {
+    const res = await fetch('/api/receptionist', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ messages: payload }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data?.error ?? 'Something went wrong.');
+    return data.messages as ChatMessage[];
+  }
+
+  async function deliver(replies: ChatMessage[]) {
+    for (let i = 0; i < replies.length; i++) {
+      const m = replies[i];
+      await sleep(450 + Math.min((m.text?.length ?? 0) * 9, 700));
+      hideTyping();
+      if (m.action && m.action.type !== 'lead_captured') ticket(m.action);
+      else if (m.text) bubble(m.text, 'out', m.timestamp);
+      history.push(m);
+      if (i < replies.length - 1) showTyping();
+    }
+    setChips(replies[replies.length - 1]?.quickReplies);
+  }
+
+  async function send(text: string) {
+    text = text.trim();
+    if (busy || !text) return;
+    setBusy(true);
+    setChips([]);
+    const mine: ChatMessage = { id: crypto.randomUUID(), role: 'customer', text, timestamp: new Date().toISOString() };
+    bubble(text, 'in', mine.timestamp);
+    history.push(mine);
+    showTyping();
+    try {
+      await deliver(await call(history));
+    } catch (err) {
+      hideTyping();
+      history.pop();
+      const e = document.createElement('div');
+      e.className = 'k-err';
+      e.textContent = err instanceof Error ? err.message : 'Something went wrong.';
+      msgs.appendChild(e);
+      scroll();
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const v = field.value;
+    field.value = '';
+    send(v);
+  });
+
+  (async () => {
+    setBusy(true);
+    showTyping();
+    try { await deliver(await call([])); }
+    catch { hideTyping(); bubble("Hi! 👋 I'm the BrightSmile Dental assistant. Ask me to book, share prices or answer questions.", 'out'); }
+    finally { setBusy(false); }
+  })();
+
+  /* ---------------- night shift model ---------------- */
+  const track = q('[data-track]');
+  const needle = q('[data-needle]');
+  const scrub = q<HTMLInputElement>('[data-scrub]');
+  const feed = q('[data-feed]');
+  const play = q<HTMLButtonElement>('[data-play]');
+  const isAfter = (t: number) => t < 8 || t >= 17;
+  const LABEL: Record<NightOutcome, string> = { booked: 'Booked', answered: 'Answered', moved: 'Rescheduled', escalated: 'Sent to staff' };
+  const pins = NIGHT_FEED.map((m) => {
+    const p = document.createElement('span');
+    p.className = `ro-pin ${m.out}`;
+    p.style.left = `${(m.t / 24) * 100}%`;
+    p.title = `${fmtHour(m.t)} · ${m.name}`;
+    track.appendChild(p);
+    return p;
+  });
+  const S = (k: string) => q(`[data-s="${k}"]`);
+  let shown = -1;
+
+  function render(t: number) {
+    needle.style.left = `${(t / 24) * 100}%`;
+    needle.dataset.time = fmtHour(Math.min(t, 23.99));
+    const upto = NIGHT_FEED.filter((m) => m.t <= t);
+    pins.forEach((p, i) => p.classList.toggle('on', NIGHT_FEED[i].t <= t));
+    if (upto.length === shown) return;
+    shown = upto.length;
+    feed.replaceChildren();
+    if (!upto.length) {
+      const empty = document.createElement('div');
+      empty.className = 'ro-feed-empty';
+      empty.textContent = '12:00am. Clinic is dark. Press play.';
+      feed.appendChild(empty);
+    }
+    for (const m of [...upto].reverse()) {
+      const c = document.createElement('article');
+      c.className = `ro-card${isAfter(m.t) ? ' after' : ''}`;
+      const time = document.createElement('time');
+      time.textContent = fmtHour(m.t);
+      const mid = document.createElement('div');
+      const who = document.createElement('div');
+      who.className = 'who';
+      who.textContent = m.name + (isAfter(m.t) ? '  ·  after hours' : '');
+      const said = document.createElement('div');
+      said.className = 'said';
+      said.textContent = `"${m.msg}"`;
+      mid.append(who, said);
+      const res = document.createElement('div');
+      res.className = `res ${m.out}`;
+      res.textContent = `${LABEL[m.out]} · ${m.what}`;
+      c.append(time, mid, res);
+      feed.appendChild(c);
+    }
+    const booked = upto.filter((m) => m.out === 'booked');
+    S('booked').textContent = money(booked.reduce((a, m) => a + m.value, 0));
+    S('msgs').textContent = String(upto.length);
+    S('after').textContent = String(upto.filter((m) => isAfter(m.t)).length);
+    S('appts').textContent = String(booked.length);
+    const mins = upto.length * 4;
+    S('mins').textContent = mins >= 60 ? `${Math.floor(mins / 60)}h ${mins % 60}m` : `${mins}m`;
+  }
+
+  let raf = 0;
+  function stop() { cancelAnimationFrame(raf); raf = 0; play.textContent = '▶ Play the day'; }
+  play.addEventListener('click', () => {
+    if (raf) return stop();
+    let t = +scrub.value >= 23.9 ? 0 : +scrub.value;
+    let last = performance.now();
+    play.textContent = '❚❚ Pause';
+    const step = (now: number) => {
+      t = Math.min(24, t + ((now - last) / 1000) * 1.6);
+      last = now;
+      scrub.value = String(t);
+      render(t);
+      if (t < 24) raf = requestAnimationFrame(step); else stop();
+    };
+    raf = requestAnimationFrame(step);
+  });
+  scrub.addEventListener('input', () => { stop(); render(+scrub.value); });
+  track.addEventListener('click', (e) => {
+    stop();
+    const r = track.getBoundingClientRect();
+    const t = Math.max(0, Math.min(24, ((e.clientX - r.left) / r.width) * 24));
+    scrub.value = String(t);
+    render(t);
+  });
+  render(24);
+
+  /* ---------------- ROI scoreboard ---------------- */
+  const val = (id: string) => +q<HTMLInputElement>(`#${id}`).value;
+  const FMT: Record<string, (v: number) => string> = {
+    rMissed: String, rNew: money, rRec: (v) => `${v}%`, rActive: (v) => v.toLocaleString(),
+    rLift: (v) => `+${v} pts`, rRetVal: money, rInactive: (v) => v.toLocaleString(), rReact: (v) => `${v}%`,
+  };
+  const B = (k: string) => q(`[data-b="${k}"]`);
+  function calc() {
+    for (const id of Object.keys(FMT)) q(`[data-o="${id}"]`).textContent = FMT[id](val(id));
+    const r = calculateRoi({
+      missedBookingsPerMonth: val('rMissed'),
+      avgRevenuePerNewCustomer: val('rNew'),
+      recoveryRate: val('rRec') / 100,
+      activeCustomers: val('rActive'),
+      currentRetentionRate: 0,
+      expectedRetentionRate: val('rLift') / 100,
+      avgAnnualRevenuePerRetainedCustomer: val('rRetVal'),
+      reactivationEnabled: true,
+      inactiveCustomers: val('rInactive'),
+      reactivationRate: val('rReact') / 100,
+      revenuePerReactivatedCustomer: val('rRetVal'),
+    });
+    B('rec').textContent = money(r.recoveredAnnualRevenue);
+    B('ret').textContent = money(r.retainedAnnualRevenue);
+    B('react').textContent = money(r.reactivationAnnualRevenue);
+    B('cost').textContent = `−${money(AI_COST_ANNUAL)}`;
+    B('mult').textContent = `${Math.max(0, r.roiMultiple).toFixed(1)}×`;
+    B('net').textContent = money(r.netAnnualImpact);
+  }
+  document.querySelectorAll('[data-dial]').forEach((i) => i.addEventListener('input', calc));
+  calc();
+</script>
+
+<style is:global>
+  /* Rush Out — Junkanoo flag aqua, gold and black. Light-only by design. */
+  html:has(.rush) { color-scheme: light; }
+  html:has(.rush) body { background: #fff8e6; color: #0d0d0d; }
+  .rush {
+    --ro-aqua: #00b8c4; --ro-aqua-deep: #00737b; --ro-gold: #ffc629; --ro-ink: #0d0d0d;
+    --ro-paper: #fff8e6; --ro-flamingo: #ff5c8a; --ro-white: #ffffff;
+    --ro-display: 'Bowlby One', 'Arial Black', Impact, sans-serif;
+    --ro-body: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+    --ro-mono: 'Martian Mono', ui-monospace, Menlo, monospace;
+    --ro-b: 3px solid var(--ro-ink);
+    --ro-sh: 6px 6px 0 var(--ro-ink);
+    --ro-sh-lg: 10px 10px 0 var(--ro-ink);
+    background: var(--ro-paper); color: var(--ro-ink); font: 400 1rem/1.55 var(--ro-body);
+    overflow-x: clip;
+  }
+  .rush :focus-visible { outline: 4px solid var(--ro-flamingo); outline-offset: 3px; }
+  .rush h1, .rush h2, .rush h3 { font-family: var(--ro-display); font-weight: 400; line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+  .rush p { margin: 0; }
+  .rush a { color: inherit; }
+  .ro-wrap { max-width: 1180px; margin: 0 auto; padding-inline: max(16px, 4vw); }
+
+  .ro-ticker { background: var(--ro-ink); color: var(--ro-gold); border-bottom: var(--ro-b); overflow: hidden; white-space: nowrap; font: 700 .72rem/1 var(--ro-mono); letter-spacing: .12em; text-transform: uppercase; }
+  .ro-ticker-track { display: inline-flex; gap: 2.5rem; padding: .7rem 0; animation: ro-tick 38s linear infinite; }
+  .ro-ticker-track span::before { content: "✸ "; color: var(--ro-aqua); }
+  @keyframes ro-tick { to { transform: translateX(-50%); } }
+
+  .ro-nav { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1.1rem; flex-wrap: wrap; }
+  .ro-logo { display: flex; align-items: center; gap: .6rem; font-family: var(--ro-display); font-size: 1.35rem; text-decoration: none; }
+  .ro-logo-mark { width: 2.4rem; height: 2.4rem; border: var(--ro-b); background: conic-gradient(var(--ro-aqua) 0 33%, var(--ro-gold) 0 66%, var(--ro-ink) 0); box-shadow: 3px 3px 0 var(--ro-ink); transform: rotate(-6deg); }
+  .ro-nav-links { display: flex; gap: 1.25rem; align-items: center; font-weight: 800; font-size: .92rem; flex-wrap: wrap; }
+  .ro-nav-links a { text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+  .ro-nav-links a:not(.ro-btn):hover { text-decoration: underline 3px var(--ro-aqua); text-underline-offset: 5px; }
+
+  .ro-btn { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; font: 800 1rem/1 var(--ro-body); padding: .95rem 1.3rem; border: var(--ro-b); background: var(--ro-gold); color: var(--ro-ink); box-shadow: var(--ro-sh); text-decoration: none; cursor: pointer; transition: transform .12s, box-shadow .12s; }
+  .ro-btn:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ro-ink); }
+  .ro-btn:active { transform: translate(4px, 4px); box-shadow: 2px 2px 0 var(--ro-ink); }
+  .ro-btn.ro-alt { background: var(--ro-white); }
+  .ro-btn.ro-sm { padding: .65rem .95rem; font-size: .88rem; box-shadow: 4px 4px 0 var(--ro-ink); }
+
+  .ro-hero { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: center; padding-block: clamp(2rem, 5vw, 4rem) clamp(3rem, 6vw, 5rem); }
+  .ro-hero > * { min-width: 0; }
+  .ro-stamp { display: inline-block; font: 700 .72rem/1.3 var(--ro-mono); letter-spacing: .14em; text-transform: uppercase; background: var(--ro-aqua); border: var(--ro-b); padding: .55rem .8rem; box-shadow: 3px 3px 0 var(--ro-ink); transform: rotate(-2deg); }
+  .ro-hero h1 { font-size: clamp(2.9rem, 7.6vw, 6.4rem); line-height: 1.16; margin-top: 1.4rem; }
+  .ro-hl { display: inline-block; background: var(--ro-gold); padding: .04em .12em .1em; border: var(--ro-b); box-shadow: 5px 5px 0 var(--ro-ink); line-height: 1.05; margin-block: .06em; }
+  .ro-aq { color: var(--ro-aqua-deep); }
+  .ro-lede { font-size: clamp(1.05rem, 1.6vw, 1.22rem); max-width: 34rem; margin-top: 1.6rem !important; }
+  .ro-lede strong { background: linear-gradient(transparent 60%, var(--ro-flamingo) 60%); }
+  .ro-cta-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
+  .ro-proof { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1.8rem; }
+  .ro-proof span { font: 700 .7rem/1 var(--ro-mono); text-transform: uppercase; letter-spacing: .06em; border: 2px solid var(--ro-ink); padding: .5rem .65rem; background: var(--ro-white); }
+
+  .ro-stage { position: relative; display: grid; place-items: center; padding: 1.5rem 0; }
+  .ro-burst { position: absolute; inset: -6%; background: repeating-conic-gradient(var(--ro-gold) 0 9deg, var(--ro-aqua) 9deg 18deg, var(--ro-flamingo) 18deg 27deg, var(--ro-paper) 27deg 36deg); clip-path: polygon(50% 0, 61% 12%, 76% 4%, 80% 20%, 97% 22%, 90% 38%, 100% 50%, 90% 62%, 97% 78%, 80% 80%, 76% 96%, 61% 88%, 50% 100%, 39% 88%, 24% 96%, 20% 80%, 3% 78%, 10% 62%, 0 50%, 10% 38%, 3% 22%, 20% 20%, 24% 4%, 39% 12%); animation: ro-spin 90s linear infinite; }
+  @keyframes ro-spin { to { transform: rotate(360deg); } }
+  .ro-phone { position: relative; width: min(100%, 360px); background: var(--ro-ink); border: var(--ro-b); border-radius: 30px; padding: 10px; box-shadow: var(--ro-sh-lg); }
+  .ro-screen { background: #efe7d6; border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; height: 540px; border: 2px solid var(--ro-ink); }
+  .ro-chat-top { display: flex; align-items: center; gap: .7rem; background: var(--ro-aqua-deep); color: var(--ro-white); padding: .8rem .9rem; border-bottom: var(--ro-b); }
+  .ro-avatar { width: 2.3rem; height: 2.3rem; border-radius: 50%; background: var(--ro-gold); color: var(--ro-ink); display: grid; place-items: center; font: 400 .9rem var(--ro-display); border: 2px solid var(--ro-ink); flex: none; }
+  .ro-chat-top b { display: block; font-size: .95rem; }
+  .ro-chat-top > div { min-width: 0; }
+  .ro-chat-top small { font: 400 .62rem var(--ro-mono); white-space: nowrap; }
+  .ro-live { margin-left: auto; font: 700 .62rem var(--ro-mono); background: var(--ro-gold); color: var(--ro-ink); padding: .3rem .45rem; border: 2px solid var(--ro-ink); text-transform: uppercase; white-space: nowrap; }
+  .ro-chat { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  .ro-hint { font: 700 .68rem var(--ro-mono); text-transform: uppercase; letter-spacing: .08em; margin-top: 1.1rem !important; text-align: center; position: relative; background: var(--ro-paper); border: 2px solid var(--ro-ink); padding: .4rem .6rem; }
+
+  .k-msgs { flex: 1; overflow-y: auto; padding: .9rem .75rem; display: flex; flex-direction: column; gap: .5rem; }
+  .k-msg { max-width: 84%; padding: .55rem .7rem 1.15rem; font-size: .88rem; line-height: 1.4; border: 2px solid var(--ro-ink); position: relative; white-space: pre-line; overflow-wrap: anywhere; }
+  .k-in { align-self: flex-end; background: #c9f7c3; box-shadow: -3px 3px 0 var(--ro-ink); }
+  .k-out { align-self: flex-start; background: var(--ro-white); box-shadow: 3px 3px 0 var(--ro-ink); }
+  .k-ts { position: absolute; right: .5rem; bottom: .25rem; font: 400 .58rem var(--ro-mono); opacity: .65; }
+  .k-typing { align-self: flex-start; display: flex; gap: 4px; padding: .7rem .8rem; background: var(--ro-white); border: 2px solid var(--ro-ink); }
+  .k-typing i { width: 7px; height: 7px; background: var(--ro-ink); border-radius: 50%; animation: ro-bob 1s infinite; }
+  .k-typing i:nth-child(2) { animation-delay: .15s; } .k-typing i:nth-child(3) { animation-delay: .3s; }
+  @keyframes ro-bob { 50% { transform: translateY(-4px); } }
+  .k-ticket { align-self: flex-start; max-width: 90%; display: flex; flex-direction: column; gap: .2rem; background: var(--ro-gold); border: 2px dashed var(--ro-ink); box-shadow: 3px 3px 0 var(--ro-ink); padding: .6rem .7rem; font-size: .8rem; }
+  .k-ticket.k-esc { background: var(--ro-flamingo); }
+  .k-ticket strong { font: 700 .7rem var(--ro-mono); text-transform: uppercase; }
+  .k-ticket small { font: 400 .6rem var(--ro-mono); opacity: .75; margin-top: .2rem; }
+  .k-err { align-self: center; font: 700 .7rem var(--ro-mono); background: var(--ro-flamingo); border: 2px solid var(--ro-ink); padding: .4rem .6rem; }
+  .k-chips { display: flex; gap: .4rem; flex-wrap: wrap; padding: 0 .75rem .55rem; }
+  .k-chip { font: 700 .74rem var(--ro-body); background: var(--ro-gold); color: var(--ro-ink); border: 2px solid var(--ro-ink); padding: .45rem .6rem; min-height: 32px; cursor: pointer; box-shadow: 2px 2px 0 var(--ro-ink); }
+  .k-chip:hover { background: var(--ro-aqua); }
+  .k-form { display: flex; gap: .45rem; padding: .6rem; background: var(--ro-white); border-top: var(--ro-b); }
+  .k-field { flex: 1; min-width: 0; border: 2px solid var(--ro-ink); padding: .6rem .7rem; font: 400 1rem var(--ro-body); background: var(--ro-paper); color: var(--ro-ink); }
+  .k-send { width: 2.75rem; border: 2px solid var(--ro-ink); background: var(--ro-aqua); color: var(--ro-ink); font-size: 1rem; cursor: pointer; }
+  .k-field:disabled, .k-send:disabled { opacity: .6; }
+
+  .ro-band { height: 34px; border-block: var(--ro-b); background: linear-gradient(90deg, var(--ro-aqua) 0 33.3%, var(--ro-gold) 33.3% 66.6%, var(--ro-aqua) 66.6%); position: relative; }
+  .ro-band::before { content: ""; position: absolute; inset: -3px auto -3px 0; width: 70px; background: var(--ro-ink); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+  .ro-fringe { height: 26px; background: repeating-linear-gradient(90deg, var(--ro-flamingo) 0 10px, var(--ro-gold) 10px 20px, var(--ro-aqua) 20px 30px, var(--ro-ink) 30px 32px); -webkit-mask: conic-gradient(from -45deg at 50% 100%, #000 90deg, transparent 0) 0 0/18px 100% repeat-x; mask: conic-gradient(from -45deg at 50% 100%, #000 90deg, transparent 0) 0 0/18px 100% repeat-x; }
+
+  .rush section { padding-block: clamp(3.5rem, 7vw, 6rem); }
+  .ro-kicker { font: 700 .74rem/1.2 var(--ro-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ro-aqua-deep); }
+  .ro-sec-head { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: end; margin-bottom: 2.5rem; }
+  .ro-sec-head > * { min-width: 0; }
+  .ro-sec-head h2 { font-size: clamp(2.2rem, 5vw, 4rem); margin-top: .8rem; }
+  .ro-sec-head > p { font-size: 1.08rem; max-width: 34rem; }
+
+  .ro-night { background: var(--ro-ink); color: var(--ro-paper); }
+  .ro-night .ro-kicker { color: var(--ro-gold); }
+  .ro-night h2 em { font-style: normal; color: var(--ro-aqua); }
+  .ro-clock { border: 3px solid var(--ro-paper); background: #1c1c1c; padding: 1.2rem; box-shadow: 8px 8px 0 var(--ro-aqua); }
+  .ro-track { position: relative; height: 54px; margin-top: 1.4rem; border: 3px solid var(--ro-paper); cursor: pointer; background: repeating-linear-gradient(90deg, transparent 0 calc(100%/24 - 1px), rgba(255,248,230,.18) calc(100%/24 - 1px) calc(100%/24)); }
+  .ro-open { position: absolute; top: 0; bottom: 0; left: calc(8/24*100%); width: calc(9/24*100%); background: rgba(255,198,41,.22); border-inline: 3px dashed var(--ro-gold); }
+  .ro-open span { position: absolute; top: 4px; left: 6px; font: 700 .6rem var(--ro-mono); color: var(--ro-gold); text-transform: uppercase; letter-spacing: .08em; }
+  .ro-pin { position: absolute; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border: 2px solid var(--ro-ink); background: var(--ro-paper); transform: rotate(45deg); transition: background .2s, transform .2s; }
+  .ro-pin.on { transform: rotate(45deg) scale(1.35); }
+  .ro-pin.on.booked { background: var(--ro-aqua); } .ro-pin.on.answered { background: var(--ro-gold); }
+  .ro-pin.on.moved { background: var(--ro-white); } .ro-pin.on.escalated { background: var(--ro-flamingo); }
+  .ro-needle { position: absolute; top: -10px; bottom: -10px; width: 4px; background: var(--ro-flamingo); margin-left: -2px; pointer-events: none; }
+  .ro-needle::after { content: attr(data-time); position: absolute; top: -26px; left: 50%; transform: translateX(-50%); font: 700 .7rem var(--ro-mono); background: var(--ro-flamingo); color: var(--ro-ink); padding: .2rem .4rem; white-space: nowrap; border: 2px solid var(--ro-ink); }
+  .ro-hours { display: flex; justify-content: space-between; font: 400 .62rem var(--ro-mono); opacity: .75; margin-top: .45rem; }
+  .ro-controls { display: flex; gap: 1rem; align-items: center; margin-top: 1.1rem; flex-wrap: wrap; }
+  .ro-controls input[type=range] { flex: 1; min-width: 180px; accent-color: var(--ro-aqua); height: 28px; }
+  .ro-controls .ro-btn { box-shadow: 4px 4px 0 var(--ro-aqua); }
+  .ro-legend { display: flex; gap: 1rem; flex-wrap: wrap; font: 400 .66rem var(--ro-mono); text-transform: uppercase; margin-top: 1rem; }
+  .ro-legend i { display: inline-block; width: 10px; height: 10px; border: 2px solid var(--ro-paper); margin-right: .35rem; transform: rotate(45deg); vertical-align: -1px; }
+
+  .ro-night-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 1.8rem; margin-top: 2rem; }
+  .ro-night-grid > * { min-width: 0; }
+  .ro-feed { display: flex; flex-direction: column; gap: .7rem; max-height: 470px; overflow-y: auto; padding-right: .3rem; }
+  .ro-feed-empty { border: 3px dashed rgba(255,248,230,.4); padding: 1.4rem; font: 400 .85rem var(--ro-mono); }
+  .ro-card { display: grid; grid-template-columns: auto 1fr auto; gap: .9rem; align-items: center; background: var(--ro-paper); color: var(--ro-ink); border: var(--ro-b); padding: .8rem .9rem; box-shadow: 4px 4px 0 var(--ro-gold); animation: ro-drop .35s cubic-bezier(.2,1.4,.4,1); }
+  .ro-card.after { box-shadow: 4px 4px 0 var(--ro-aqua); }
+  @keyframes ro-drop { from { transform: translateY(-14px) rotate(-1.5deg); opacity: .3; } }
+  .ro-card time { font: 700 .72rem var(--ro-mono); background: var(--ro-ink); color: var(--ro-paper); padding: .35rem .45rem; }
+  .ro-card .who { font-weight: 800; font-size: .9rem; }
+  .ro-card .said { font-size: .86rem; }
+  .ro-card .res { font: 700 .62rem var(--ro-mono); text-transform: uppercase; padding: .4rem .5rem; border: 2px solid var(--ro-ink); text-align: right; max-width: 11rem; }
+  .res.booked { background: var(--ro-aqua); } .res.answered { background: var(--ro-gold); }
+  .res.moved { background: var(--ro-white); } .res.escalated { background: var(--ro-flamingo); }
+
+  .ro-score { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; align-content: start; }
+  .ro-tile { border: 3px solid var(--ro-paper); padding: 1rem; background: #1c1c1c; }
+  .ro-tile b { display: block; font: 400 clamp(1.8rem, 3.6vw, 2.6rem)/1 var(--ro-display); font-variant-numeric: tabular-nums; }
+  .ro-tile span { font: 400 .66rem var(--ro-mono); text-transform: uppercase; letter-spacing: .06em; }
+  .ro-tile.ro-big { grid-column: 1 / -1; background: var(--ro-gold); color: var(--ro-ink); border-color: var(--ro-ink); box-shadow: 6px 6px 0 var(--ro-aqua); }
+  .ro-tile.ro-big b { font-size: clamp(2.4rem, 5vw, 3.6rem); }
+  .ro-tile.ro-aqt b { color: var(--ro-aqua); }
+  .ro-footnote { font: 400 .66rem/1.5 var(--ro-mono); opacity: .8; margin-top: 1rem !important; }
+
+  .ro-lineup { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; }
+  .ro-job { border: var(--ro-b); background: var(--ro-white); padding: 1.2rem 1rem 1.4rem; box-shadow: var(--ro-sh); display: flex; flex-direction: column; gap: .6rem; transition: transform .15s; }
+  .ro-job:nth-child(odd) { transform: rotate(-1.2deg); } .ro-job:nth-child(even) { transform: rotate(1.2deg); }
+  .ro-job:hover { transform: rotate(0) translateY(-4px); }
+  .ro-n { font: 700 .7rem var(--ro-mono); width: 2rem; height: 2rem; display: grid; place-items: center; border: 2px solid var(--ro-ink); background: var(--ro-gold); }
+  .ro-job:nth-child(2) .ro-n, .ro-job:nth-child(4) .ro-n { background: var(--ro-aqua); }
+  .ro-job h3 { font-size: 1.45rem; }
+  .ro-job p { font-size: .9rem; }
+  .ro-eg { margin-top: auto !important; font: 400 .7rem/1.45 var(--ro-mono) !important; border-top: 2px dashed var(--ro-ink); padding-top: .6rem; }
+
+  .ro-roi { display: grid; grid-template-columns: 1.1fr .9fr; gap: 1.8rem; }
+  .ro-roi > * { min-width: 0; }
+  .ro-dials { display: grid; gap: 1rem; }
+  .ro-dial { border: var(--ro-b); background: var(--ro-white); padding: 1.1rem 1.2rem; box-shadow: var(--ro-sh); margin: 0; min-width: 0; }
+  .ro-dial legend { float: left; width: 100%; padding: 0; }
+  .ro-dial h3 { font-size: 1.25rem; display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; flex-wrap: wrap; }
+  .ro-dial h3 small { font: 700 .66rem var(--ro-mono); text-transform: uppercase; background: var(--ro-aqua); padding: .3rem .45rem; border: 2px solid var(--ro-ink); }
+  .ro-dial:nth-child(2) h3 small { background: var(--ro-gold); } .ro-dial:nth-child(3) h3 small { background: var(--ro-flamingo); }
+  .ro-row { clear: both; display: grid; grid-template-columns: 1fr auto; gap: .2rem .8rem; align-items: center; padding-top: .9rem; }
+  .ro-row label { font-weight: 600; font-size: .9rem; }
+  .ro-row output { font: 700 .82rem var(--ro-mono); font-variant-numeric: tabular-nums; background: var(--ro-paper); border: 2px solid var(--ro-ink); padding: .2rem .45rem; }
+  .ro-row input { grid-column: 1 / -1; width: 100%; accent-color: var(--ro-ink); }
+  .ro-board { background: var(--ro-ink); color: var(--ro-paper); border: var(--ro-b); box-shadow: var(--ro-sh-lg); padding: 1.4rem; display: flex; flex-direction: column; gap: 1rem; position: sticky; top: 1rem; align-self: start; }
+  .ro-lines { display: grid; gap: .55rem; font-size: .95rem; }
+  .ro-lines div { display: flex; justify-content: space-between; gap: 1rem; border-bottom: 2px dashed rgba(255,248,230,.25); padding-bottom: .5rem; }
+  .ro-lines b { font: 700 .95rem var(--ro-mono); font-variant-numeric: tabular-nums; }
+  .ro-cost b { color: var(--ro-flamingo); }
+  .ro-multiple { background: var(--ro-gold); color: var(--ro-ink); border: 3px solid var(--ro-paper); padding: 1.1rem; text-align: center; }
+  .ro-multiple b { display: block; font: 400 clamp(3.2rem, 8vw, 5.4rem)/1 var(--ro-display); font-variant-numeric: tabular-nums; }
+  .ro-multiple span { font: 700 .7rem var(--ro-mono); text-transform: uppercase; letter-spacing: .08em; }
+  .ro-net { font: 400 1.6rem/1 var(--ro-display); color: var(--ro-aqua); text-align: center; }
+  .ro-net small { display: block; font: 400 .66rem var(--ro-mono); color: var(--ro-paper); margin-top: .5rem; text-transform: uppercase; }
+
+  .rush .ro-finale { background: var(--ro-aqua); border-block: var(--ro-b); }
+  .ro-finale-inner { display: grid; grid-template-columns: 1.3fr .7fr; gap: 2rem; align-items: center; }
+  .ro-finale-inner > * { min-width: 0; }
+  .ro-finale h2 { font-size: clamp(2.4rem, 6vw, 5rem); margin-top: .8rem; }
+  .ro-finale-inner > div > p:last-child { font-size: 1.1rem; margin-top: 1rem; max-width: 36rem; }
+  .ro-price { background: var(--ro-paper); border: var(--ro-b); box-shadow: var(--ro-sh-lg); padding: 1.5rem; transform: rotate(2deg); }
+  .ro-price b { font: 400 3.4rem/1.1 var(--ro-display); }
+  .ro-price .ro-kicker { margin-bottom: .6rem; }
+  .ro-price ul { padding-left: 1.1rem; margin: .9rem 0 1.2rem; font-size: .92rem; display: grid; gap: .3rem; }
+  .ro-footer { padding-block: 2rem; font: 400 .7rem/1.6 var(--ro-mono); }
+  .ro-footer .ro-wrap { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .ro-footer a { text-decoration: underline; }
+
+  @media (max-width: 960px) {
+    .ro-hero, .ro-sec-head, .ro-night-grid, .ro-roi, .ro-finale-inner { grid-template-columns: 1fr; }
+    .ro-lineup { grid-template-columns: repeat(2, 1fr); }
+    .ro-lineup .ro-job:last-child { grid-column: 1 / -1; }
+    .ro-board { position: static; }
+  }
+  @media (max-width: 520px) {
+    .ro-lineup { grid-template-columns: 1fr; }
+    .ro-card { grid-template-columns: auto 1fr; }
+    .ro-card .res { grid-column: 1 / -1; text-align: left; max-width: none; }
+    .ro-screen { height: 500px; }
+    .ro-price { transform: none; }
+  }
+</style>
